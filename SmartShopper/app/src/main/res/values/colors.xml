@@ -3,4 +3,16 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!-- creates colors for departments can revise later -->
+    <color name="dairyDeptColor">#FF00FF</color>
+    <color name="meatDeptColor">#FFF0AA</color>
+    <color name="seafoodDeptColor">#BBCC04</color>
+    <color name="bakeryDeptColor">#A0AB88</color>
+    <color name="deliDeptColor">#ABCDEF</color>
+    <color name="produceDeptColor">#00FF00</color>
+    <color name="hBC_DeptColor">#0000FF</color>
+    <color name="groceryDeptColor">#FF0000</color>
+    <color name="floralDeptColor">#ABFFF0</color>
+    <color name="frozenDeptColor">#B2650A</color>
 </resources>
