@@ -16,6 +16,7 @@
         android:text="Welcome!"
         android:gravity="center"
         android:textSize="30sp"
+        android:textStyle="bold"
 
         app:layout_constraintHeight_percent=".1"
 
@@ -31,7 +32,7 @@
         android:layout_height="0dp"
         android:id="@+id/schematicConstraintLayout"
 
-        app:layout_constraintHeight_percent=".50"
+        app:layout_constraintHeight_percent=".4"
         app:layout_constraintWidth_percent=".80"
 
         app:layout_constraintTop_toBottomOf="@id/WelcomeTV"
@@ -49,10 +50,10 @@
             android:id="@+id/dairyDepartmentTV"
             android:background="@color/dairyDeptColor"
 
-            app:layout_constraintHeight_percent=".09"
+            app:layout_constraintHeight_percent=".095"
             app:layout_constraintWidth_percent=".45"
 
-            app:layout_constraintVertical_bias=".02"
+            app:layout_constraintVertical_bias=".015"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -591,12 +592,185 @@
 
             />
 
-        <!-- creates the 4 views for frozen department -->
+        <!-- creates the 4 views for produce department -->
 
+        <!-- creates produce left-most-aisle -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/produceDepartmentLeftMostAisleTV"
+            android:background="@color/produceDeptColor"
 
+            app:layout_constraintHeight_percent=".295"
+            app:layout_constraintWidth_percent=".021"
 
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintHorizontal_bias=".11"
 
+            app:layout_constraintTop_toBottomOf="@id/groceryDepartmentA3LeftTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA4LeftTV"
+            app:layout_constraintEnd_toEndOf="@id/bakeryDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="@id/groceryDepartmentA4LeftTV"
+
+            />
+
+        <!-- creates produce top-most-aisle -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/produceDepartmentTopMostAisleTV"
+            android:background="@color/produceDeptColor"
+
+            app:layout_constraintHeight_percent=".06"
+            app:layout_constraintWidth_percent=".235"
+
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintHorizontal_bias="0"
+
+            app:layout_constraintTop_toTopOf="@id/produceDepartmentLeftMostAisleTV"
+            app:layout_constraintStart_toEndOf="@id/produceDepartmentLeftMostAisleTV"
+            app:layout_constraintEnd_toEndOf="@id/bakeryDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="@id/produceDepartmentLeftMostAisleTV"
+
+            />
+
+        <!-- creates produce left-most-display -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/produceDepartmentLeftMostDisplayTV"
+            android:background="@color/produceDeptColor"
+
+            app:layout_constraintHeight_percent=".082"
+            app:layout_constraintWidth_percent=".035"
+
+            app:layout_constraintVertical_bias=".79"
+            app:layout_constraintHorizontal_bias=".19"
+
+            app:layout_constraintTop_toTopOf="@id/produceDepartmentTopMostAisleTV"
+            app:layout_constraintStart_toEndOf="@id/produceDepartmentLeftMostAisleTV"
+            app:layout_constraintEnd_toEndOf="@id/produceDepartmentTopMostAisleTV"
+
+            app:layout_constraintBottom_toBottomOf="@id/produceDepartmentLeftMostAisleTV"
+
+            />
+
+        <!-- creates produce right-most-display -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/produceDepartmentRightMostDisplayTV"
+            android:background="@color/produceDeptColor"
+
+            app:layout_constraintHeight_percent=".082"
+            app:layout_constraintWidth_percent=".035"
+
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintHorizontal_bias=".8"
+
+            app:layout_constraintTop_toTopOf="@id/produceDepartmentLeftMostDisplayTV"
+            app:layout_constraintStart_toEndOf="@id/produceDepartmentLeftMostDisplayTV"
+            app:layout_constraintEnd_toEndOf="@id/produceDepartmentTopMostAisleTV"
+
+            app:layout_constraintBottom_toBottomOf="@id/produceDepartmentLeftMostDisplayTV"
+
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- text view to indicate the start of our departments -->
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/OurDepartmentsTV"
+
+        app:layout_constraintTop_toBottomOf="@id/schematicConstraintLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintWidth_percent=".8"
+
+        android:text="Our Departments:"
+        android:textSize="25sp"
+        android:gravity="center"
+
+        app:layout_constraintVertical_bias=".05"
+
+        />
+
+    <!-- creates a 5*4 grid layout to tether the departments w/ their
+        associated color
+    -->
+    <GridLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/departmentGridLayout"
+
+        app:layout_constraintWidth_percent=".8"
+        app:layout_constraintHeight_percent=".25"
+
+        app:layout_constraintTop_toBottomOf="@id/OurDepartmentsTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:rowCount="5"
+        android:columnCount="4"
+        >
+
+        <!-- grid (0,0) frozen color -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:id="@+id/gridFrozenColorTV"
+
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+
+            android:background="@color/frozenDeptColor"
+            />
+
+        <!-- grid (0,1) frozen text -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:id="@+id/gridFrozenTextTV"
+
+            android:text="Frozen Department"
+
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+
+            />
+
+
+    </GridLayout>
+
+    <!-- button to search again (invisible) -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchAgainBtn"
+
+        app:layout_constraintTop_toBottomOf="@id/departmentGridLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintVertical_bias="0"
+
+        android:text="Search Again"
+        android:textSize="15sp"
+
+        android:visibility="invisible"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
