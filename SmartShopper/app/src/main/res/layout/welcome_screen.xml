@@ -189,18 +189,18 @@
         <!-- creates the 10 lanes for the grocery department -->
 
 
-        <!-- creates grocery dept aisle 1 -->
+        <!-- creates grocery dept aisle 10 Right (Left is FrozenDept) -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:id="@+id/groceryDepartmentA1TV"
+            android:id="@+id/groceryDepartmentA10RightTV"
             android:background="@color/groceryDeptColor"
 
             app:layout_constraintHeight_percent=".6175"
-            app:layout_constraintWidth_percent=".05"
+            app:layout_constraintWidth_percent=".03"
 
             app:layout_constraintVertical_bias=".35"
-            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_bias=".1"
 
 
             app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
@@ -211,26 +211,237 @@
 
             />
 
-        <!-- creates grocery dept aisle 2 -->
+        <!-- creates grocery dept aisle 9 Left -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:id="@+id/groceryDepartmentA2TV"
+            android:id="@+id/groceryDepartmentA9LeftTV"
             android:background="@color/groceryDeptColor"
 
             app:layout_constraintHeight_percent=".6175"
             app:layout_constraintWidth_percent=".03"
 
             app:layout_constraintVertical_bias=".35"
-            app:layout_constraintHorizontal_bias=".15"
+            app:layout_constraintHorizontal_bias=".0"
 
             app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
-            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA1TV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA10RightTV"
+            app:layout_constraintEnd_toEndOf="@id/dairyDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+        />
+
+        <!-- creates grocery dept aisle 9 Right -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA9RightTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".6175"
+            app:layout_constraintWidth_percent=".0275"
+
+            app:layout_constraintVertical_bias=".35"
+            app:layout_constraintHorizontal_bias=".10"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA9LeftTV"
             app:layout_constraintEnd_toEndOf="@id/dairyDepartmentTV"
 
             app:layout_constraintBottom_toBottomOf="parent"
 
             />
+
+        <!-- creates grocery dept aisle 8 Left -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA8LeftTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".6175"
+            app:layout_constraintWidth_percent=".0275"
+
+            app:layout_constraintVertical_bias=".35"
+            app:layout_constraintHorizontal_bias=".0"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA9RightTV"
+            app:layout_constraintEnd_toEndOf="@id/dairyDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 8 Right -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA8RightTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".025"
+
+            app:layout_constraintVertical_bias=".32"
+            app:layout_constraintHorizontal_bias=".2"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA8LeftTV"
+            app:layout_constraintEnd_toEndOf="@id/dairyDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 7 Left -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA7LeftTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".025"
+
+            app:layout_constraintVertical_bias=".32"
+            app:layout_constraintHorizontal_bias="0"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA8RightTV"
+            app:layout_constraintEnd_toEndOf="@id/dairyDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 7 Right -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA7RightTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".024"
+
+            app:layout_constraintVertical_bias=".32"
+            app:layout_constraintHorizontal_bias=".3"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA7LeftTV"
+            app:layout_constraintEnd_toEndOf="@id/dairyDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 6 Left -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA6LeftTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".024"
+
+            app:layout_constraintVertical_bias=".32"
+            app:layout_constraintHorizontal_bias="0"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA7RightTV"
+            app:layout_constraintEnd_toEndOf="@id/dairyDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 6 Right -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA6RightTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".024"
+
+            app:layout_constraintVertical_bias=".32"
+            app:layout_constraintHorizontal_bias=".11"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA6LeftTV"
+            app:layout_constraintEnd_toEndOf="@id/meatDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 5 Left -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA5LeftTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".024"
+
+            app:layout_constraintVertical_bias=".32"
+            app:layout_constraintHorizontal_bias=".0"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA6RightTV"
+            app:layout_constraintEnd_toEndOf="@id/meatDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 5 Right -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA5RightTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".023"
+
+            app:layout_constraintVertical_bias=".305"
+            app:layout_constraintHorizontal_bias=".11"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA5LeftTV"
+            app:layout_constraintEnd_toEndOf="@id/meatDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <!-- creates grocery dept aisle 4 Left -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/groceryDepartmentA4LeftTV"
+            android:background="@color/groceryDeptColor"
+
+            app:layout_constraintHeight_percent=".61"
+            app:layout_constraintWidth_percent=".023"
+
+            app:layout_constraintVertical_bias=".305"
+            app:layout_constraintHorizontal_bias="0"
+
+            app:layout_constraintTop_toBottomOf="@id/dairyDepartmentTV"
+            app:layout_constraintStart_toEndOf="@id/groceryDepartmentA5RightTV"
+            app:layout_constraintEnd_toEndOf="@id/meatDepartmentTV"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
