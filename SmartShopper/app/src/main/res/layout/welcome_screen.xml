@@ -495,7 +495,7 @@
             android:background="@color/groceryDeptColor"
 
             app:layout_constraintHeight_percent=".27"
-            app:layout_constraintWidth_percent=".018"
+            app:layout_constraintWidth_percent=".02"
 
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias=".2"
@@ -516,10 +516,10 @@
             android:background="@color/groceryDeptColor"
 
             app:layout_constraintHeight_percent=".27"
-            app:layout_constraintWidth_percent=".022"
+            app:layout_constraintWidth_percent=".024"
 
             app:layout_constraintVertical_bias="0"
-            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_bias=".05"
 
             app:layout_constraintTop_toTopOf="@id/groceryDepartmentA4LeftTV"
             app:layout_constraintStart_toEndOf="@id/groceryDepartmentA3RightTV"
@@ -558,7 +558,7 @@
             android:background="@color/groceryDeptColor"
 
             app:layout_constraintHeight_percent=".27"
-            app:layout_constraintWidth_percent=".022"
+            app:layout_constraintWidth_percent=".025"
 
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0"
@@ -578,7 +578,7 @@
             android:id="@+id/groceryDepartmentA1RightTV"
             android:background="@color/groceryDeptColor"
 
-            app:layout_constraintHeight_percent=".275"
+            app:layout_constraintHeight_percent=".28"
             app:layout_constraintWidth_percent=".020"
 
             app:layout_constraintVertical_bias="0"
