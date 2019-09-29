@@ -78,7 +78,7 @@
         android:id="@+id/NamveTV"
         android:layout_width="65dp"
         android:layout_height="28dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="40dp"
         android:text="Name:"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,13 +102,13 @@
         android:id="@+id/RankTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="Rank:"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintHorizontal_bias="0.157"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EmployeeIDTV" />
+        app:layout_constraintTop_toBottomOf="@+id/PasswordTV" />
 
     <TextView
         android:id="@+id/EmployeeIdDisTV"
@@ -125,8 +125,8 @@
         android:id="@+id/rankCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="84dp"
         android:text="Store Admin"
         app:layout_constraintStart_toEndOf="@+id/RankTV"
         app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisTV" />
@@ -141,17 +141,17 @@
         app:layout_constraintHorizontal_bias="0.383"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.68" />
+        app:layout_constraintVertical_bias="0.768" />
 
     <TextView
         android:id="@+id/outcomeTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:text="This will display an outcome"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.383"
+        app:layout_constraintHorizontal_bias="0.382"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submitBTN" />
 
@@ -159,11 +159,33 @@
         android:id="@+id/RetunrBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="28dp"
         android:text="Return to hub"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.389"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/outcomeTV" />
+
+    <TextView
+        android:id="@+id/PasswordTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Passowrd:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.147"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EmployeeIDTV" />
+
+    <EditText
+        android:id="@+id/PasswordET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintStart_toEndOf="@+id/PasswordTV"
+        app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisTV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
