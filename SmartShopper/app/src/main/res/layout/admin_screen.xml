@@ -7,12 +7,86 @@
 
     <TextView
         android:id="@+id/msgCenterTV"
-        android:layout_width="84dp"
-        android:layout_height="23dp"
-        android:text="Enter a Bar"
+        android:layout_width="314dp"
+        android:layout_height="30dp"
+        android:text="Welcome back, "
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.319"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.113" />
+        app:layout_constraintVertical_bias="0.078" />
+
+    <TextView
+        android:id="@+id/NameTV"
+        android:layout_width="158dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="64dp"
+        android:text="Name: "
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.189"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/msgCenterTV" />
+
+    <TextView
+        android:id="@+id/EmployeeIDTV"
+        android:layout_width="176dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="24dp"
+        android:text="Employee ID:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.204"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/NameTV" />
+
+    <TextView
+        android:id="@+id/RantTV"
+        android:layout_width="156dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="28dp"
+        android:text="Rank: "
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EmployeeIDTV" />
+
+    <TextView
+        android:id="@+id/actionTV"
+        android:layout_width="328dp"
+        android:layout_height="31dp"
+        android:text="What would you like to do?"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.373"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.452" />
+
+    <Button
+        android:id="@+id/adminBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Create/Modify Admin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.231"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ProductBTN" />
+
+    <Button
+        android:id="@+id/ProductBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Modify Product Layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actionTV" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
