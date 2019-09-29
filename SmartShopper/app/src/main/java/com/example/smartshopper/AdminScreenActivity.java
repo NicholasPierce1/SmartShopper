@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AdminScreenActivity extends AppCompatActivity {
 
     public String empid, name, rank;
+
     TextView nameTV, empIDTV, rankTV;
 
     @Override
@@ -50,7 +51,13 @@ public class AdminScreenActivity extends AppCompatActivity {
     }
     public void adminCreateAction(View v){
         Intent toAdminCreate = new Intent(this, CreateAdminScreenActivity.class);
+        toAdminCreate.putExtra("EMPID", empid);
         startActivity(toAdminCreate);
+    }
+    public void modifyProductAction(View v){
+        Intent toProductModifer = new Intent(this, AdminScreenActivity.class);
+        toProductModifer.putExtra("EMPID", empid);
+        startActivity(toProductModifer);
     }
 
 }
