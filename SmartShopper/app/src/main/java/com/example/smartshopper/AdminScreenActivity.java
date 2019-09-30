@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+//@Author Matthew Berry
 public class AdminScreenActivity extends AppCompatActivity {
 
     public String empid, name, rank;
