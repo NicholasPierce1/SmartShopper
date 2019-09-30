@@ -60,4 +60,18 @@ public class AdminScreenActivity extends AppCompatActivity {
         startActivity(toProductModifer);
     }
 
+    public void onActivityResult(int req, int result, Intent data) {
+        super.onActivityResult(req, result, data);
+        if (req == 6) {
+            if (result == 0) {
+                return;
+            }
+        }
+    }
+    public void logOutAction(View V){
+        //There might be more functionality here later. For now we just want to create an intent
+        //and go to main activity
+        Intent logOut = new Intent(this, MainActivity.class);
+        startActivity(logOut);
+    }
 }
