@@ -16,7 +16,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.admin_login);
-
+        //we might need to do more here later
         Intent ini = getIntent();
 
     }
@@ -47,5 +47,11 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         }
         else return false;
     }
+
+    public void cancleAction(View v){
+        Intent goBack = new Intent(this, MainActivity.class);
+        startActivity(goBack);
+    }
+
 
 }
