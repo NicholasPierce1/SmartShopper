@@ -15,8 +15,7 @@ public class SearchMainActivity extends AppCompatActivity {
     }
 
     public void adminActionIntent(View v){
-        Intent adminIntent = new Intent(this, AdminLoginScreenActivity.class){
-            
-        }
+        Intent adminIntent = new Intent(this, AdminLoginScreenActivity.class);
+        startActivity(adminIntent);
     }
 }
