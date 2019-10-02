@@ -13,9 +13,15 @@ public class welcome_screenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_screen);
     }
-    public void adminIntent(View v){
+    public void adminIntent(View v) {
         Intent adminIntent = new Intent(this, AdminLoginScreenActivity.class);
-            startActivity(adminIntent);
-        }
+        startActivity(adminIntent);
+    }
+
+    public void searchIntent(View v){
+        Intent searchIntent = new Intent(this, StoreScreenActivity.class);
+        startActivity(searchIntent);
+    }
+
 
 }
