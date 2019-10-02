@@ -2,7 +2,9 @@ package com.example.smartshopper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class welcome_screenActivity extends AppCompatActivity {
 
@@ -11,4 +13,9 @@ public class welcome_screenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_screen);
     }
+    public void adminIntent(View v){
+        Intent adminIntent = new Intent(this, AdminLoginScreenActivity.class);
+            startActivity(adminIntent);
+        }
+
 }
