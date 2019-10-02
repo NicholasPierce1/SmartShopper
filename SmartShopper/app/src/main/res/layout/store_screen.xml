@@ -1075,4 +1075,6 @@
         android:visibility="invisible"
         />
 
+    <!-- creates tab bar emulator comprised of image buttons -->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
