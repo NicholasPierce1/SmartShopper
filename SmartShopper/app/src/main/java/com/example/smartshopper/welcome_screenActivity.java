@@ -11,7 +11,7 @@ public class welcome_screenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome_screen);
+        setContentView(R.layout.welcome_screen);
     }
     public void adminIntent(View v){
         Intent adminIntent = new Intent(this, AdminLoginScreenActivity.class);
