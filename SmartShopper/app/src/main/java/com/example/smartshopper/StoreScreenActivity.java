@@ -13,4 +13,5 @@ public class StoreScreenActivity extends AppCompatActivity {
         super.setContentView(R.layout.store_screen);
 
     }
+
 }

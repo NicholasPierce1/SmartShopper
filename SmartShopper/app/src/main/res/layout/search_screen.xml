@@ -71,9 +71,9 @@
         android:background="#FF000000" >
 
         <ImageButton
-            android:layout_height="0dp"
-            android:layout_width="0dp"
             android:id="@+id/tabBarWelcomeScreenTab"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
 
             android:layout_row="0"
             android:layout_rowWeight="1"
@@ -82,13 +82,14 @@
             android:layout_columnWeight="1"
             android:layout_margin="0dp"
 
-            android:src="@drawable/store_selection_tab_image"
-            android:scaleType="fitXY" />
+            android:onClick="welcomeScreenIntent"
+            android:scaleType="fitXY"
+            android:src="@drawable/store_selection_tab_image" />
 
         <ImageButton
-            android:layout_height="0dp"
-            android:layout_width="0dp"
             android:id="@+id/tabBarStoreScreenTab"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
 
             android:layout_row="0"
             android:layout_rowWeight="1"
@@ -96,15 +97,16 @@
             android:layout_column="1"
             android:layout_columnWeight="1"
 
-            android:src="@drawable/home_tab_image"
-            android:scaleType="fitXY"
+            android:layout_margin="0dp"
+            android:onClick="storeScreenIntent"
 
-            android:layout_margin="0dp" />
+            android:scaleType="fitXY"
+            android:src="@drawable/home_tab_image" />
 
         <ImageButton
-            android:layout_height="0dp"
+            android:id="@+id/tabBarFindItem"
             android:layout_width="0dp"
-            android:id="@+id/tabBarStoreSelectionTab"
+            android:layout_height="0dp"
 
             android:layout_row="0"
             android:layout_rowWeight="1"
@@ -112,10 +114,11 @@
             android:layout_column="2"
             android:layout_columnWeight="1"
 
-            android:src="@drawable/search_tab_image"
-            android:scaleType="fitXY"
+            android:layout_margin="0dp"
+            android:onClick="findItemIntent"
 
-            android:layout_margin="0dp"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/search_tab_image" />
     </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,7 +46,18 @@ public class welcome_screenActivity extends AppCompatActivity implements Adapter
         startActivity(searchIntent);
     }
 
+    public void welcomeScreenIntent(View v){
+        if(this instanceof welcome_screenActivity)
+            return;
 
+        Intent searchIntent = new Intent(this, welcome_screenActivity.class);
+        startActivity(searchIntent);
 
+    }
+
+    public void storeScreenIntent(View v){
+        Intent screenIntent = new Intent(this, StoreScreenActivity.class);
+        startActivity(screenIntent);
+        }
 
 }
