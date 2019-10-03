@@ -15,4 +15,7 @@
     <color name="groceryDeptColor">#FF0000</color>
     <color name="floralDeptColor">#ABFFF0</color>
     <color name="frozenDeptColor">#B2650A</color>
+
+    <!-- emulated tab bar: creates color for when user is on current view -->
+    <color name="currentlyDisplayTabItem">#A9A9A9</color>
 </resources>
