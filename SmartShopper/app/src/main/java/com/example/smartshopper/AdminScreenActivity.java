@@ -71,7 +71,7 @@ public class AdminScreenActivity extends AppCompatActivity {
     public void logOutAction(View V){
         //There might be more functionality here later. For now we just want to create an intent
         //and go to main activity
-        Intent logOut = new Intent(this, MainActivity.class);
+        Intent logOut = new Intent(this, Welcome_screenActivity.class);
         startActivity(logOut);
     }
 }

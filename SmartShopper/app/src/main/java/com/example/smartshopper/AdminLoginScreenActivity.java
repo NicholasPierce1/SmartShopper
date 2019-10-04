@@ -3,7 +3,6 @@ package com.example.smartshopper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -49,7 +48,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
     }
 
     public void cancleAction(View v){
-        Intent goBack = new Intent(this, MainActivity.class);
+        Intent goBack = new Intent(this, Welcome_screenActivity.class);
         startActivity(goBack);
     }
 

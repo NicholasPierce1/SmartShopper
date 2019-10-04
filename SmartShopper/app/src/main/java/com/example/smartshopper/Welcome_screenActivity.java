@@ -10,14 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class welcome_screenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Welcome_screenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     String[] stores = { "Store 1"};
     Spinner spin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.welcome_screen);
         spin = findViewById(R.id.storeMenuSPNR);
         spin.setOnItemSelectedListener(this);
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,stores);
@@ -41,23 +41,6 @@ public class welcome_screenActivity extends AppCompatActivity implements Adapter
         startActivity(adminIntent);
     }
 
-    public void searchIntent(View v){
-        Intent searchIntent = new Intent(this, StoreScreenActivity.class);
-        startActivity(searchIntent);
-    }
 
-    public void welcomeScreenIntent(View v){
-        if(this instanceof welcome_screenActivity)
-            return;
-
-        Intent searchIntent = new Intent(this, welcome_screenActivity.class);
-        startActivity(searchIntent);
-
-    }
-
-    public void storeScreenIntent(View v){
-        Intent screenIntent = new Intent(this, StoreScreenActivity.class);
-        startActivity(screenIntent);
-        }
 
 }

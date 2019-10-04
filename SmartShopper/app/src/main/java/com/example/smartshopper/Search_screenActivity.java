@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class search_screenActivity extends AppCompatActivity {
+public class Search_screenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class search_screenActivity extends AppCompatActivity {
     }
 
     public void welcomeScreenIntent(View v){
-        Intent welcomeIntent = new Intent(this, welcome_screenActivity.class);
+        Intent welcomeIntent = new Intent(this, Welcome_screenActivity.class);
         startActivity(welcomeIntent);
     }
 
@@ -25,11 +25,7 @@ public class search_screenActivity extends AppCompatActivity {
     }
 
     public void findItemIntent(View v){
-        if(this instanceof search_screenActivity){
-            return;
-        }
-        Intent itemIntent = new Intent(this, welcome_screenActivity.class);
-        startActivity(itemIntent);
+        return;
     }
 
 }
