@@ -28,7 +28,9 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
     //Performing action onItemSelected and onNothing selected
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-        Toast.makeText(getApplicationContext(), stores[position], Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), stores[position], Toast.LENGTH_LONG).show();
+        // no need to display text values globally
+        
     }
 
     @Override
