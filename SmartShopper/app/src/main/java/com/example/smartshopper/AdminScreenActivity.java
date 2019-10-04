@@ -55,7 +55,7 @@ public class AdminScreenActivity extends AppCompatActivity {
         startActivity(toAdminCreate);
     }
     public void modifyProductAction(View v){
-        Intent toProductModifer = new Intent(this, AdminScreenActivity.class);
+        Intent toProductModifer = new Intent(this, AdminProductScreenActivity.class);
         toProductModifer.putExtra("EMPID", empid);
         startActivity(toProductModifer);
     }

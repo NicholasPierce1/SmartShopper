@@ -1,0 +1,3 @@
+ADMIN LOG IN INFORMATION:
+id: 001
+pw: admin

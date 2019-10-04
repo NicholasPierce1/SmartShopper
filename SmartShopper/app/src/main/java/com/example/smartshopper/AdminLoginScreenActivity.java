@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AdminLoginScreenActivity extends AppCompatActivity {
-
+    TextView errorTV;
     //@Author Matthew Berry
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -17,6 +17,8 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         super.setContentView(R.layout.admin_login);
         //we might need to do more here later
         Intent ini = getIntent();
+        errorTV = findViewById(R.id.ErrorTV);
+        errorTV.setVisibility(View.INVISIBLE);
 
     }
     public void loginAction(View v){
@@ -30,8 +32,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
             startActivity(toHub);
         }
         else{
-            TextView result = findViewById(R.id.ResultTV);
-            result.setVisibility(View.VISIBLE);
+            errorTV.setVisibility(View.VISIBLE);
         }
 
     }
