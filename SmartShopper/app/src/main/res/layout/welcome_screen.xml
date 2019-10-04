@@ -50,7 +50,7 @@
             android:id="@+id/startSearchingBTN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="searchIntent"
+            android:onClick="transitionToSelectedStore"
             android:text="start searching"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
