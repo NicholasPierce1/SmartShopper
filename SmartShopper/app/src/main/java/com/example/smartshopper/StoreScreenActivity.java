@@ -26,10 +26,8 @@ public class StoreScreenActivity extends AppCompatActivity {
 
     // invokes by first image button on tab application, intents to welcome and preserves stack (w/o re-ordering)
     public void welcomeScreenIntent(View v){
-
         Intent searchIntent = new Intent(this, Welcome_screenActivity.class);
         startActivity(searchIntent);
-
     }
 
     // current context- no action performed
