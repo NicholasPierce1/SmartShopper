@@ -1,3 +1,4 @@
+GITHUB URL:https://github.com/NicholasPierce1/SmartShopper.git
 Matthew Berry used the following thread to toggle visibility of widgets
 https://stackoverflow.com/questions/5093466/visible-and-invisible-with-a-checkbox
 VERSION:
