@@ -11,4 +11,12 @@ public final class Store {
     public String location;  // "city,StateAbbreviation"
 
     public String name; // type of store like "Walmart"
+
+    // defines constructor for simplified creation
+    public Store(String location, String name){
+        //TODO: validated location input for base pattern
+
+        this.location = location;
+        this.name = name;
+    }
 }
