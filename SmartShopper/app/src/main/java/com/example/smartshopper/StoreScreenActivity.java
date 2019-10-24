@@ -20,7 +20,7 @@ public class StoreScreenActivity extends AppCompatActivity {
 
     // invokes by third image button on tab application, intents to search activity and preserves stack (w/o re-ordering)
     public void searchIntent(View v){
-        Intent searchIntent = new Intent(this, StoreScreenActivity.class);
+        Intent searchIntent = new Intent(this, Search_screenActivity.class);
         startActivity(searchIntent);
     }
 
