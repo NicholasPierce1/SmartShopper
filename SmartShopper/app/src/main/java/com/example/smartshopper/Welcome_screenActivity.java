@@ -10,8 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class Welcome_screenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    String[] stores = {"Store 1"};
+public class Welcome_screenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    Store store1 = new Store("Maryville, MO", "Walmart");
+    Store store2 = new Store("Clarinda, IA", "Fareway");
+    Store store3 = new Store("Maryville, MO", "Hyvee");
+
+    // array of store objects
+    Store[] stores = {store1, store2, store3};
     Spinner spin;
 
     @Override
@@ -20,7 +25,7 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
         setContentView(R.layout.welcome_screen);
         spin = findViewById(R.id.storeMenuSPNR);
         spin.setOnItemSelectedListener(this);
-        ArrayAdapter<String> aa = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stores);
+        ArrayAdapter<Store> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stores);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
     }
