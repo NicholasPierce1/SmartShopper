@@ -7,7 +7,6 @@ public final class Admin {
     String objectID;
 
     // enumerates local properties
-    public static String[] a1 = {"Matthew Berry", "001", "admin", "Owner", "001"};
 
     public String name; // name of employee in relation
 
@@ -19,44 +18,20 @@ public final class Admin {
 
     public Store store; // denotes store that admin presides in
 
-    public Admin(){
+    public String empID; // unique id to employee -- NOT primary key to relation
+
+    private Admin(){
 
     }
 
 
-    private Admin(String name, String userName, String pw, AdminLevel level, Store store){
+    // temporarily public for milestone 2
+    public Admin(String name, String userName, String pw, AdminLevel level, Store store){
         this.name = name;
         this.userName = userName;
         password = pw;
         adminLevel = level;
         this.store = store;
-    }
-    public static Admin adminBuilder(String adminID){
-        String[] adminParams = getAdminDetails(adminID);
-         String nme, aid, passwrd, adlevel, sid;
-         AdminLevel aLevel;
-         Store aStore = new Store();
-        nme = adminParams[0];
-        aid = adminParams[1];
-        passwrd = adminParams[2];
-        adlevel = adminParams[3];
-        if(adlevel.equals("Admin")){
-            aLevel = AdminLevel.storeAdmin;
-        }
-        else if(adlevel.equals("Store Admin")){
-            aLevel = AdminLevel.storeAdmin;
-        }
-        else aLevel = AdminLevel.owner;
-        sid = adminParams[4];
-        aStore = Store.storeBuilder(sid);
-
-        Admin admin = new Admin(nme, aid, passwrd, aLevel, aStore);
-        return admin;
-    }
-
-    private static String[] getAdminDetails(String adminID){
-        //At some point this calls the class that class the db and retunrs an object based on adminin
-        return a1;
     }
 
 }
