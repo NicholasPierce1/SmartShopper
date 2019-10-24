@@ -25,9 +25,18 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
         setContentView(R.layout.welcome_screen);
         spin = findViewById(R.id.storeMenuSPNR);
         spin.setOnItemSelectedListener(this);
+        
         ArrayAdapter<Store> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stores);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
+    }
+
+    private String[] convertFromStoreArray(Store[] storeArray){
+        String array[] = {};
+        for(int i=0; i<storeArray.length; i++){
+            storeArray[i].name = array[i];
+        }
+        return array;
     }
 
     //Performing action onItemSelected and onNothing selected
