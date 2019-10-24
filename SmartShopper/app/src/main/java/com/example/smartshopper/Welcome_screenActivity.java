@@ -10,6 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Welcome_screenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     Store store1 = new Store("Maryville, MO", "Walmart");
     Store store2 = new Store("Clarinda, IA", "Fareway");
@@ -30,12 +34,12 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
         spin.setAdapter(aa);
     }
 
-    private String[] convertFromStoreArray(Store[] storeArray){
-        String array[] = {};
+    private List<String> convertFromStoreArray(Store[] storeArray){
+        String array[] = new String[storeArray.length];
         for(int i=0; i<storeArray.length; i++){
-            storeArray[i].name = array[i];
+            array[i] = storeArray[i].name;
         }
-        return array;
+        return Arrays.asList(array);
     }
 
     //Performing action onItemSelected and onNothing selected
