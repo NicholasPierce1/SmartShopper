@@ -13,13 +13,18 @@ public final class Store {
 
     public String name; // type of store like "Walmart"
 
+
     public Store(){
 
     }
-    private Store(String location, String name){
+     // defines constructor for simplified creation
+    public Store(String location, String name){
+        //TODO: validated location input for base pattern
+
         this.location = location;
         this.name = name;
     }
+
     public static Store storeBuilder(String storeID){
         String[] storeParams = getStoreParams(storeID);
         String slocation, sname;
@@ -35,4 +40,6 @@ public final class Store {
     }
 
 
+
+   
 }
