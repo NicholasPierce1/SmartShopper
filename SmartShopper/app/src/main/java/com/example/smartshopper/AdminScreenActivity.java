@@ -2,6 +2,7 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,11 @@ public class AdminScreenActivity extends AppCompatActivity {
         super.setContentView(R.layout.admin_screen);
         Intent ini = getIntent();
         empid = ini.getStringExtra("EMPID");
+        Log.d("LoginDeBug", "Size of admin list is: "+
+                AdminMockModelClass.adminList.size());
+        Log.d("LoginDeBug", "Testing admin in activity: " +
+                AdminMockModelClass.adminList.get(AdminMockModelClass.adminUserNames.indexOf(empid)).name);
+        Log.d("LoginDeBug", "empid: "+ empid);
         Admin admin;
         admin = AdminMockModelClass.adminFinder(empid);
         nameTV = findViewById(R.id.NameTV);

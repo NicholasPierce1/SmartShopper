@@ -2,6 +2,7 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +21,27 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         errorTV = findViewById(R.id.ErrorTV);
         errorTV.setVisibility(View.INVISIBLE);
 
+            Log.d("loginbugs", "fake data populated");
+            if(AdminMockModelClass.firstTime) {
+                AdminMockModelClass.firstTime = false;
+                AdminMockModelClass.adminList.add(AdminMockModelClass.a1);
+                AdminMockModelClass.adminUserNames.add(AdminMockModelClass.a1.userName);
+                AdminMockModelClass.adminPw.add(AdminMockModelClass.a1.password);
+                AdminMockModelClass.adminList.add(AdminMockModelClass.a2);
+                AdminMockModelClass.adminUserNames.add(AdminMockModelClass.a2.userName);
+                AdminMockModelClass.adminPw.add(AdminMockModelClass.a2.password);
+                AdminMockModelClass.adminList.add(AdminMockModelClass.a3);
+                AdminMockModelClass.adminUserNames.add(AdminMockModelClass.a3.userName);
+                AdminMockModelClass.adminPw.add(AdminMockModelClass.a3.password);
+                Log.d("LoginDeBug", "Fake data populated");
+                Log.d("LoginDeBug", AdminMockModelClass.adminUserNames.get(1));
+                Log.d("LoginDeBug", "Testing admin: " +
+                        AdminMockModelClass.adminList.get(0).name);
+                Log.d("LoginDeBug", "Size of admin list is: "+
+                        AdminMockModelClass.adminList.size());
+            }
+
+
     }
     public  void loginAction(View v){
         EditText usernameET = findViewById(R.id.userNameET);
@@ -27,7 +49,8 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         EditText passwordET = findViewById(R.id.PasswordET);
         String pw = passwordET.getText().toString();
         if(validateLogin(user, pw)){
-            Intent toHub = new Intent(this, AdminScreenActivity.class);
+
+          Intent toHub = new Intent(this, AdminScreenActivity.class);
             toHub.putExtra("EMPID", user);
             startActivity(toHub);
         }
@@ -37,23 +60,35 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
 
     }
     private boolean validateLogin(String user, String pw){
-        //For now this wull be a hard codeed thing.
+        Log.d("LoginDeBug", "In Login Validation");
+        //For now this will be a hard codeed thing.
         // In the Future we will have a method that validates username and password.
+        int index = AdminMockModelClass.adminUserNames.indexOf(user);
+        Log.d("LoginDeBug", AdminMockModelClass.adminUserNames.get(index));
+
+        Log.d("LoginDeBug", "Username used: " + user + "\n User retrived:" + AdminMockModelClass.adminUserNames.get(index)
+                + "With index: " + index);
+        Log.d("LoginDeBug", "Password used:" + pw + "\n Passwrod retrived: " + AdminMockModelClass.adminPw.get(index)
+                + "\nWith index: " + AdminMockModelClass.adminPw.indexOf(pw) + "Index used: " + index);
 
       if(AdminMockModelClass.adminUserNames.contains(user)){
-         int index = AdminMockModelClass.adminUserNames.indexOf(user);
+
+
          if(pw.equals(AdminMockModelClass.adminPw.get(index))){
              return true;
          }
          else return false;
       }
       else return false;
+
     }
 
     public void cancleAction(View v){
         Intent goBack = new Intent(this, Welcome_screenActivity.class);
         startActivity(goBack);
     }
+
+
 
 
 }
