@@ -41,7 +41,8 @@ public class Search_Screen_RecyclerView_Adapter extends RecyclerView.Adapter<Sea
     public void onBindViewHolder(SearchScreenViewHolder vh, int which){
         TextView itemName = vh.itemView.findViewById(R.id.itemRVTV);
         TextView departmentName = vh.itemView.findViewById(R.id.departmentRVTV);
-        
+        itemName.setText(commodityList.get(0).name);
+        departmentName.setText(commodityList.get(0).department.type.name());
     }
 
     public int getItemCount(){

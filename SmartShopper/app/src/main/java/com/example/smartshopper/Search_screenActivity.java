@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +35,17 @@ public class Search_screenActivity extends AppCompatActivity{
     ArrayList<Commodity> itemListReturn1 = new ArrayList<>();
     ArrayList<Commodity> itemListReturn2 = new ArrayList<>();
 
+    RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_screen);
         errorTV = findViewById(R.id.errorTV);
         itemEntered = findViewById(R.id.itemNameET);
+
+        this.recyclerView = (RecyclerView)super.findViewById(R.id.itemRecyclerView);
+        this.recyclerView.setVisibility(View.INVISIBLE);
     }
 
     public void itemSearch(View v){
@@ -62,12 +68,11 @@ public class Search_screenActivity extends AppCompatActivity{
         if(commodityList.size() == 1){
             this.returnedItemIntent(commodityList.get(0));
         }
-        else if(commodityList.size() >= 2 && commodityList.size() <= 3){
-
-        }
         // else here- 2-3
         // pass list into recycler view for user selection
-
+        else if(commodityList.size() >= 2 && commodityList.size() <= 3){
+            Toast.makeText(this, "List between 2-3", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
