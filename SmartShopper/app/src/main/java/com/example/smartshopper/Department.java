@@ -17,4 +17,12 @@ public final class Department {
     public int maxAisle; // acquire from ordinal in Location-- stored in StoreDepartments
 
     public Store store; // stored in StoreDepartments
+
+    public Department(final DepartmentType departmentType, final boolean hasAisles, final int minAisle, final int maxAisle, final Store store){
+        this.type = departmentType;
+        this.hasAisles = hasAisles;
+        this.minAisle = minAisle;
+        this.maxAisle = maxAisle;
+        this.store = store;
+    }
 }

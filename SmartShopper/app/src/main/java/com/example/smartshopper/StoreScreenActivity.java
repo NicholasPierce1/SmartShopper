@@ -27,7 +27,7 @@ public class StoreScreenActivity extends AppCompatActivity {
 
     }
 
-    // initializes mappings between TODO**
+    // initializes mappings between
 
     // configures the "emulated tab bar intents" to insert functionality into tabs
 
