@@ -7,12 +7,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Search_screenActivity extends AppCompatActivity{
     Random rando = new Random();
     TextView errorTV;
     EditText itemEntered;
+    String fake;
 
     Store store1 = new Store("Maryville", "Hyvee");
     Store store2 = new Store("Maryville", "Walmart");
@@ -26,9 +28,9 @@ public class Search_screenActivity extends AppCompatActivity{
     Commodity item4 = new Commodity("0004", "24pk water", "Ice Mountain", 2.89, true, Location.aisleFourRight, grocery);
     Commodity item5 = new Commodity("0005", "2lb sugar", "C & H", 2.49, true, Location.aisleFiveLeft, grocery);
 
-    ArrayList<Object> itemListReturn0 = new ArrayList<>();
-    ArrayList<Object> itemListReturn1 = new ArrayList<>();
-    ArrayList<Object> itemListReturn2 = new ArrayList<>();
+    ArrayList<Commodity> itemListReturn0 = new ArrayList<>();
+    ArrayList<Commodity> itemListReturn1 = new ArrayList<>();
+    ArrayList<Commodity> itemListReturn2 = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -45,9 +47,30 @@ public class Search_screenActivity extends AppCompatActivity{
         else if(itemEntered.getText().toString().length() < 4){
             errorTV.setText("Invalid input");
         }
+
+        List<Commodity> commodityList = findItemByUserText(fake);
+
+        if(commodityList.size() == 0){
+            errorTV.setText("Be more general with your search");
+        }
+        else if(commodityList.size() > 3){
+            errorTV.setText("Be more specific with your search");
+        }
+
+        if(commodityList.size() == 1){
+            this.returnedItemIntent(commodityList.get(0));
+        }
+        else{
+            
+        }
+
+        // else here- 2-3
+        // pass list into recycler view for user selection
+
+
     }
 
-    public ArrayList<Object> findItemByUserText(String item){
+    public ArrayList<Commodity> findItemByUserText(String item){
         int number = rando.nextInt(3);
 
         itemListReturn0.add(item1);
@@ -68,9 +91,17 @@ public class Search_screenActivity extends AppCompatActivity{
         }
         else
             return itemListReturn2;
-        
+
     }
 
+    public void returnedItemIntent(Commodity commodity){
+        Intent itemReturned = new Intent (this, StoreScreenActivity.class);
+
+        itemReturned.putExtra("commodity", commodity);
+
+        this.startActivity(itemReturned);
+
+    }
 
     public void welcomeScreenIntent(View v){
         Intent welcomeIntent = new Intent(this, Welcome_screenActivity.class);
