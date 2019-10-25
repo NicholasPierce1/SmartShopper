@@ -20,4 +20,6 @@ public final class Commodity {
 
     public Location location; // explicates where the item is positioned relative to the store
 
+    public Department department; // denotes the corresponding department that the item pertains in conjunction with store
+
 }
