@@ -1,38 +1,51 @@
 package com.example.smartshopper;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AdminMockModelClass {
-    public static String[] a1 = {"Matthew Berry", "001", "admin", "Owner", "001"};
-    public static String[] a2 = {"Joe Average", "002", "admin", "storeAdmin", "001"};
-    public static String[] a3 = {"Mason Middle", "002", "admin", "managingStoreAdmin", "001"};
+    public static Admin a1 = new Admin("Matthew Berry", "001", "admin", AdminLevel.owner, Store.storeBuilder("001"));
+    public static Admin a2 = new Admin("Joe Average", "002", "admin", AdminLevel.storeAdmin, Store.storeBuilder("001"));
+    public static Admin a3 = new Admin("Mason Middle", "002", "admin", AdminLevel.managingStoreAdmin, Store.storeBuilder("001"));
+    public static ArrayList<String> adminUserNames = new ArrayList<String>();
+    public static ArrayList<String> adminPw = new ArrayList<String>();
     public ArrayList<Admin> adminList = new ArrayList<Admin>();
-    adminList.add(a1);
+    //IMPORTANT: THE INDEXING OF THE THREE ARRAYLISTS MUST MATCH! If they don't bad things happen
+    //Bad things...
+    //VERY BAD THINGS
+    private boolean started = populateFakeData(); //This is just to make java do a thing
     //For milestone two
-    public static Admin adminBuilder(String adminID){
-        String[] adminParams = getAdminDetails(adminID);
-        String nme, aid, passwrd, adlevel, sid;
-        AdminLevel aLevel;
-        Store aStore = new Store();
-        nme = adminParams[0];
-        aid = adminParams[1];
-        passwrd = adminParams[2];
-        adlevel = adminParams[3];
-        if(adlevel.equals("Admin")){
-            aLevel = AdminLevel.storeAdmin;
-        }
-        else if(adlevel.equals("Store Admin")){
-            aLevel = AdminLevel.storeAdmin;
-        }
-        else aLevel = AdminLevel.owner;
-        sid = adminParams[4];
-        aStore = Store.storeBuilder(sid);
-
-        Admin admin = new Admin(nme, aid, passwrd, aLevel, aStore);
-        return admin;
+    public Admin adminFinder(String id){
+        //Method predicated on the fact that the proper, valid, and relevant adminID exists
+        int finder = adminList.indexOf(id);
+        return adminList.get(finder);
     }
-    private static String[] getAdminDetails(String adminID){
-        //At some point this calls the class that class the db and retunrs an object based on adminin
-        return a1;
+    private boolean populateFakeData(){
+        adminList.add(a1);
+        adminUserNames.add(a1.userName);
+        adminPw.add(a1.password);
+        adminList.add(a2);
+        adminUserNames.add(a2.userName);
+        adminPw.add(a2.password);
+        adminList.add(a3);
+        adminUserNames.add(a3.userName);
+        adminPw.add(a3.password);
+        return true;
+    }
+    public void fakeCreator(Admin a){
+        adminList.add(a);
+        adminUserNames.add(a.userName);
+        adminPw.add(a.password);
+    }
+    public void fakeUpdator(Admin a){
+        String id = a.userName;
+        fakeDestroyer(id);
+        fakeCreator(a);
+    }
+    public void fakeDestroyer(String id){
+        int temp = adminUserNames.indexOf(id);
+        adminList.remove(temp);
+        adminUserNames.remove(temp);
+        adminPw.remove(temp);
     }
 }
