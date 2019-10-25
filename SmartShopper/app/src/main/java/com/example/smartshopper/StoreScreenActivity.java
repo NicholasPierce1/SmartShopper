@@ -27,6 +27,8 @@ public class StoreScreenActivity extends AppCompatActivity {
 
     }
 
+    // initializes mappings between TODO**
+
     // configures the "emulated tab bar intents" to insert functionality into tabs
 
     // invokes by third image button on tab application, intents to search activity and preserves stack (w/o re-ordering)

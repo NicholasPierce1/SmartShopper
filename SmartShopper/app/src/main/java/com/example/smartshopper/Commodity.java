@@ -22,4 +22,16 @@ public final class Commodity {
 
     public Department department; // denotes the corresponding department that the item pertains in conjunction with store
 
+    // temporary public constructor to expidite local-state creation
+    public Commodity(final String barcode, final String name, final String vendorName, final double price, final boolean hasAisle,
+                     final Location location, final Department department){
+        this.barcode = barcode;
+        this.name = name;
+        this.vendorName = vendorName;
+        this.price = price;
+        this.hasAisle = hasAisle;
+        this.location = location;
+        this.department = department;
+    }
+
 }
