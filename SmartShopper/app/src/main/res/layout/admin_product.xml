@@ -35,7 +35,6 @@
         android:id="@+id/createBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.105"
@@ -47,7 +46,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
         android:text="Modify"
         app:layout_constraintStart_toEndOf="@+id/createBTN"
         app:layout_constraintTop_toBottomOf="@+id/BarcodeET" />
@@ -57,7 +55,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="16dp"
         android:text="Remove"
         app:layout_constraintStart_toEndOf="@+id/ModifyBTN"
         app:layout_constraintTop_toBottomOf="@+id/BarcodeET" />
@@ -111,7 +108,7 @@
         app:layout_constraintTop_toBottomOf="@+id/DeptTV" />
 
     <TextView
-        android:id="@+id/SearchTV"
+        android:id="@+id/priceTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -170,17 +167,16 @@
         app:layout_constraintTop_toBottomOf="@+id/DeptET" />
 
     <EditText
-        android:id="@+id/SearchET"
+        android:id="@+id/priceET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
         android:ems="10"
         android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:text="tags go here"
+        android:hint="Enter Price "
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/SearchTV"
+        app:layout_constraintStart_toEndOf="@+id/priceTV"
         app:layout_constraintTop_toBottomOf="@+id/IsleET" />
 
     <Button
@@ -191,18 +187,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.386"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SearchET" />
+        app:layout_constraintTop_toBottomOf="@+id/priceET" />
 
     <TextView
         android:id="@+id/ResultTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="4dp"
+        android:layout_height="57dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintHorizontal_bias="0.425"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.793" />
+        app:layout_constraintVertical_bias="0.744" />
 
     <Button
         android:id="@+id/BackBTN"

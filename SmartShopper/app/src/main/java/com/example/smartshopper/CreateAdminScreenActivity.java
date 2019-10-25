@@ -51,7 +51,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
         createBTN = findViewById(R.id.CreateAdminBTN);
         modifyBTN = findViewById(R.id.ModifyAdminBTN);
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
-        cancelBTN = findViewById(R.id.RemoveAdminBTN);
+        cancelBTN = findViewById(R.id.cancelBTN);
         submitBTN = findViewById(R.id.submitBTN);
         boolean isNull = nameET == null;
         Log.d("NullFun", "Is name null:" + isNull);
@@ -60,7 +60,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(submitCode == -1){
-                    return;
+                    outcomeTV.setText("Not able to submit at this time");
                 }
                 else if (submitCode == 1){
                 if(isInputValid()){
@@ -86,7 +86,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                         Store store = AdminMockModelClass.storeBuilder();
                         Admin newAdmin = new Admin(name, empIDDIS, pw, level, store);
                         //We would make a real model call to create it, but for now...
-                        AdminMockModelClass.fakeUpdator(AdminMockModelClass.adminFinder(empIDDIS));
+                        AdminMockModelClass.fakeUpdator(newAdmin);
                         outcomeTV.setText("Update Success!");
                         hideAndCelar();
                     }
@@ -98,10 +98,11 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                     AdminMockModelClass.fakeDestroyer(empIDDIS);
                     outcomeTV.setText("" + "Admin was removed");
                     hideAndCelar();
-                    createBTN.setVisibility(View.VISIBLE);
-                    modifyBTN.setVisibility(View.VISIBLE);
-                    deleteBTN.setVisibility(View.VISIBLE);
+
                 }
+                createBTN.setVisibility(View.VISIBLE);
+                modifyBTN.setVisibility(View.VISIBLE);
+                deleteBTN.setVisibility(View.VISIBLE);
             }
 
         });
@@ -109,6 +110,9 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
              @Override
              public void onClick(View view) {
                  hideAndCelar();
+                 createBTN.setVisibility(View.VISIBLE);
+                 modifyBTN.setVisibility(View.VISIBLE);
+                 deleteBTN.setVisibility(View.VISIBLE);
              }
          });
         createBTN.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +156,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                     String no = "Admin id does not exist";
                     outcomeTV.setText("" + no);
                 }
-                else if(!hasPermission(user)){
+                else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
                     outcomeTV.setText("Insufficient Permissions");
                 }
                 else{
@@ -191,7 +195,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                     String no = "Admin id does not exist";
                     outcomeTV.setText("" + no);
                 }
-                else if(!hasPermission(user)){
+                else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
                     outcomeTV.setText("Insufficient Permissions");
                 }
                 else{
@@ -230,11 +234,15 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
         setResult(0, data);
         finish();
     }
-    private boolean hasPermission(Admin a){
-        if(a.adminLevel.equals(AdminLevel.managingStoreAdmin) ||
-                a.adminLevel.equals(AdminLevel.owner)|| a.userName.equals(empid))
+    private boolean hasPermission(Admin using, Admin chaning){
+        if(using.userName.equals(chaning.userName))
             return false;
-        else return true;
+        else if(using.adminLevel.equals(AdminLevel.owner))
+          return true;
+        else if (chaning.adminLevel.equals(AdminLevel.storeAdmin))
+          return true;
+        else return false;
+
     }
     public void hideAndCelar(){
 
