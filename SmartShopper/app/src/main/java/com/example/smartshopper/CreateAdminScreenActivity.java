@@ -237,26 +237,21 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
         else return true;
     }
     public void hideAndCelar(){
-        Log.d("NullFun", "Is name null:" + View.INVISIBLE);
-        boolean isNull = nameTV == null;
-        Log.d("NullFun", "Is nameTV null in HAC: " + isNull);
-        nameTV = findViewById(R.id.NameTV);
-        isNull = nameTV == null;
-        Log.d("NullFun", "Is nameTV null in HAC after instation: " + isNull);
 
-       // nameTV.setVisibility(View.INVISIBLE);
-//        nameET.setText("");
-//        nameET.setVisibility(View.INVISIBLE);
-//        employeeTV.setVisibility(View.INVISIBLE);
-//        employeeDisTV.setVisibility(View.INVISIBLE);
-//        passwordTV.setVisibility(View.INVISIBLE);
-//        passwordET.setText("");
-//        passwordET.setVisibility(View.INVISIBLE);
-//        rankTV.setVisibility(View.INVISIBLE);
-//        middleAdminCB.setChecked(false);
-//        middleAdminCB.setVisibility(View.INVISIBLE);
-//        ownerCB.setChecked(false);
-//        ownerCB.setVisibility(View.INVISIBLE);
+
+       nameTV.setVisibility(View.INVISIBLE);
+        nameET.setText("");
+        nameET.setVisibility(View.INVISIBLE);
+        employeeTV.setVisibility(View.INVISIBLE);
+        employeeDisTV.setVisibility(View.INVISIBLE);
+        passwordTV.setVisibility(View.INVISIBLE);
+        passwordET.setText("");
+        passwordET.setVisibility(View.INVISIBLE);
+        rankTV.setVisibility(View.INVISIBLE);
+        middleAdminCB.setChecked(false);
+        middleAdminCB.setVisibility(View.INVISIBLE);
+        ownerCB.setChecked(false);
+        ownerCB.setVisibility(View.INVISIBLE);
     }
     public void showFields(){
         nameTV.setVisibility(View.VISIBLE);
