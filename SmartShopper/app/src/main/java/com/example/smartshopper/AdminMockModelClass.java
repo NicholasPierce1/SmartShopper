@@ -32,17 +32,17 @@ public class AdminMockModelClass {
         adminPw.add(a3.password);
         return true;
     }
-    public void fakeCreator(Admin a){
+    public static void fakeCreator(Admin a){
         adminList.add(a);
         adminUserNames.add(a.userName);
         adminPw.add(a.password);
     }
-    public void fakeUpdator(Admin a){
+    public static void fakeUpdator(Admin a){
         String id = a.userName;
         fakeDestroyer(id);
         fakeCreator(a);
     }
-    public void fakeDestroyer(String id){
+    public static void fakeDestroyer(String id){
         int temp = adminUserNames.indexOf(id);
         adminList.remove(temp);
         adminUserNames.remove(temp);

@@ -21,7 +21,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         errorTV.setVisibility(View.INVISIBLE);
 
     }
-    public void loginAction(View v){
+    public  void loginAction(View v){
         EditText usernameET = findViewById(R.id.userNameET);
         String user = usernameET.getText().toString();
         EditText passwordET = findViewById(R.id.PasswordET);

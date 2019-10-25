@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/AdminIDET" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/nameET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -105,6 +105,7 @@
         android:layout_marginTop="16dp"
         android:text="Rank:"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.179"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,15 +120,16 @@
         android:text="01110110"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/EmployeeIDTV"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/nameET" />
 
     <CheckBox
-        android:id="@+id/rankCB"
+        android:id="@+id/middleAdminCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="52dp"
-        android:text="Store Admin"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="44dp"
+        android:text="Managing Admin"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/RankTV"
         app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisTV" />
 
@@ -139,7 +141,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.383"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rankCB" />
+        app:layout_constraintTop_toBottomOf="@+id/middleAdminCB" />
 
     <TextView
         android:id="@+id/outcomeTV"
@@ -185,5 +187,26 @@
         android:inputType="textPassword"
         app:layout_constraintStart_toEndOf="@+id/PasswordTV"
         app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisTV" />
+
+    <CheckBox
+        android:id="@+id/ownerCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Owner"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/middleAdminCB"
+        app:layout_constraintTop_toBottomOf="@+id/PasswordET" />
+
+    <Button
+        android:id="@+id/cancelBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.693"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/middleAdminCB" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
