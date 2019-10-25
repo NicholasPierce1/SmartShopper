@@ -71,11 +71,11 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="A name will be here"
-        app:layout_constraintStart_toEndOf="@+id/NamveTV"
+        app:layout_constraintStart_toEndOf="@+id/NameTV"
         app:layout_constraintTop_toBottomOf="@+id/RemoveAdminBTN" />
 
     <TextView
-        android:id="@+id/NamveTV"
+        android:id="@+id/NameTV"
         android:layout_width="65dp"
         android:layout_height="28dp"
         android:layout_marginTop="12dp"
@@ -96,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.132"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NamveTV" />
+        app:layout_constraintTop_toBottomOf="@+id/NameTV" />
 
     <TextView
         android:id="@+id/RankTV"
