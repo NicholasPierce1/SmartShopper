@@ -6,8 +6,13 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +32,139 @@ public class StoreScreenActivity extends AppCompatActivity {
 
     }
 
-    // initializes mappings between
+    // initializes mappings between location and text view
+    @NonNull
+    @AnyThread
+    private List<Pair<DepartmentType,HashMap<Location, TextView>>> initializeInternalHashmapMappings(){
+
+        // creates local list to hold the department type hashmap pairs
+        final List<Pair<DepartmentType, HashMap<Location, TextView>>> innerListPairings = new ArrayList<Pair<DepartmentType, HashMap<Location, TextView>>>();
+
+        // local counter for item walk through all departments
+        int deptCounter = 1;
+
+        // constructs while loop to walk through all department
+        while(deptCounter < DepartmentType.getDepartmentCount() + 1) {
+
+            // creates local hash map reference
+            final HashMap<Location, TextView> innerHashMap = new HashMap<Location, TextView>();
+
+            // creates department type from id
+            DepartmentType departmentType = DepartmentType.getDepartmentTypeFromID(deptCounter);
+
+            // asserts not null
+            assert(departmentType != null);
+
+            // employs switch to walk through all cases
+            switch(departmentType) {
+
+                case grocery:
+                    // grocery aisle 10
+                    innerHashMap.put(Location.aisleTenRight, (TextView) super.findViewById(R.id.groceryDepartmentA10RightTV));
+
+                    // grocery aisle 9
+                    innerHashMap.put(Location.aisleNineLeft, (TextView) super.findViewById(R.id.groceryDepartmentA9LeftTV));
+                    innerHashMap.put(Location.aisleNineRight, (TextView) super.findViewById(R.id.groceryDepartmentA9RightTV));
+
+                    // grocery aisle 8
+                    innerHashMap.put(Location.aisleEightLeft, (TextView) super.findViewById(R.id.groceryDepartmentA8LeftTV));
+                    innerHashMap.put(Location.aisleEightRight, (TextView) super.findViewById(R.id.groceryDepartmentA8RightTV));
+
+                    // grocery aisle 7
+                    innerHashMap.put(Location.aisleSevenLeft, (TextView) super.findViewById(R.id.groceryDepartmentA7LeftTV));
+                    innerHashMap.put(Location.aisleSevenRight, (TextView) super.findViewById(R.id.groceryDepartmentA7RightTV));
+
+                    // grocery aisle 6
+                    innerHashMap.put(Location.aisleSixLeft, (TextView) super.findViewById(R.id.groceryDepartmentA6LeftTV));
+                    innerHashMap.put(Location.aisleSixRight, (TextView) super.findViewById(R.id.groceryDepartmentA6RightTV));
+
+                    // grocery aisle 5
+                    innerHashMap.put(Location.aisleFiveLeft, (TextView) super.findViewById(R.id.groceryDepartmentA5LeftTV));
+                    innerHashMap.put(Location.aisleFiveRight, (TextView) super.findViewById(R.id.groceryDepartmentA5RightTV));
+
+                    // grocery aisle 4
+                    innerHashMap.put(Location.aisleFourLeft, (TextView) super.findViewById(R.id.groceryDepartmentA4LeftTV));
+                    innerHashMap.put(Location.aisleFourRight, (TextView) super.findViewById(R.id.groceryDepartmentA4RightTV));
+
+                    // grocery aisle 3
+                    innerHashMap.put(Location.aisleThreeLeft, (TextView) super.findViewById(R.id.groceryDepartmentA3LeftTV));
+                    innerHashMap.put(Location.aisleThreeRight, (TextView) super.findViewById(R.id.groceryDepartmentA3RightTV));
+
+                    // grocery aisle 2
+                    innerHashMap.put(Location.aisleTwoLeft, (TextView) super.findViewById(R.id.groceryDepartmentA2LeftTV));
+                    innerHashMap.put(Location.aisleTwoRight, (TextView) super.findViewById(R.id.groceryDepartmentA2RightTV));
+
+                    // grocery aisle 1
+                    innerHashMap.put(Location.aisleOneLeft, (TextView) super.findViewById(R.id.groceryDepartmentA1LeftTV));
+                    innerHashMap.put(Location.aisleOneRight, (TextView) super.findViewById(R.id.groceryDepartmentA1RightTV));
+
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case produce:
+
+                    // appends all sub locations in hashmap
+                    innerHashMap.put(Location.produceDepartmentLeftMostAisle, (TextView)super.findViewById(R.id.produceDepartmentLeftMostAisleTV));
+                    innerHashMap.put(Location.produceDepartmentLeftMostDisplay, (TextView)super.findViewById(R.id.produceDepartmentLeftMostDisplayTV));
+                    innerHashMap.put(Location.produceDepartmentTopMostAisle, (TextView)super.findViewById(R.id.produceDepartmentTopMostAisleTV));
+                    innerHashMap.put(Location.produceDepartmentRightMostDisplay, (TextView)super.findViewById(R.id.produceDepartmentRightMostDisplayTV));
+
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case floral:
+                    innerHashMap.put(Location.floralDepartment, (TextView)super.findViewById(R.id.floralDepartmentTV));
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case deli:
+                    innerHashMap.put(Location.deliDepartment, (TextView)super.findViewById(R.id.deliDepartmentTV));
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case bakery:
+                    innerHashMap.put(Location.bakeryDepartment, (TextView)super.findViewById(R.id.bakeryDepartmentTV));
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case meat:
+                    innerHashMap.put(Location.meatDepartment, (TextView)super.findViewById(R.id.meatDepartmentTV));
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case seafood:
+                    innerHashMap.put(Location.seafoodDepartment, (TextView)super.findViewById(R.id.seafoodDepartmentTV));
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case dairy:
+                    innerHashMap.put(Location.dairyDepartment, (TextView)super.findViewById(R.id.dairyDepartmentTV));
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+
+                case frozen:
+                    innerHashMap.put(Location.frozenDepartment, (TextView)super.findViewById(R.id.frozenDepartmentTV));
+                    // creates pair object and adds to list
+                    innerListPairings.add(new Pair<DepartmentType, HashMap<Location, TextView>>(departmentType, innerHashMap));
+                    break;
+            }
+
+            // increments counter
+            deptCounter++;
+        }
+
+        return innerListPairings;
+    }
+
+    
 
     // configures the "emulated tab bar intents" to insert functionality into tabs
 
