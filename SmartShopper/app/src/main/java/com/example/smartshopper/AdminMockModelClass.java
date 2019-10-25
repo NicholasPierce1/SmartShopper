@@ -7,9 +7,10 @@ import java.util.ArrayList;
 
 public class AdminMockModelClass {
     public static boolean firstTime = true;
-    public static Admin a1 = new Admin("Matthew Berry", "001", "admin", AdminLevel.owner, Store.storeBuilder("001"));
-    public static Admin a2 = new Admin("Joe Average", "002", "admin", AdminLevel.storeAdmin, Store.storeBuilder("001"));
-    public static Admin a3 = new Admin("Mason Middle", "003", "admin", AdminLevel.managingStoreAdmin, Store.storeBuilder("001"));
+    public static Store store = new Store("Maryville,MO","Walmart");
+    public static Admin a1 = new Admin("Matthew Berry", "001", "admin", AdminLevel.owner, store);
+    public static Admin a2 = new Admin("Joe Average", "002", "admin", AdminLevel.storeAdmin, store);
+    public static Admin a3 = new Admin("Mason Middle", "003", "admin", AdminLevel.managingStoreAdmin, store);
     public static ArrayList<String> adminUserNames = new ArrayList<String>();
     public static ArrayList<String> adminPw = new ArrayList<String>();
     public static ArrayList<Admin> adminList = new ArrayList<Admin>();
@@ -28,7 +29,9 @@ public class AdminMockModelClass {
 
         return adminList.get(finder);
     }
-
+    public static Store storeBuilder(){
+        return store;
+    }
     public static void fakeCreator(Admin a){
         adminList.add(a);
         adminUserNames.add(a.userName);

@@ -67,7 +67,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                     String name = nameET.getText().toString();
                     String pw = passwordET.getText().toString();
                     AdminLevel level = levelFinder();
-                    Store store = Store.storeBuilder("001");
+                    Store store = AdminMockModelClass.storeBuilder();
                     Admin newAdmin = new Admin(name, empIDDIS, pw, level, store);
                     //We would make a real model call to create it, but for now...
                     AdminMockModelClass.fakeCreator(newAdmin);
@@ -83,7 +83,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                         String name = nameET.getText().toString();
                         String pw = passwordET.getText().toString();
                         AdminLevel level = levelFinder();
-                        Store store = Store.storeBuilder("001");
+                        Store store = AdminMockModelClass.storeBuilder();
                         Admin newAdmin = new Admin(name, empIDDIS, pw, level, store);
                         //We would make a real model call to create it, but for now...
                         AdminMockModelClass.fakeUpdator(AdminMockModelClass.adminFinder(empIDDIS));
