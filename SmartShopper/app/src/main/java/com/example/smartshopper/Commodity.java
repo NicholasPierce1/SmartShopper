@@ -1,7 +1,9 @@
 package com.example.smartshopper;
 
+import java.io.Serializable;
+
 // denotes the definition of Commodities and groceries in data access layer
-public final class Commodity {
+public final class Commodity implements Serializable {
 
     // enumerates shared properties
     String objectId;

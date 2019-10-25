@@ -2,6 +2,7 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,13 +47,15 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
         passwordET = findViewById(R.id.PasswordET);
         employeeDisTV.setText("");
 
-        hideAndCelar();
-         createBTN = findViewById(R.id.CreateAdminBTN);
-         modifyBTN = findViewById(R.id.ModifyAdminBTN);
-         deleteBTN = findViewById(R.id.RemoveAdminBTN);
-         cancelBTN = findViewById(R.id.RemoveAdminBTN);
-        submitBTN = findViewById(R.id.submitBTN);
 
+        createBTN = findViewById(R.id.CreateAdminBTN);
+        modifyBTN = findViewById(R.id.ModifyAdminBTN);
+        deleteBTN = findViewById(R.id.RemoveAdminBTN);
+        cancelBTN = findViewById(R.id.RemoveAdminBTN);
+        submitBTN = findViewById(R.id.submitBTN);
+        boolean isNull = nameET == null;
+        Log.d("NullFun", "Is name null:" + isNull);
+        hideAndCelar();
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +67,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                     String name = nameET.getText().toString();
                     String pw = passwordET.getText().toString();
                     AdminLevel level = levelFinder();
-                    Store store = Store.storeBuilder("001");
+                    Store store = AdminMockModelClass.storeBuilder();
                     Admin newAdmin = new Admin(name, empIDDIS, pw, level, store);
                     //We would make a real model call to create it, but for now...
                     AdminMockModelClass.fakeCreator(newAdmin);
@@ -80,7 +83,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
                         String name = nameET.getText().toString();
                         String pw = passwordET.getText().toString();
                         AdminLevel level = levelFinder();
-                        Store store = Store.storeBuilder("001");
+                        Store store = AdminMockModelClass.storeBuilder();
                         Admin newAdmin = new Admin(name, empIDDIS, pw, level, store);
                         //We would make a real model call to create it, but for now...
                         AdminMockModelClass.fakeUpdator(AdminMockModelClass.adminFinder(empIDDIS));
@@ -234,7 +237,9 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
         else return true;
     }
     public void hideAndCelar(){
-        nameTV.setVisibility(View.INVISIBLE);
+
+
+       nameTV.setVisibility(View.INVISIBLE);
         nameET.setText("");
         nameET.setVisibility(View.INVISIBLE);
         employeeTV.setVisibility(View.INVISIBLE);
