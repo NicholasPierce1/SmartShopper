@@ -11,15 +11,38 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/errorTV"
-            android:layout_width="133dp"
-            android:layout_height="29dp"
+            android:id="@+id/departmentTV"
+            android:layout_width="91dp"
+            android:layout_height="30dp"
+            android:text="Department:"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.715"
+            app:layout_constraintHorizontal_bias="0.143"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.267" />
+            app:layout_constraintVertical_bias="0.375" />
+
+        <Button
+            android:id="@+id/searchBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/search_go"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="280dp"
+            android:layout_height="293dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.787" />
 
         <TextView
             android:id="@+id/findMyItemTV"

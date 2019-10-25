@@ -13,7 +13,7 @@ public class Search_screenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_screen);
-        errorTV = findViewById(R.id.errorTV);
+        errorTV = findViewById(R.id.departmentTV);
     }
 
     public void welcomeScreenIntent(View v){
