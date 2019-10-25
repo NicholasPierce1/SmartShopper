@@ -6,7 +6,7 @@ enum Location {
     aisleSevenLeft(13), aisleSevenRight(14), aisleEightLeft(15), aisleEightRight(16),
     aisleNineLeft(17),  aisleNineRight(18), aisleTenRight(19), frozenDepartment(20), dairyDepartment(21),
     meatDepartment(22), seafoodDepartment(23), bakeryDepartment(24), deliDepartment(25),  floralDepartment(26),
-    frozenDepartmentLeftMostAisle(27), frozenDepartmentTopMostAisle(28), frozenDepartmentLeftMostDisplay(29), frozenDepartmentRightMostDisplay(30);
+    produceDepartmentLeftMostAisle(27), produceDepartmentTopMostAisle(28), produceDepartmentLeftMostDisplay(29), produceDepartmentRightMostDisplay(30);
 
 
     // defines locationID
