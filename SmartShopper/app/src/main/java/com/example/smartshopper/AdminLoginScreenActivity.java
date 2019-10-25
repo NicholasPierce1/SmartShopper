@@ -28,7 +28,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         String pw = passwordET.getText().toString();
         if(validateLogin(user, pw)){
             Intent toHub = new Intent(this, AdminScreenActivity.class);
-            toHub.putExtra("EMPID", "001");
+            toHub.putExtra("EMPID", user);
             startActivity(toHub);
         }
         else{
@@ -39,13 +39,15 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
     private boolean validateLogin(String user, String pw){
         //For now this wull be a hard codeed thing.
         // In the Future we will have a method that validates username and password.
-        if(user.equals("001")){
-            if(pw.equals("admin")){
-                return true;
-            }
-            else return false;
-        }
-        else return false;
+
+      if(AdminMockModelClass.adminUserNames.contains(user)){
+         int index = AdminMockModelClass.adminUserNames.indexOf(user);
+         if(pw.equals(AdminMockModelClass.adminPw.get(index))){
+             return true;
+         }
+         else return false;
+      }
+      else return false;
     }
 
     public void cancleAction(View v){
