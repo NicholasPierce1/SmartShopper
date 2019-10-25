@@ -2,11 +2,22 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class StoreScreenActivity extends AppCompatActivity {
+
+    // enumerates local member state
+
+    // holds all locations pertaining to the store's schematic: textviews are found via departments of searched commodity
+    // from the search commodity, the location is referenced to acquire the text view
+    private HashMap<DepartmentType, HashMap<Location, TextView>> departmentToTextViewInfoReference;
 
 
     @Override
