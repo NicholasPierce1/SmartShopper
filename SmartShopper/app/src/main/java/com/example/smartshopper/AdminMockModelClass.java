@@ -1,7 +1,13 @@
 package com.example.smartshopper;
 
+import java.util.ArrayList;
+
 public class AdminMockModelClass {
     public static String[] a1 = {"Matthew Berry", "001", "admin", "Owner", "001"};
+    public static String[] a2 = {"Joe Average", "002", "admin", "storeAdmin", "001"};
+    public static String[] a3 = {"Mason Middle", "002", "admin", "managingStoreAdmin", "001"};
+    public ArrayList<Admin> adminList = new ArrayList<Admin>();
+    adminList.add(a1);
     //For milestone two
     public static Admin adminBuilder(String adminID){
         String[] adminParams = getAdminDetails(adminID);
