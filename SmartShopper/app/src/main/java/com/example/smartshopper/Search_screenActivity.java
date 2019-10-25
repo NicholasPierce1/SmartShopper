@@ -1,5 +1,7 @@
 package com.example.smartshopper;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -60,10 +62,9 @@ public class Search_screenActivity extends AppCompatActivity{
         if(commodityList.size() == 1){
             this.returnedItemIntent(commodityList.get(0));
         }
-        else{
-            
-        }
+        else if(commodityList.size() >= 2 && commodityList.size() <= 3){
 
+        }
         // else here- 2-3
         // pass list into recycler view for user selection
 
