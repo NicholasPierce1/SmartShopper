@@ -22,29 +22,28 @@ public class AdminScreenActivity extends AppCompatActivity {
         super.setContentView(R.layout.admin_screen);
         Intent ini = getIntent();
         empid = ini.getStringExtra("EMPID");
+        Admin admin;
+        admin = AdminMockModelClass.adminFinder(empid);
         nameTV = findViewById(R.id.NameTV);
-        name = (nameTV.getText().toString() + nameFinder(empid));
+        name = (nameTV.getText().toString() + admin.name);
         nameTV.setText(name);
         empIDTV = findViewById(R.id.EmployeeIDTV);
         empIDTV.setText(empIDTV.getText().toString() + empid);
         rankTV = findViewById(R.id.RantTV);
-        rank = (rankTV.getText().toString() + rankFinder(empid) );
+        rank = (rankTV.getText().toString() + rankFinder(admin) );
         rankTV.setText(rank);
 
     }
-    private String nameFinder(String eid){
+
+    private String rankFinder(Admin a){
         //Here we will do a key value search with the employee id for the name.
         //For now we're just gonna hard code a value and retunr in
-        return "Mister Admin";
-    }
-    private String rankFinder(String eid){
-        //Here we will do a key value search with the employee id for the name.
-        //For now we're just gonna hard code a value and retunr in
-        boolean isStoreAdmin = true;
+        boolean isStoreAdmin = (a.adminLevel.equals(AdminLevel.owner) ||
+                a.adminLevel.equals(AdminLevel.managingStoreAdmin));
         Button adminCreateBTN = findViewById(R.id.adminBTN);
         if (isStoreAdmin){
             adminCreateBTN.setVisibility(View.VISIBLE);
-            return "Store Admin";
+            return "Elevated Admin";
         }
        else{
            adminCreateBTN.setVisibility(View.INVISIBLE);

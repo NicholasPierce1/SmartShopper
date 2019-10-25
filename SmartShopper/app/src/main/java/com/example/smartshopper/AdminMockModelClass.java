@@ -9,13 +9,13 @@ public class AdminMockModelClass {
     public static Admin a3 = new Admin("Mason Middle", "002", "admin", AdminLevel.managingStoreAdmin, Store.storeBuilder("001"));
     public static ArrayList<String> adminUserNames = new ArrayList<String>();
     public static ArrayList<String> adminPw = new ArrayList<String>();
-    public ArrayList<Admin> adminList = new ArrayList<Admin>();
+    public static ArrayList<Admin> adminList = new ArrayList<Admin>();
     //IMPORTANT: THE INDEXING OF THE THREE ARRAYLISTS MUST MATCH! If they don't bad things happen
     //Bad things...
     //VERY BAD THINGS
     private boolean started = populateFakeData(); //This is just to make java do a thing
     //For milestone two
-    public Admin adminFinder(String id){
+    public static Admin adminFinder(String id){
         //Method predicated on the fact that the proper, valid, and relevant adminID exists
         int finder = adminList.indexOf(id);
         return adminList.get(finder);
