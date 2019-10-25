@@ -66,12 +66,14 @@ public class Search_screenActivity extends AppCompatActivity{
         }
 
         if(commodityList.size() == 1){
-            this.returnedItemIntent(commodityList.get(0));
+            //this.returnedItemIntent(commodityList.get(0));
+            errorTV.setText("Blah");
         }
         // else here- 2-3
         // pass list into recycler view for user selection
         else if(commodityList.size() >= 2 && commodityList.size() <= 3){
             Toast.makeText(this, "List between 2-3", Toast.LENGTH_SHORT).show();
+            errorTV.setText("FLAH");
         }
 
     }
