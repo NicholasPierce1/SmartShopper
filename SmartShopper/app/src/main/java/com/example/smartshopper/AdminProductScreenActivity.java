@@ -1,6 +1,7 @@
 package com.example.smartshopper;
 
 import android.content.Intent;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 //@Author Matthew Berry
 
 public class AdminProductScreenActivity extends AppCompatActivity {
-    String empid, barcode;
+    String empid, barcode, vendor, name, dept;
+    double price;
+    String wrong = "";
     int submitCode = -1;
     TextView nameTV, vendorTV, deptTV, isleTV, priceTV, resultTV;
     EditText barCodeET, nameET, vendorET, deptET, isleET, priceET;
@@ -47,6 +50,71 @@ public class AdminProductScreenActivity extends AppCompatActivity {
         backBTN = findViewById(R.id.BackBTN);
         hideAndClear();
 
+        pCancleBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideAndClear();
+                crateBTN.setVisibility(View.VISIBLE);
+                modifyBTN.setVisibility(View.VISIBLE);
+                deleteBTN.setVisibility(View.VISIBLE);
+            }
+        });
+
+        pSubmitBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vendor = vendorET.getText().toString();
+                price = Double.valueOf(vendorET.getText().toString());
+                dept = deptET.getText().toString();
+                int isleNum = Integer.valueOf(isleET.getText().toString());
+                //STUBBED LOGIC
+                Department department;
+                if(isleNum > 0 && isleNum < 6 ){
+                     department = CommodityMockModel.d1;
+                }
+                else  department = CommodityMockModel.d2;
+
+                if(submitCode == -1){
+                    resultTV.setText("Not able to submit at this time");
+                }
+                else if (submitCode == 1){
+                    if(isInputValid()){
+                       Commodity commodity = new Commodity(barcode, name, vendor, price, true,
+                               Location.getLocationFromAisleNumber(isleNum), department);
+                        //We would make a real model call to create it, but for now...
+                        CommodityMockModel.fakeCreator(commodity);
+                        resultTV.setText("Creation Success!");
+                        hideAndClear();
+                    }
+                    else{
+                        resultTV.setText("Invalid input: " +wrong);
+                    }
+                }
+                else if(submitCode == 2){
+                    if(isInputValid()){
+                        Commodity commodity = new Commodity(barcode, name, vendor, price, true,
+                                Location.getLocationFromAisleNumber(isleNum), department);
+                        //We would make a real model call to create it, but for now...
+                        CommodityMockModel.fakeUpdator(commodity);
+                        resultTV.setText("Update Success!");
+                        hideAndClear();
+                    }
+                    else{
+                        resultTV.setText("Invalid input: " +wrong);
+                    }
+                }
+                else if(submitCode == 3){
+                    AdminMockModelClass.fakeDestroyer(barcode);
+                    resultTV.setText("" + "Product was removed");
+                    hideAndClear();
+
+                }
+                crateBTN.setVisibility(View.VISIBLE);
+                modifyBTN.setVisibility(View.VISIBLE);
+                deleteBTN.setVisibility(View.VISIBLE);
+            }
+
+        });
         pCancleBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,6 +272,27 @@ public class AdminProductScreenActivity extends AppCompatActivity {
         isleET.setVisibility(View.VISIBLE);
         priceTV.setVisibility(View.VISIBLE);
         priceET.setVisibility(View.VISIBLE);
+    }
+
+    private boolean isInputValid(){
+         wrong = "";
+        if(isEmpty(vendor) || isEmpty(dept) || isEmpty(name)){
+            wrong +="Blank fields are not allowed";
+        }
+        if(price <=0){
+            wrong += "Price cannnot be less than zero";
+        }
+        if(CommodityMockModel.vendors.contains(vendor)){
+            if(name.equals(CommodityMockModel.names.get(CommodityMockModel.vendors.indexOf(vendor)))){
+                wrong += "Vendor already has a product with this name";
+            }
+        }
+        else;
+        return  wrong.equals("");
+
+    }
+    private boolean isEmpty(String s){
+        return (s == null || s.equals("") || s.equals(" "));
     }
 
 
