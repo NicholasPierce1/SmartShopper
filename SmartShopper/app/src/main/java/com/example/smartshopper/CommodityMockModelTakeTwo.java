@@ -40,6 +40,7 @@ public final class CommodityMockModelTakeTwo {
         // gets department object from name
         Department connectedDepartment = this.getDepartmentFromDepartmentName(department);
 
+
         // checks that no fields are empty & department does not equal null
         if(barcode.isEmpty() || name.isEmpty() || connectedDepartment == null)
             return false;
