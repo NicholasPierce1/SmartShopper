@@ -16,7 +16,7 @@ public class AdminInputValidationHandler {
     }
      private static boolean  productValidationCheck(String valCode){
         //This is  a stubbed method for now
-        if(valCode.equals("123"))
+        if(CommodityMockModel.barCodes.contains(valCode))
          return true;
         else return false;
     }
