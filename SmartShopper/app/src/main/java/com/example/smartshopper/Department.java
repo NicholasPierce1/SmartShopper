@@ -1,7 +1,9 @@
 package com.example.smartshopper;
 
+import java.io.Serializable;
+
 // denotes the definition of Department in data access layer
-public final class Department {
+public final class Department implements Serializable {
 
     // enumerates shared properties
     String objectID;

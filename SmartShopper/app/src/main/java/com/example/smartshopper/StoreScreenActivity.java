@@ -2,6 +2,7 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class StoreScreenActivity extends AppCompatActivity {
 
         // refreshes/ initializes store schematic view from intent
         this.initializeSchematicView();
+
     }
 
     // initializes mappings between location and text view
@@ -207,6 +209,8 @@ public class StoreScreenActivity extends AppCompatActivity {
             // initial creation OR tab bar creation
             this.turnOnOrOffAllSchematicViews(true);
         }
+        Log.d("onCreateCall", "is passed in intent: ".concat(String.valueOf(intentPair.first)));
+        Log.d("onCreateCallIsIntentEmpty", String.valueOf(this.getIntent().getExtras() == null));
     }
 
     // turns on or off all views within schematic
@@ -234,8 +238,9 @@ public class StoreScreenActivity extends AppCompatActivity {
     private Pair<Boolean, Commodity> needsToRefreshTextViewFromIntent(){
 
         // acquires commodity (null default)
-        Commodity commodity = (Commodity)super.getIntent().getSerializableExtra(this.getString(R.string.itemLookupExtraKey));
-
+        Commodity commodity = (Commodity)this.getIntent().getSerializableExtra(this.getString(R.string.itemLookupExtraKey));
+        Log.d("onCreateCallCommodityPull", String.valueOf(commodity));
+        Log.d("onCreateCallIntPull", String.valueOf(this.getIntent().getIntExtra("test", -1)));
         return new Pair<Boolean, Commodity>(commodity != null, commodity);
 
     }
@@ -259,4 +264,10 @@ public class StoreScreenActivity extends AppCompatActivity {
         return;
     }
 
+    @Override
+    public void onRestart(){
+        super.onRestart();
+
+        //this.initializeSchematicView();
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.smartshopper;
 
-enum Location {
+import java.io.Serializable;
+
+enum Location implements Serializable {
     aisleOneLeft(1), aisleOneRight(2), aisleTwoLeft(3), aisleTwoRight(4), aisleThreeLeft(5), aisleThreeRight(6),
     aisleFourLeft(7), aisleFourRight(8), aisleFiveLeft(9), aisleFiveRight(10), aisleSixLeft(11), aisleSixRight(12),
     aisleSevenLeft(13), aisleSevenRight(14), aisleEightLeft(15), aisleEightRight(16),

@@ -3,9 +3,10 @@ package com.example.smartshopper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.security.InvalidKeyException;
 
-public enum DepartmentType {
+public enum DepartmentType implements Serializable {
     grocery(1), floral(2), deli(3), bakery(4), produce(5), meat(6), seafood(7), dairy(8), frozen(9);
 
     // holds ordinal value for ease-creation and search
