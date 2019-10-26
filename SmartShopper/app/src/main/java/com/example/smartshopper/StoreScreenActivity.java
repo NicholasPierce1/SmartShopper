@@ -209,8 +209,7 @@ public class StoreScreenActivity extends AppCompatActivity {
             // initial creation OR tab bar creation
             this.turnOnOrOffAllSchematicViews(true);
         }
-        Log.d("onCreateCall", "is passed in intent: ".concat(String.valueOf(intentPair.first)));
-        Log.d("onCreateCallIsIntentEmpty", String.valueOf(this.getIntent().getExtras() == null));
+
     }
 
     // turns on or off all views within schematic
@@ -226,7 +225,6 @@ public class StoreScreenActivity extends AppCompatActivity {
 
     @MainThread
     private void turnStoreSchematicTextViewOnFromCommodity(@NonNull final Commodity commodity){
-
         // turns textview on per commodity's department type and location
         this.departmentToTextViewInfoReference.get(commodity.department.type).get(commodity.location).setVisibility(View.VISIBLE);
 
@@ -239,8 +237,7 @@ public class StoreScreenActivity extends AppCompatActivity {
 
         // acquires commodity (null default)
         Commodity commodity = (Commodity)this.getIntent().getSerializableExtra(this.getString(R.string.itemLookupExtraKey));
-        Log.d("onCreateCallCommodityPull", String.valueOf(commodity));
-        Log.d("onCreateCallIntPull", String.valueOf(this.getIntent().getIntExtra("test", -1)));
+
         return new Pair<Boolean, Commodity>(commodity != null, commodity);
 
     }

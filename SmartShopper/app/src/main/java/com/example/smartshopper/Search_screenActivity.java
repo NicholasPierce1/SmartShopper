@@ -94,7 +94,7 @@ public class Search_screenActivity extends AppCompatActivity{
                     int position = holder.getAdapterPosition();
 
                     // acquire item from position and invoke intent w/ clear top
-                    controller.returnedItemIntent(controller.itemListReturn0.get(position));
+                    controller.returnedItemIntent(controller.itemListReturn1.get(position));
 
                     return true; // Use up the tap gesture
                 }
