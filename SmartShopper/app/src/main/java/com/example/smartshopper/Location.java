@@ -26,12 +26,12 @@ enum Location implements Serializable {
     // returns location from aisle number
     @Nullable
     @AnyThread
-    public Location getItemFromAisleNumber(final int aisleNumber) {
+    public Location getLocationFromAisleNumber(final int aisleNumber) {
 
         // validates input to assert aisleNumber is within aisle range [1-19]
         if(aisleNumber > Location.aisleTenRight.locationID || aisleNumber < Location.aisleOneLeft.locationID)
             return null;
-        
+
         // employs switch to acquire corresponding location
         switch(aisleNumber){
             case 1: return aisleOneLeft;
