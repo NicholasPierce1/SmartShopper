@@ -1,11 +1,14 @@
 package com.example.smartshopper;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ public class Search_screenActivity extends AppCompatActivity{
     ArrayList<Commodity> itemListReturn2 = new ArrayList<>();
 
     RecyclerView recyclerView;
+    private GestureDetectorCompat detector = null;
 
     Search_Screen_RecyclerView_Adapter adapter;
 
@@ -60,6 +64,34 @@ public class Search_screenActivity extends AppCompatActivity{
         itemListReturn1.add(item2);
         itemListReturn1.add(item4);
         itemListReturn1.add(item5);
+
+        // Make a Listener for taps
+        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListener());
+        // add the listener to the recycler
+        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e){
+                return detector.onTouchEvent(e);
+            }
+        });
+    }
+
+    private class RecyclerViewOnGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            View view = recyclerView.findChildViewUnder(e.getX(), e.getY());
+            if (view != null) {
+                RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
+                if (holder instanceof Search_Screen_RecyclerView_Adapter.SearchScreenViewHolder) {
+                    int position = holder.getAdapterPosition();
+                    // handle single tap
+                    Log.d("click", "clicked on item "+ position);
+                    return true; // Use up the tap gesture
+                }
+            }
+            // we didn't handle the gesture so pass it on
+            return false;
+        }
     }
 
     public void itemSearch(View v){
@@ -85,8 +117,8 @@ public class Search_screenActivity extends AppCompatActivity{
         }
 
         if(commodityList.size() == 1){
-            //this.returnedItemIntent(commodityList.get(0));
-            errorTV.setText("Blah");
+            this.returnedItemIntent(commodityList.get(0));
+
 
         }
         // else here- 2-3
@@ -118,9 +150,8 @@ public class Search_screenActivity extends AppCompatActivity{
 
     public void returnedItemIntent(Commodity commodity){
         Intent itemReturned = new Intent (this, StoreScreenActivity.class);
-
-        itemReturned.putExtra("commodity", commodity);
-
+        itemReturned.putExtra(this.getString(R.string.itemLookupExtraKey), commodity);
+        itemReturned.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.startActivity(itemReturned);
 
     }
