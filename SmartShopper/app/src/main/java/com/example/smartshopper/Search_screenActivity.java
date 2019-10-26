@@ -1,9 +1,11 @@
 package com.example.smartshopper;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,6 +39,8 @@ public class Search_screenActivity extends AppCompatActivity{
 
     RecyclerView recyclerView;
 
+    Search_Screen_RecyclerView_Adapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -46,40 +50,6 @@ public class Search_screenActivity extends AppCompatActivity{
 
         this.recyclerView = (RecyclerView)super.findViewById(R.id.itemRecyclerView);
         this.recyclerView.setVisibility(View.INVISIBLE);
-    }
-
-    public void itemSearch(View v){
-        if(itemEntered.getText().toString().isEmpty()){
-            errorTV.setText("This field cannot be blank");
-        }
-        else if(itemEntered.getText().toString().length() < 4){
-            errorTV.setText("Invalid input");
-        }
-
-        List<Commodity> commodityList = findItemByUserText(fake);
-
-        if(commodityList.size() == 0){
-            errorTV.setText("Be more general with your search");
-        }
-        else if(commodityList.size() > 3){
-            errorTV.setText("Be more specific with your search");
-        }
-
-        if(commodityList.size() == 1){
-            //this.returnedItemIntent(commodityList.get(0));
-            errorTV.setText("Blah");
-        }
-        // else here- 2-3
-        // pass list into recycler view for user selection
-        else if(commodityList.size() >= 2 && commodityList.size() <= 3){
-            Toast.makeText(this, "List between 2-3", Toast.LENGTH_SHORT).show();
-            errorTV.setText("FLAH");
-        }
-
-    }
-
-    public ArrayList<Commodity> findItemByUserText(String item){
-        int number = rando.nextInt(3);
 
         itemListReturn0.add(item1);
         itemListReturn0.add(item2);
@@ -90,14 +60,58 @@ public class Search_screenActivity extends AppCompatActivity{
         itemListReturn1.add(item2);
         itemListReturn1.add(item4);
         itemListReturn1.add(item5);
+    }
 
-        if(number == 0){
+    public void itemSearch(View v){
+        if(itemEntered.getText().toString().isEmpty()){
+            errorTV.setText("This field cannot be blank");
+            return;
+        }
+        else if(itemEntered.getText().toString().length() < 4){
+            errorTV.setText("Invalid input");
+            return;
+        }
+
+        List<Commodity> commodityList = findItemByUserText(fake);
+        Log.d("randomNumLength", String.valueOf(commodityList.size()));
+
+        if(commodityList.size() == 0){
+            errorTV.setText("Be more general with your search");
+            return;
+        }
+        else if(commodityList.size() > 3){
+            errorTV.setText("Be more specific with your search");
+            return;
+        }
+
+        if(commodityList.size() == 1){
+            //this.returnedItemIntent(commodityList.get(0));
+            errorTV.setText("Blah");
+
+        }
+        // else here- 2-3
+        // pass list into recycler view for user selection
+        else{
+            this.adapter  = new Search_Screen_RecyclerView_Adapter(commodityList);
+            this.recyclerView.setAdapter(this.adapter);
+            this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            this.recyclerView.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    public ArrayList<Commodity> findItemByUserText(String item){
+        int number = rando.nextInt(3);
+
+        Log.d("randomNum", String.valueOf(number));
+
+        if(number == 0){ // all
             return itemListReturn0;
         }
-        else if(number == 1){
+        else if(number == 1){ // three
             return itemListReturn1;
         }
-        else
+        else // empty
             return itemListReturn2;
 
     }
