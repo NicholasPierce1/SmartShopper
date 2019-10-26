@@ -1,4 +1,5 @@
 package com.example.smartshopper;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,7 +67,7 @@ public class Search_screenActivity extends AppCompatActivity{
         itemListReturn1.add(item5);
 
         // Make a Listener for taps
-        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListener());
+        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListenerForSearchMultiSelection(this));
         // add the listener to the recycler
         recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
             @Override
@@ -76,7 +77,14 @@ public class Search_screenActivity extends AppCompatActivity{
         });
     }
 
-    private class RecyclerViewOnGestureListener extends GestureDetector.SimpleOnGestureListener {
+    private class RecyclerViewOnGestureListenerForSearchMultiSelection extends GestureDetector.SimpleOnGestureListener {
+
+        Search_screenActivity controller;
+
+        RecyclerViewOnGestureListenerForSearchMultiSelection(@NonNull final Search_screenActivity search_screenActivity){
+            this.controller = search_screenActivity;
+        }
+
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             View view = recyclerView.findChildViewUnder(e.getX(), e.getY());
@@ -84,8 +92,10 @@ public class Search_screenActivity extends AppCompatActivity{
                 RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
                 if (holder instanceof Search_Screen_RecyclerView_Adapter.SearchScreenViewHolder) {
                     int position = holder.getAdapterPosition();
-                    // handle single tap
-                    Log.d("click", "clicked on item "+ position);
+
+                    // acquire item from position and invoke intent w/ clear top
+                    controller.returnedItemIntent(controller.itemListReturn0.get(position));
+
                     return true; // Use up the tap gesture
                 }
             }

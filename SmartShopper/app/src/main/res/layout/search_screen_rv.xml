@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FF0000"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/itemRVTV"
+        android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Item:" />
 
     <TextView
-        android:id="@+id/departmentRVTV"
+        android:id="@+id/itemRVTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Item:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Department:" />
+
+    <TextView
+        android:id="@+id/departmentRVTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Department:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
