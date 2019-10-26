@@ -53,8 +53,7 @@ public class CreateAdminScreenActivity extends AppCompatActivity {
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
         cancelBTN = findViewById(R.id.cancelBTN);
         submitBTN = findViewById(R.id.submitBTN);
-        boolean isNull = nameET == null;
-        Log.d("NullFun", "Is name null:" + isNull);
+       
         hideAndCelar();
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override

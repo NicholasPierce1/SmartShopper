@@ -112,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Search tags:"
+        android:text="Price"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.086"
@@ -170,8 +170,7 @@
         android:id="@+id/priceET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="80dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Enter Price "
@@ -180,25 +179,24 @@
         app:layout_constraintTop_toBottomOf="@+id/IsleET" />
 
     <Button
-        android:id="@+id/SubmitBTN"
+        android:id="@+id/pSubmitBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.386"
+        app:layout_constraintHorizontal_bias="0.241"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/priceET" />
 
     <TextView
         android:id="@+id/ResultTV"
-        android:layout_width="4dp"
-        android:layout_height="57dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="289dp"
+        android:layout_height="25dp"
+        android:text="asdf"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.425"
+        app:layout_constraintHorizontal_bias="0.429"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.744" />
+        app:layout_constraintTop_toBottomOf="@+id/BackBTN" />
 
     <Button
         android:id="@+id/BackBTN"
@@ -207,7 +205,16 @@
         android:onClick="goBackAction"
         android:text="Back to Hub"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.404"
+        app:layout_constraintHorizontal_bias="0.42"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SubmitBTN" />
+        app:layout_constraintTop_toBottomOf="@+id/pSubmitBTN" />
+
+    <Button
+        android:id="@+id/pCancelBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="Cancel"
+        app:layout_constraintStart_toEndOf="@+id/pSubmitBTN"
+        app:layout_constraintTop_toBottomOf="@+id/priceET" />
 </androidx.constraintlayout.widget.ConstraintLayout>
