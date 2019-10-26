@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.AnyThread;
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -166,6 +167,7 @@ public class StoreScreenActivity extends AppCompatActivity {
         return innerListPairings;
     }
 
+    @MainThread
     // uses inner department type - hashmap pairing to initialize controller's departmentToTextViewInfoReference
     private void initializeDepartmentToTextViewInfoReference(){
 
@@ -182,6 +184,15 @@ public class StoreScreenActivity extends AppCompatActivity {
     }
 
     // TODO** add method that takes intent checks bundle, then conditionally displays location of item per dept and location
+
+
+    // checks bundle and returns if intent that instigated activity is from search AND has data
+    //@NonNull
+    @MainThread
+    private Pair<Boolean, Commodity> needsToRefreshTextViewFromIntent(){
+       // return new Pair<Boolean, Commodity>(super.getIntent().getSerializableExtra())
+        return null;
+    }
 
     // configures the "emulated tab bar intents" to insert functionality into tabs
 

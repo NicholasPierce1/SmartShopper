@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SmartShopper</string>
+    <string name="itemLookupExtraKey">itemKey</string>
 </resources>
