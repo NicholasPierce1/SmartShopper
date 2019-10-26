@@ -21,7 +21,7 @@
         <activity android:name=".AdminLoginScreenActivity"></activity>
         <activity android:name=".AdminProductScreenActivity"></activity>
         <activity android:name=".AdminScreenActivity"></activity>
-        <activity android:name=".CreateAdminScreenActivity"></activity>
+        <activity android:name=".AdminModificationScreenActivity"></activity>
     </application>
 
 </manifest>

@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.w3c.dom.Text;
 //@Author Matthew Berry
 
-public class CreateAdminScreenActivity extends AppCompatActivity {
+public class AdminModificationScreenActivity extends AppCompatActivity {
     String empid;
     Admin user;
     EditText adminIDET, nameET, passwordET;

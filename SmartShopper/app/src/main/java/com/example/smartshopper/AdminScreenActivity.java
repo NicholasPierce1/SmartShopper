@@ -57,7 +57,7 @@ public class AdminScreenActivity extends AppCompatActivity {
         }
     }
     public void adminCreateAction(View v){
-        Intent toAdminCreate = new Intent(this, CreateAdminScreenActivity.class);
+        Intent toAdminCreate = new Intent(this, AdminModificationScreenActivity.class);
         toAdminCreate.putExtra("EMPID", empid);
         startActivity(toAdminCreate);
     }
