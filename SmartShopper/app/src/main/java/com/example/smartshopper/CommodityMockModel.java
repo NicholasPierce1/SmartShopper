@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class CommodityMockModel {
+    public static boolean firstTime = true;
     public static Store cStore = new Store("Maryville,MO","Walmart");
    private static Department d1 = new Department(DepartmentType.grocery, true, 1,5, cStore);
    private static Department d2 = new Department(DepartmentType.frozen, true, 6,9, cStore);
