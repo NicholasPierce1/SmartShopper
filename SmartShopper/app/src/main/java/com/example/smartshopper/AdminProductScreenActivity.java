@@ -24,6 +24,7 @@ public class AdminProductScreenActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(final Bundle savedInstanceState){
+        final AdminProductScreenActivity controller = this;
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.admin_product);
         Intent ini = getIntent();
@@ -76,26 +77,32 @@ public class AdminProductScreenActivity extends AppCompatActivity {
                 else if (submitCode == 1){
                     if(CommodityMockModelTakeTwo.shared.addCommodity(barcode,name,vendor,dept,isleNum,price)){
                         // success
+                        Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         // fail
+                        Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
                     }
 
                 }
                 else if(submitCode == 2){
                     if(CommodityMockModelTakeTwo.shared.modifyCommodityFromBarcode(barcode,name,vendor,dept,isleNum,price)){
                         // success
+                        Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         // fail
+                        Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else if(submitCode == 3){
                     if(CommodityMockModelTakeTwo.shared.removeItem(barcode)){
                         // success
+                        Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         // fail
+                        Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
                     }
 
                 }

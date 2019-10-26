@@ -3,7 +3,7 @@ package com.example.smartshopper;
 import android.util.Log;
 
 import java.util.ArrayList;
-/*
+
 public class CommodityMockModel {
     public static boolean firstTime = true;
     public static Store cStore = new Store("Maryville,MO","Walmart");
@@ -48,4 +48,4 @@ public class CommodityMockModel {
         vendors.remove(temp);
     }
 
-} */
+}
