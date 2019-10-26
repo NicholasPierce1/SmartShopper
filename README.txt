@@ -1,8 +1,10 @@
 GITHUB URL:https://github.com/NicholasPierce1/SmartShopper.git
 Matthew Berry used the following thread to toggle visibility of widgets
 https://stackoverflow.com/questions/5093466/visible-and-invisible-with-a-checkbox
+Most funcionality should be correct. Experiencing some problems with the admin product modifier.
+Fake data between admin screens and store screens not consistent due to no database.
 VERSION:
 Pleasee use 8.1 or higher
 ADMIN LOGIN INFORMATION:
-id: 001
+id: 001, 002, 003
 pw: admin
