@@ -28,7 +28,7 @@ public class AdminProductScreenActivity extends AppCompatActivity {
         super.setContentView(R.layout.admin_product);
         Intent ini = getIntent();
         empid = ini.getStringExtra("EMPID");
-        populateFakeData();
+
         nameTV = findViewById(R.id.NameTV);
         vendorTV = findViewById(R.id.VendorTV);
         deptTV = findViewById(R.id.DeptTV);
@@ -68,45 +68,35 @@ public class AdminProductScreenActivity extends AppCompatActivity {
                 dept = deptET.getText().toString();
                 int isleNum = Integer.valueOf(isleET.getText().toString());
                 //STUBBED LOGIC
-                Department department;
-                if(isleNum > 0 && isleNum < 6 ){
-                     department = CommodityMockModel.d1;
-                }
-                else  department = CommodityMockModel.d2;
+
 
                 if(submitCode == -1){
                     resultTV.setText("Not able to submit at this time");
                 }
                 else if (submitCode == 1){
-                    if(isInputValid()){
-                       Commodity commodity = new Commodity(barcode, name, vendor, price, true,
-                               Location.getLocationFromAisleNumber(isleNum), department);
-                        //We would make a real model call to create it, but for now...
-                        CommodityMockModel.fakeCreator(commodity);
-                        resultTV.setText("Creation Success!");
-                        hideAndClear();
+                    if(CommodityMockModelTakeTwo.shared.addCommodity(barcode,name,vendor,dept,isleNum,price)){
+                        // success
                     }
                     else{
-                        resultTV.setText("Invalid input: " +wrong);
+                        // fail
                     }
+
                 }
                 else if(submitCode == 2){
-                    if(isInputValid()){
-                        Commodity commodity = new Commodity(barcode, name, vendor, price, true,
-                                Location.getLocationFromAisleNumber(isleNum), department);
-                        //We would make a real model call to create it, but for now...
-                        CommodityMockModel.fakeUpdator(commodity);
-                        resultTV.setText("Update Success!");
-                        hideAndClear();
+                    if(CommodityMockModelTakeTwo.shared.modifyCommodityFromBarcode(barcode,name,vendor,dept,isleNum,price)){
+                        // success
                     }
                     else{
-                        resultTV.setText("Invalid input: " +wrong);
+                        // fail
                     }
                 }
                 else if(submitCode == 3){
-                    AdminMockModelClass.fakeDestroyer(barcode);
-                    resultTV.setText("" + "Product was removed");
-                    hideAndClear();
+                    if(CommodityMockModelTakeTwo.shared.removeItem(barcode)){
+                        // success
+                    }
+                    else{
+                        // fail
+                    }
 
                 }
                 crateBTN.setVisibility(View.VISIBLE);
@@ -164,7 +154,7 @@ public class AdminProductScreenActivity extends AppCompatActivity {
                     //Now we are going to show all of the fields
                     showFields();
 
-                    Commodity subject = CommodityMockModel.commodityFinder(barcode);
+                    Commodity subject = CommodityMockModelTakeTwo.shared.getCommodityFromBarcode(barcode);
 
                     nameET.setText("" + subject.name);
                     vendorET.setText("" + subject.vendorName);
@@ -196,7 +186,7 @@ public class AdminProductScreenActivity extends AppCompatActivity {
                     //Now we are going to show all of the fields
                     showFields();
 
-                    Commodity subject = CommodityMockModel.commodityFinder(barcode);
+                    Commodity subject = CommodityMockModelTakeTwo.shared.getCommodityFromBarcode(barcode);
                     nameET.setClickable(false);
                     vendorET.setClickable(false);
                     priceET.setClickable(false);
@@ -223,19 +213,6 @@ public class AdminProductScreenActivity extends AppCompatActivity {
         finish();
     }
 
-    private void populateFakeData(){
-        if(CommodityMockModel.firstTime) {
-            CommodityMockModel.firstTime = false;
-            CommodityMockModel.commodityList.add(CommodityMockModel.c1);
-            CommodityMockModel.barCodes.add(CommodityMockModel.c1.barcode);
-            CommodityMockModel.names.add(CommodityMockModel.c1.name);
-            CommodityMockModel.vendors.add(CommodityMockModel.c1.vendorName);
-            CommodityMockModel.commodityList.add(CommodityMockModel.c2);
-            CommodityMockModel.barCodes.add(CommodityMockModel.c2.barcode);
-            CommodityMockModel.names.add(CommodityMockModel.c2.name);
-            CommodityMockModel.vendors.add(CommodityMockModel.c2.vendorName);
-        }
-    }
 
    private void hideAndClear(){
         nameTV.setVisibility(View.INVISIBLE);
@@ -274,23 +251,7 @@ public class AdminProductScreenActivity extends AppCompatActivity {
         priceET.setVisibility(View.VISIBLE);
     }
 
-    private boolean isInputValid(){
-         wrong = "";
-        if(isEmpty(vendor) || isEmpty(dept) || isEmpty(name)){
-            wrong +="Blank fields are not allowed";
-        }
-        if(price <=0){
-            wrong += "Price cannnot be less than zero";
-        }
-        if(CommodityMockModel.vendors.contains(vendor)){
-            if(name.equals(CommodityMockModel.names.get(CommodityMockModel.vendors.indexOf(vendor)))){
-                wrong += "Vendor already has a product with this name";
-            }
-        }
-        else;
-        return  wrong.equals("");
 
-    }
     private boolean isEmpty(String s){
         return (s == null || s.equals("") || s.equals(" "));
     }
