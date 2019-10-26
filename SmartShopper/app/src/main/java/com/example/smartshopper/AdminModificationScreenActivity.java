@@ -58,6 +58,10 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // clears output text from last command
+                outcomeTV.setText("");
+                adminIDET.setText("");
+
                 if(submitCode == -1){
                     outcomeTV.setText("Not able to submit at this time");
                 }
@@ -102,12 +106,16 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
                 createBTN.setVisibility(View.VISIBLE);
                 modifyBTN.setVisibility(View.VISIBLE);
                 deleteBTN.setVisibility(View.VISIBLE);
+
+
             }
 
         });
          cancelBTN.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
+                 // clears output text from last command
+                 outcomeTV.setText("");
                  hideAndCelar();
                  createBTN.setVisibility(View.VISIBLE);
                  modifyBTN.setVisibility(View.VISIBLE);
@@ -117,6 +125,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
         createBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // clears output text from last command
+                outcomeTV.setText("");
                 //So you can't do other things
                 modifyBTN.setVisibility(View.INVISIBLE);
                 deleteBTN.setVisibility(View.INVISIBLE);
@@ -128,6 +138,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
                    outcomeTV.setText("" + no);
                 }
                 else{
+                    outcomeTV.setText("");
                     //Now we are going to show all of the fields
                     submitCode = 1;
                     showFields();
@@ -159,6 +170,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
                     outcomeTV.setText("Insufficient Permissions");
                 }
                 else{
+                    outcomeTV.setText("");
                     submitCode = 2;
                     //Now we are going to show all of the fields
                     showFields();
@@ -220,7 +232,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
                     passwordET.setClickable(false);
                     passwordET.setText("" + subject.password);
 
-                    Toast.makeText(getApplicationContext(),"Modify Admin Credentials", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Confirm Deletion", Toast.LENGTH_LONG).show();
 
                 }
             }
