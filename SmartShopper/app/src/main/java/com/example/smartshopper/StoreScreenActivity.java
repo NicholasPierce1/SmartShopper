@@ -30,6 +30,8 @@ public class StoreScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.store_screen);
 
+        // initializes view references by location and department
+        this.initializeDepartmentToTextViewInfoReference();
     }
 
     // initializes mappings between location and text view
@@ -164,7 +166,22 @@ public class StoreScreenActivity extends AppCompatActivity {
         return innerListPairings;
     }
 
-    
+    // uses inner department type - hashmap pairing to initialize controller's departmentToTextViewInfoReference
+    private void initializeDepartmentToTextViewInfoReference(){
+
+        // acquires local inner mappings
+        final List<Pair<DepartmentType, HashMap<Location, TextView>>> innerMappings = this.initializeInternalHashmapMappings();
+
+        // initializes hashmap for controller
+        this.departmentToTextViewInfoReference = new HashMap<DepartmentType, HashMap<Location, TextView>>();
+
+        // walks through list and appends members to hashmap
+        for(Pair<DepartmentType, HashMap<Location, TextView>> pairMapping: innerMappings){
+            this.departmentToTextViewInfoReference.put(pairMapping.first, pairMapping.second);
+        }
+    }
+
+    // TODO** add method that takes intent checks bundle, then conditionally displays location of item per dept and location
 
     // configures the "emulated tab bar intents" to insert functionality into tabs
 
