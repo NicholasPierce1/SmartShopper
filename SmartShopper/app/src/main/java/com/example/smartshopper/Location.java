@@ -1,6 +1,11 @@
 package com.example.smartshopper;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
+import java.security.InvalidParameterException;
 
 enum Location implements Serializable {
     aisleOneLeft(1), aisleOneRight(2), aisleTwoLeft(3), aisleTwoRight(4), aisleThreeLeft(5), aisleThreeRight(6),
@@ -18,5 +23,36 @@ enum Location implements Serializable {
         this.locationID = locationID;
     }
 
-    // TODO: implement method to return location id and determine enum by location id
+    // returns location from aisle number
+    @Nullable
+    @AnyThread
+    public Location getItemFromAisleNumber(final int aisleNumber) {
+
+        // validates input to assert aisleNumber is within aisle range [1-19]
+        if(aisleNumber > Location.aisleTenRight.locationID || aisleNumber < Location.aisleOneLeft.locationID)
+            return null;
+        
+        // employs switch to acquire corresponding location
+        switch(aisleNumber){
+            case 1: return aisleOneLeft;
+            case 2: return aisleOneRight;
+            case 3: return aisleTwoLeft;
+            case 4: return aisleTwoRight;
+            case 5: return aisleThreeLeft;
+            case 6: return aisleThreeRight;
+            case 7: return aisleFourLeft;
+            case 8: return aisleFourRight;
+            case 9: return aisleFiveLeft;
+            case 10: return aisleFiveRight;
+            case 11: return aisleSixLeft;
+            case 12: return aisleSixRight;
+            case 13: return aisleSevenLeft;
+            case 14: return aisleSevenRight;
+            case 15: return aisleEightLeft;
+            case 16: return aisleEightRight;
+            case 17: return aisleNineLeft;
+            case 18: return aisleNineRight;
+            default: return aisleTenRight;
+        }
+    }
 }
