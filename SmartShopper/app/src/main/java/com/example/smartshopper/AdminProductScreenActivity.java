@@ -73,7 +73,7 @@ public class AdminProductScreenActivity extends AppCompatActivity {
                     //Now we are going to show all of the fields
                     submitCode = 1;
                     showFields();
-                    Toast.makeText(getApplicationContext(),"Enter new admin credentials", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Enter commodity details", Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -105,7 +105,41 @@ public class AdminProductScreenActivity extends AppCompatActivity {
                     isleET.setText("" + subject.location);
 
 
-                    Toast.makeText(getApplicationContext(),"Modify Admin Credentials", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Modify Commodity details", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
+        deleteBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                crateBTN.setVisibility(View.INVISIBLE);
+                modifyBTN.setVisibility(View.INVISIBLE);
+                //Need to make sure the id does not exist
+                hideAndClear();
+                barcode= barCodeET.getText().toString();
+                if(!AdminInputValidationHandler.isExistingValue(true, barcode)){
+                    String no = "Barcode  does not exist";
+                    resultTV.setText("" + no);
+                }
+
+                else{
+                    submitCode = 3;
+                    //Now we are going to show all of the fields
+                    showFields();
+
+                    Commodity subject = CommodityMockModel.commodityFinder(barcode);
+                    nameET.setClickable(false);
+                    vendorET.setClickable(false);
+                    priceET.setClickable(false);
+                    deptET.setClickable(false);
+                    isleET.setClickable(false);
+                    nameET.setText("" + subject.name);
+                    vendorET.setText("" + subject.vendorName);
+                    priceET.setText("" + subject.price);
+                    deptET.setText("" + subject.department);
+                    isleET.setText("" + subject.location);
+                    Toast.makeText(getApplicationContext(),"Confrim Deletion", Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -151,11 +185,19 @@ public class AdminProductScreenActivity extends AppCompatActivity {
        priceTV.setVisibility(View.INVISIBLE);
        priceET.setVisibility(View.INVISIBLE);
        priceET.setText("");
+       nameET.setClickable(true);
+       vendorET.setClickable(true);
+       priceET.setClickable(true);
+       deptET.setClickable(true);
+       isleET.setClickable(true);
+
 
     }
     private  void showFields(){
         nameTV.setVisibility(View.VISIBLE);
         nameET.setVisibility(View.VISIBLE);
+        vendorTV.setVisibility(View.VISIBLE);
+        vendorET.setVisibility(View.VISIBLE);
         deptTV.setVisibility(View.VISIBLE);
         deptET.setVisibility(View.VISIBLE);
         isleTV.setVisibility(View.VISIBLE);
@@ -163,22 +205,7 @@ public class AdminProductScreenActivity extends AppCompatActivity {
         priceTV.setVisibility(View.VISIBLE);
         priceET.setVisibility(View.VISIBLE);
     }
-    private Location locationFinder(int isle){
-        if(isle ==1){
-            return Location.aisleOneLeft;
 
-        }
-        else if(isle == 2){
-            return Location.aisleOneRight;
-        }
-        else if(isle == 3){
-            return Location.aisleTwoLeft;
-        }
-        else if(isle == 4){
-            return Location.aisleTwoRight;
-        }
-       return Location.aisleTwoRight; //deafault so it doesn't get mad. Needs to change obvisouly
-    }
 
 
 }
