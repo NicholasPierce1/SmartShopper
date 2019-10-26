@@ -33,6 +33,9 @@ public class StoreScreenActivity extends AppCompatActivity {
 
         // initializes view references by location and department
         this.initializeDepartmentToTextViewInfoReference();
+
+        // refreshes/ initializes store schematic view from intent
+        this.initializeSchematicView();
     }
 
     // initializes mappings between location and text view
@@ -183,15 +186,58 @@ public class StoreScreenActivity extends AppCompatActivity {
         }
     }
 
-    // TODO** add method that takes intent checks bundle, then conditionally displays location of item per dept and location
+    //takes intent and checks bundle, then conditionally displays location of item per dept and location
+    @MainThread
+    private void initializeSchematicView(){
 
+        // acquires pair from intent
+        final Pair<Boolean, Commodity> intentPair = this.needsToRefreshTextViewFromIntent();
+
+        // if true then refresh schematic view - else turn on all views
+        if(intentPair.first){
+
+            // turn offs all text views
+            this.turnOnOrOffAllSchematicViews(false);
+
+            // turns on text view w/ corresponding commodity state endpoint
+            this.turnStoreSchematicTextViewOnFromCommodity(intentPair.second);
+
+        }
+        else{
+            // initial creation OR tab bar creation
+            this.turnOnOrOffAllSchematicViews(true);
+        }
+    }
+
+    // turns on or off all views within schematic
+    @MainThread
+    private void turnOnOrOffAllSchematicViews(boolean turnOn){
+
+        // walks through all inner hashmaps and textviews and sets visibility varying on turnOn param
+        for(HashMap<Location, TextView> innerHashMap: this.departmentToTextViewInfoReference.values()) {
+            for (TextView schematicTextView : innerHashMap.values())
+                schematicTextView.setVisibility(turnOn ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
+    @MainThread
+    private void turnStoreSchematicTextViewOnFromCommodity(@NonNull final Commodity commodity){
+
+        // turns textview on per commodity's department type and location
+        this.departmentToTextViewInfoReference.get(commodity.department.type).get(commodity.location).setVisibility(View.VISIBLE);
+
+    }
 
     // checks bundle and returns if intent that instigated activity is from search AND has data
-    //@NonNull
+    @NonNull
     @MainThread
     private Pair<Boolean, Commodity> needsToRefreshTextViewFromIntent(){
-       // return new Pair<Boolean, Commodity>(super.getIntent().getSerializableExtra())
-        return null;
+
+        // acquires commodity (null default)
+        Commodity commodity = (Commodity)super.getIntent().getSerializableExtra(this.getString(R.string.itemLookupExtraKey));
+
+        return new Pair<Boolean, Commodity>(commodity != null, commodity);
+
     }
 
     // configures the "emulated tab bar intents" to insert functionality into tabs
