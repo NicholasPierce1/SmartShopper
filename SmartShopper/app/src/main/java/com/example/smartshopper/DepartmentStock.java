@@ -16,11 +16,11 @@ final class DepartmentStock extends DataAccess {
     String itemObjectId; // holds foreign key to item relation
 
     // enumerates local keys for parse object lookups and sets
-    private static String storeObjectIdKey = "storeObjectId";
-    private static String departmentObjectIdKey = "departmentObjectId";
-    private static String itemObjectIdKey = "itemObjectId";
-    private static String locationKey = "location";
-    private static String priceKey = "price";
+    private static final String storeObjectIdKey = "storeObjectId";
+    private static final String departmentObjectIdKey = "departmentObjectId";
+    private static final String itemObjectIdKey = "itemObjectId";
+    private static final String locationKey = "location";
+    private static final String priceKey = "price";
 
     // private constructor for facilitated static builders
     private DepartmentStock(){}
@@ -41,48 +41,9 @@ final class DepartmentStock extends DataAccess {
         departmentStock.price = price;
 
         // sets that creation is complete for conversion to parse object
-        departmentStock.setHasBeenCreated();
+
 
         return departmentStock;
     }
-
-    // overrides data access abstraction for parse object conversion
-    @Override
-    @NonNull
-    public ParseObject convertToParseObject(@NonNull final ParseObject parseObject){
-        // asserts that DA has been created
-        super.assertDataAccessObjectHasBeenCreated();
-
-        // supplements local state into parse object
-        parseObject.put(DepartmentStock.storeObjectIdKey, this.storeObjectId);
-        parseObject.put(DepartmentStock.departmentObjectIdKey, this.departmentObjectId);
-        parseObject.put(DepartmentStock.itemObjectIdKey, this.itemObjectId);
-        parseObject.put(DepartmentStock.locationKey, this.location.getLocationID());
-        parseObject.put(DepartmentStock.priceKey, this.price);
-
-        return parseObject;
-    }
-
-    // creates DataAccess object from returned parse object from back4app
-    @NonNull
-    public DataAccess createFromParseObject(@NonNull final ParseObject parseObject){
-
-        // creates local reference
-        final DepartmentStock departmentStock = new DepartmentStock();
-
-        // assigns local state
-        departmentStock.storeObjectId = parseObject.getString(DepartmentStock.storeObjectIdKey);
-        departmentStock.departmentObjectId = parseObject.getString(DepartmentStock.departmentObjectIdKey);
-        departmentStock.itemObjectId = parseObject.getString(DepartmentStock.itemObjectIdKey);
-        departmentStock.location = Location.getLocationFromLocationId(parseObject.getInt(DepartmentStock.locationKey));
-        departmentStock.price = parseObject.getDouble(DepartmentStock.departmentObjectIdKey);
-
-        // denotes that DA has been created
-        departmentStock.setHasBeenCreated();
-
-        return departmentStock;
-
-    }
-
 
 }

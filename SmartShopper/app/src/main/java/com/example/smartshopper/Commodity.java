@@ -1,9 +1,13 @@
 package com.example.smartshopper;
 
+import androidx.annotation.NonNull;
+
+import com.parse.ParseObject;
+
 import java.io.Serializable;
 
 // denotes the definition of Commodities and groceries in data access layer
-public final class Commodity implements Serializable {
+public final class Commodity extends DataAccess {
 
     // enumerates shared properties
     String objectId;
@@ -24,7 +28,12 @@ public final class Commodity implements Serializable {
 
     public Department department; // denotes the corresponding department that the item pertains in conjunction with store
 
-    // temporary public constructor to expidite local-state creation
+    // enumerates local keys for col lookup/set
+    private static final String nameKey = "name";
+    private static final String vendorNameKey = "vendorName";
+
+    // temporary public constructor to expedite local-state creation
+    @Deprecated
     public Commodity(final String barcode, final String name, final String vendorName, final double price, final boolean hasAisle,
                      final Location location, final Department department){
         this.barcode = barcode;
@@ -35,5 +44,6 @@ public final class Commodity implements Serializable {
         this.location = location;
         this.department = department;
     }
+
 
 }

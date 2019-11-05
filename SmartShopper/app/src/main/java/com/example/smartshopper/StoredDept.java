@@ -50,45 +50,7 @@ final class StoredDept extends DataAccess {
         storedDept.maxAisle = hasAisle ? maxAisle: -1;
         storedDept.minAisle = hasAisle ? minAisle: -1;
 
-        // sets that object has been created
-        storedDept.setHasBeenCreated();
-
         return storedDept;
     }
 
-    // overrides data access abstraction for parse object conversion granted that DA has been set first
-    @Override
-    @NonNull
-    public ParseObject convertToParseObject(@NonNull final ParseObject parseObject){
-        // asserts DA has been created beforehand
-        super.assertDataAccessObjectHasBeenCreated();
-
-        parseObject.put(StoredDept.hasAisleKey, this.hasAisle);
-        parseObject.put(StoredDept.maxAisleKey, this.maxAisle);
-        parseObject.put(StoredDept.minAisleKey, this.minAisle);
-        parseObject.put(StoredDept.departmentObjectIdKey, this.departmentObjectId);
-        parseObject.put(StoredDept.storeObjectIdKey, this.storeObjectId);
-
-        return parseObject;
-    }
-
-    // creates DataAccess object from returned parse object from back4app
-    @NonNull
-    public DataAccess createFromParseObject(@NonNull final ParseObject parseObject){
-
-        // creates local reference
-        final StoredDept storedDept = new StoredDept();
-
-        // assigns state from parse object
-        storedDept.storeObjectId = parseObject.getString(StoredDept.storeObjectIdKey);
-        storedDept.departmentObjectId = parseObject.getString(StoredDept.departmentObjectIdKey);
-        storedDept.hasAisle = parseObject.getBoolean(StoredDept.hasAisleKey);
-        storedDept.minAisle = parseObject.getInt(StoredDept.minAisleKey);
-        storedDept.maxAisle = parseObject.getInt(StoredDept.maxAisleKey);
-
-        // denotes that object has been created
-        storedDept.setHasBeenCreated();
-
-        return storedDept;
-    }
 }
