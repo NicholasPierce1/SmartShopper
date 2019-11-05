@@ -13,6 +13,9 @@ public enum AdminLevel {
         this.idType =  idType;
     }
 
+    // permits acquiring of idType of admin level
+    public int getIdType(){return this.idType;}
+
     // facilitates creation of admin object via customer ordinal
     @Nullable
     @AnyThread

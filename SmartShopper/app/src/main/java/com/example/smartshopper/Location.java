@@ -28,7 +28,6 @@ enum Location implements Serializable {
 
     // returns location from aisle number
     @Nullable
-    @AnyThread
     public static Location getLocationFromAisleNumber(final int aisleNumber) {
 
         // validates input to assert aisleNumber is within aisle range [1-19]
@@ -56,6 +55,32 @@ enum Location implements Serializable {
             case 17: return aisleNineLeft;
             case 18: return aisleNineRight;
             default: return aisleTenRight;
+        }
+    }
+
+    // creates location from exhaustive list of all possibilities-- aisle and non-aisle
+    @Nullable
+    public static Location getLocationFromLocationId(int locationID){
+        // asserts that threshold range is within location's range
+        if(locationID < aisleOneLeft.locationID || locationID > produceDepartmentRightMostDisplay.locationID)
+            return null;
+
+        // employs switch to walk through all non-aisle cases granted that location is non-aisle
+        if(Location.getLocationFromAisleNumber(locationID) != null)
+            return Location.getLocationFromAisleNumber(locationID);
+
+        switch(locationID){
+            case 20: return frozenDepartment;
+            case 21: return dairyDepartment;
+            case 22: return meatDepartment;
+            case 23: return seafoodDepartment;
+            case 24: return bakeryDepartment;
+            case 25: return deliDepartment;
+            case 26: return floralDepartment;
+            case 27: return produceDepartmentLeftMostAisle;
+            case 28: return produceDepartmentTopMostAisle;
+            case 29: return produceDepartmentLeftMostDisplay;
+            default: return produceDepartmentRightMostDisplay;
         }
     }
 }

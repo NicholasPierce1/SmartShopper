@@ -44,4 +44,8 @@ public abstract class DataAccess implements Serializable {
     @NonNull
     public abstract ParseObject convertToParseObject(@NonNull final ParseObject parseObject);
 
+    // creates DataAccess object from returned parse object from back4app
+    @NonNull
+    public abstract DataAccess createFromParseObject(@NonNull final ParseObject parseObject);
+
 }

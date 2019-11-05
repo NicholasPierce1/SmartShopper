@@ -71,4 +71,24 @@ final class StoredDept extends DataAccess {
 
         return parseObject;
     }
+
+    // creates DataAccess object from returned parse object from back4app
+    @NonNull
+    public DataAccess createFromParseObject(@NonNull final ParseObject parseObject){
+
+        // creates local reference
+        final StoredDept storedDept = new StoredDept();
+
+        // assigns state from parse object
+        storedDept.storeObjectId = parseObject.getString(StoredDept.storeObjectIdKey);
+        storedDept.departmentObjectId = parseObject.getString(StoredDept.departmentObjectIdKey);
+        storedDept.hasAisle = parseObject.getBoolean(StoredDept.hasAisleKey);
+        storedDept.minAisle = parseObject.getInt(StoredDept.minAisleKey);
+        storedDept.maxAisle = parseObject.getInt(StoredDept.maxAisleKey);
+
+        // denotes that object has been created
+        storedDept.setHasBeenCreated();
+
+        return storedDept;
+    }
 }

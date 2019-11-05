@@ -63,5 +63,26 @@ final class DepartmentStock extends DataAccess {
         return parseObject;
     }
 
+    // creates DataAccess object from returned parse object from back4app
+    @NonNull
+    public DataAccess createFromParseObject(@NonNull final ParseObject parseObject){
+
+        // creates local reference
+        final DepartmentStock departmentStock = new DepartmentStock();
+
+        // assigns local state
+        departmentStock.storeObjectId = parseObject.getString(DepartmentStock.storeObjectIdKey);
+        departmentStock.departmentObjectId = parseObject.getString(DepartmentStock.departmentObjectIdKey);
+        departmentStock.itemObjectId = parseObject.getString(DepartmentStock.itemObjectIdKey);
+        departmentStock.location = Location.getLocationFromLocationId(parseObject.getInt(DepartmentStock.locationKey));
+        departmentStock.price = parseObject.getDouble(DepartmentStock.departmentObjectIdKey);
+
+        // denotes that DA has been created
+        departmentStock.setHasBeenCreated();
+
+        return departmentStock;
+
+    }
+
 
 }
