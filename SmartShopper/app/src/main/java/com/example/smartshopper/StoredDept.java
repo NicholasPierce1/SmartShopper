@@ -7,7 +7,7 @@ import com.parse.ParseObject;
 import java.io.Serializable;
 
 // relational object to store state between department and store relations-- proxy for creation of department objects
-final class StoredDept extends DataAccess implements Serializable {
+final class StoredDept extends DataAccess {
 
     // local string keys to create, and id cols within relation
     private static final String hasAisleKey = "hasAisle";
