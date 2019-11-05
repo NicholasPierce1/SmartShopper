@@ -23,6 +23,9 @@ enum Location implements Serializable {
         this.locationID = locationID;
     }
 
+    // returns location id
+    public int getLocationID(){return this.locationID;}
+
     // returns location from aisle number
     @Nullable
     @AnyThread
