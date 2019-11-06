@@ -28,4 +28,25 @@ public class Store extends DataAccess {
     // data access constructor for static creation
     private Store(){}
 
+
+    // abstract class implementation to render DA object from using a parse object and other composite inputs
+    public static class Builder extends DataAccess.Builder{
+
+        @NonNull
+        public Store build(@NonNull final ParseObject parseObject){
+
+            // creates local store
+            final Store store = new Store();
+
+            // assigns local state
+            store.name = parseObject.getString(Store.nameKey);
+            store.location = parseObject.getString(Store.locationKey);
+
+            // assigns Data access state
+            store.setObjectIdFromParseObject(parseObject);
+
+            return store;
+        }
+
+    }
 }

@@ -46,4 +46,25 @@ final class DepartmentStock extends DataAccess {
         return departmentStock;
     }
 
+    // abstract class implementation to render DA object from using a parse object and other composite inputs
+    public static class Builder extends DataAccess.Builder{
+
+        // renders Department Stock from Department and Comp Item (NOTE: object id need not be set)
+        @NonNull
+        public DepartmentStock build(@NonNull final Department department, @NonNull final Commodity commodity, final double price, @NonNull final Location location ){
+
+            // creates local reference
+            DepartmentStock departmentStock = new DepartmentStock();
+
+            // assigns local state
+            departmentStock.storeObjectId = department.store.getObjectId();
+            departmentStock.departmentObjectId = department.getObjectId();
+            departmentStock.price = price;
+            departmentStock.location = location;
+
+            // returns ref
+            return departmentStock;
+        }
+    }
+
 }

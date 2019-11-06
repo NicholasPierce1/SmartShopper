@@ -31,4 +31,9 @@ public abstract class DataAccess implements Serializable {
         this.objectId = parseObject.getObjectId();
     }
 
+
+    public static abstract class Builder{
+
+    }
+
 }

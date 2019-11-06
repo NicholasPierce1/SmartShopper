@@ -45,5 +45,40 @@ public final class Commodity extends DataAccess {
         this.department = department;
     }
 
+    private Commodity(){}
 
+    // updates Commodity ref state
+    public void updateCommodity(@NonNull final Department department, @NonNull final DepartmentStock departmentStock, @NonNull final ParseObject parseObject){
+
+        // updates department ref
+        this.department = department;
+
+        // updates ref state stored in relation proxy
+        this.location = departmentStock.location;
+        this.price = departmentStock.price;
+        this.hasAisle = department.hasAisles;
+
+        // updates local object id
+        this.setObjectIdFromParseObject(parseObject);
+
+    }
+
+    // abstract class implementation to render DA object from using a parse object and other composite inputs
+    public static class Builder extends DataAccess.Builder{
+
+        // renders composite build from user inputs for saving/validation
+        @NonNull
+        public Commodity build(@NonNull final String barcode,@NonNull final String name,@NonNull final String vendorName){
+
+            // creates local ref
+            final Commodity commodity = new Commodity();
+
+            commodity.barcode = barcode;
+            commodity.name = name;
+            commodity.vendorName = vendorName;
+
+            return commodity;
+        }
+
+    }
 }

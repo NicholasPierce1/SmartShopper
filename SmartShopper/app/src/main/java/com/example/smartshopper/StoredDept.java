@@ -30,27 +30,28 @@ final class StoredDept extends DataAccess {
     // defines empty constructor for parse object creation
     private StoredDept(){}
 
-    // creates StoredDept from dept and store as parse object w/ other state. Sets hasBeenCreated
-    static StoredDept setStoredDeptState(@NonNull final ParseObject store, @NonNull final ParseObject dept){
-        return StoredDept.setStoreDeptStateWithAisleRanges(store,dept,false, -1,-1);
-    }
+    // abstract class implementation to render DA object from using a parse object and other composite inputs
+    public static class Builder extends DataAccess.Builder{
 
-    // overload that passes min and max aisle range
-    static StoredDept setStoreDeptStateWithAisleRanges(@NonNull final ParseObject store, @NonNull final ParseObject dept, final boolean hasAisle, final int minAisle, final int maxAisle){
+        // renders StoredDept from a parsed object derived from store dept relation
+        public StoredDept build(@NonNull final ParseObject parseObject){
 
-        // creates local instance for state config
-        final StoredDept storedDept = new StoredDept();
+            // creates local ref
+            final StoredDept storedDept = new StoredDept();
 
-        // assigns store and department id
-        storedDept.departmentObjectId = dept.getObjectId();
-        storedDept.storeObjectId = dept.getObjectId();
+            // assigns local state from parse object
+            storedDept.hasAisle = parseObject.getBoolean(StoredDept.hasAisleKey);
+            storedDept.maxAisle = parseObject.getInt(StoredDept.maxAisleKey);
+            storedDept.minAisle = parseObject.getInt(StoredDept.minAisleKey);
+            storedDept.storeObjectId = parseObject.getString(StoredDept.storeObjectIdKey);
+            storedDept.departmentObjectId = parseObject.getString(StoredDept.departmentObjectIdKey);
 
-        // sets dept ranges
-        storedDept.hasAisle = hasAisle;
-        storedDept.maxAisle = hasAisle ? maxAisle: -1;
-        storedDept.minAisle = hasAisle ? minAisle: -1;
+            // sets object id from parse object
+            storedDept.setObjectIdFromParseObject(parseObject);
 
-        return storedDept;
+            return storedDept;
+
+        }
     }
 
 }
