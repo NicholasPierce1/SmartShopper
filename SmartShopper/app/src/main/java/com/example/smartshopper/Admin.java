@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.parse.ParseObject;
 
 // denotes the definition of Store in data access layer
-public final class Admin {
+public final class Admin extends DataAccess implements Persistable {
 
     // enumerates shared properties
     String objectID;
@@ -67,6 +67,43 @@ public final class Admin {
             return admin;
 
         }
+
+        // appends functionality to convert a composite OR complete to a parsed object for persistence
+        @NonNull
+        public Admin toDataAccessFromParse(@NonNull final ParseObject parseObject, @NonNull final Store store){
+
+            // creates local admin object
+            final Admin admin = new Admin();
+
+            // assigns local state
+            admin.store = store;
+            admin.password = parseObject.getString(Admin.passwordKey);
+            admin.userName = parseObject.getString(Admin.userNameKey);
+            admin.name = parseObject.getString(Admin.nameKey);
+            admin.empID = parseObject.getString(Admin.empIdKey);
+            admin.adminLevel = AdminLevel.getAdminLevelFromInt(parseObject.getInt(Admin.adminLevelKey));
+
+            admin.setObjectIdFromParseObject(parseObject);
+
+            return admin;
+        }
     }
+
+    @NonNull
+    public ParseObject toParseObject(){
+
+        // creates local reference to Admin relation
+        final ParseObject parseObject = new ParseObject("Admin");
+
+        // assigns composite state to parse object
+        parseObject.put(Admin.nameKey, this.name);
+        parseObject.put(Admin.passwordKey, this.password);
+        parseObject.put(Admin.storeKey, this.store.getObjectId());
+        parseObject.put(Admin.adminLevelKey, this.adminLevel.getIdType());
+        parseObject.put(Admin.userNameKey, this.userName);
+
+        return parseObject;
+    }
+
 
 }

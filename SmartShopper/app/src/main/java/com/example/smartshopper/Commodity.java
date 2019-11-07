@@ -7,7 +7,7 @@ import com.parse.ParseObject;
 import java.io.Serializable;
 
 // denotes the definition of Commodities and groceries in data access layer
-public final class Commodity extends DataAccess {
+public final class Commodity extends DataAccess implements Persistable{
 
     // enumerates shared properties
     String objectId;
@@ -31,6 +31,7 @@ public final class Commodity extends DataAccess {
     // enumerates local keys for col lookup/set
     private static final String nameKey = "name";
     private static final String vendorNameKey = "vendorName";
+    private static final String barcodeNameKey = "barcode";
 
     // temporary public constructor to expedite local-state creation
     @Deprecated
@@ -80,5 +81,39 @@ public final class Commodity extends DataAccess {
             return commodity;
         }
 
+        // allows for read back4app parsed objects to be converted to composites
+        @NonNull
+        public Commodity toDataAccessFromParse(@NonNull final ParseObject parseObject){
+
+            // creates local commodity from builder's composite method handler
+            final Commodity commodity = new Commodity.Builder().build(
+                    parseObject.getString(Commodity.barcodeNameKey),
+                    parseObject.getString(Commodity.nameKey),
+                    parseObject.getString(Commodity.vendorNameKey));
+
+            // sets object id
+            commodity.setObjectIdFromParseObject(parseObject);
+
+            return commodity;
+
+        }
+
     }
+
+    // implements Persistable's abstraction to convert composite or full to ParseObject
+    @Override
+    @NonNull
+    public ParseObject toParseObject(){
+
+        // creates local ref for parse object
+        final ParseObject parseObject = new ParseObject("Commodity");
+
+        // assigns local member state
+        parseObject.put(Commodity.vendorNameKey, this.vendorName);
+        parseObject.put(Commodity.nameKey, this.name);
+        parseObject.put(Commodity.barcodeNameKey, this.barcode);
+
+        return parseObject;
+    }
+
 }

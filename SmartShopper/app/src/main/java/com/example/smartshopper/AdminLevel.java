@@ -19,7 +19,7 @@ public enum AdminLevel {
     // facilitates creation of admin object via customer ordinal
     @Nullable
     @AnyThread
-    public AdminLevel getAdminLevelFromInt(int i){
+    public static AdminLevel getAdminLevelFromInt(int i){
 
         // employs a switch to return acceptable variations of admin
         switch(i){

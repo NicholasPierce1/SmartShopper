@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.parse.ParseObject;
 
 // package private class to hold proxy data for items in a certain department in a certain store
-final class DepartmentStock extends DataAccess {
+final class DepartmentStock extends DataAccess implements Persistable {
 
     // enumerates local state
     Location location; // holds location of item within proxy
@@ -59,12 +59,53 @@ final class DepartmentStock extends DataAccess {
             // assigns local state
             departmentStock.storeObjectId = department.store.getObjectId();
             departmentStock.departmentObjectId = department.getObjectId();
+            departmentStock.itemObjectId = commodity.getObjectId();
             departmentStock.price = price;
             departmentStock.location = location;
 
             // returns ref
             return departmentStock;
         }
+
+        // allows for read back4app parsed objects to be converted to composites
+        @NonNull
+        public DepartmentStock toDataAccessFromParse(@NonNull final ParseObject parseObject){
+
+            // creates local department stock
+            final DepartmentStock departmentStock = new DepartmentStock();
+
+            // assigns local state
+            departmentStock.itemObjectId = parseObject.getString(DepartmentStock.itemObjectIdKey);
+            departmentStock.location = Location.getLocationFromLocationId(parseObject.getInt(DepartmentStock.locationKey));
+            departmentStock.departmentObjectId = parseObject.getString(DepartmentStock.departmentObjectIdKey);
+            departmentStock.storeObjectId = parseObject.getString(DepartmentStock.storeObjectIdKey);
+            departmentStock.price = parseObject.getDouble(DepartmentStock.priceKey);
+
+            // sets objectID
+            departmentStock.setObjectIdFromParseObject(parseObject);
+
+            return departmentStock;
+
+        }
+
+    }
+
+    // implements Persistable's abstraction to convert composite or full to ParseObject
+    @Override
+    @NonNull
+    public ParseObject toParseObject(){
+
+        // creates local ref for parse object
+        final ParseObject parseObject = new ParseObject("DepartmentStock");
+
+        // appends local state
+        parseObject.put(DepartmentStock.departmentObjectIdKey, this.departmentObjectId);
+        parseObject.put(DepartmentStock.locationKey, this.location.getLocationID());
+        parseObject.put(DepartmentStock.itemObjectIdKey, this.itemObjectId);
+        parseObject.put(DepartmentStock.storeObjectIdKey, this.storeObjectId);
+        parseObject.put(DepartmentStock.priceKey, this.price);
+
+        return parseObject;
     }
 
 }
