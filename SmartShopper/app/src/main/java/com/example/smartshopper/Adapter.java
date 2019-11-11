@@ -24,7 +24,7 @@ public final class Adapter {
     public void updateItem(@NonNull final Commodity commodity, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // deletes the item via its barcode
-    public void deleteItemFromBarcode(@NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void deleteItemFromBarcode(@NonNull final Store store, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // searches for an item by a search phrase on predicate the the item's formal name OR its categorical name contains the search
     public void searchForItemByPhrase(@NonNull final Store store, @NonNull final String searchPhrase, @NonNull final List<Department> departmentList, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
