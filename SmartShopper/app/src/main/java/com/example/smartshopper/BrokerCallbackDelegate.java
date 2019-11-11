@@ -29,7 +29,11 @@ public interface BrokerCallbackDelegate {
     public abstract void findItemsBySearchHandler(@NonNull final List<Commodity> commodityList);
 
     // handler to access login results
-    public abstract void findAdminByLoginHandler(final boolean adminLoginSuccess, @Nullable final Admin admin);
+    public abstract void findAdminByUsernameAndPasswordHandler(final boolean adminSearchWasSuccess, final boolean adminFound, @Nullable final Admin admin);
+
+    // handler to find an admin by an empId
+    // second boolean indicates to broker whether this invocation was for a login action or an update
+    public abstract void findAdminByEmpId(final boolean adminSearchWasSuccess, final boolean adminFound, @Nullable final Admin admin);
 
     // handler to access deletion of admin
     public abstract void deleteAdminHandler(final boolean wasAdminRemoved);
