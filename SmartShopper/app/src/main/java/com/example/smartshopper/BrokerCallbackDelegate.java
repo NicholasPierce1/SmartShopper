@@ -11,10 +11,10 @@ import java.util.List;
 public interface BrokerCallbackDelegate {
 
     // handler to access results from barcode searching
-    public abstract void validateIfBarcodeExistHandler(@NonNull final BarcodeExistResult barcodeExistResult);
+    public abstract void validateIfBarcodeExistHandler(final boolean searchWasSuccess, @NonNull final BarcodeExistResult barcodeExistResult);
 
     // handler to access results from vendor validation (true- name is unique for vendor. false- otherwise)
-    public abstract void validateNameForVendorIsUniqueHandler(final boolean nameIsUnique);
+    public abstract void validateNameForVendorIsUniqueHandler(final boolean searchWasSuccess, final boolean nameIsUnique);
 
     // handler to access action result of updating an item
     public abstract void createItemForStoreInDepartment(final boolean isSuccessful);
@@ -26,7 +26,7 @@ public interface BrokerCallbackDelegate {
     public abstract void deleteItemHandler(final boolean isSuccessful);
 
     // handler to access search results
-    public abstract void findItemsBySearchHandler(@NonNull final List<Commodity> commodityList);
+    public abstract void findItemsBySearchHandler(final boolean searchWasSuccessful, @NonNull final List<Commodity> commodityList);
 
     // handler to access login results
     public abstract void findAdminByUsernameAndPasswordHandler(final boolean adminSearchWasSuccess, final boolean adminFound, @Nullable final Admin admin);
