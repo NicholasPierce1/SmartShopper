@@ -22,12 +22,11 @@
         android:id="@+id/BarcodeET"
         android:layout_width="246dp"
         android:layout_height="46dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Enter Existing or new barcode"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/msgCenterTV" />
 
