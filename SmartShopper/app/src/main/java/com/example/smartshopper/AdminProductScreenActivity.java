@@ -68,6 +68,7 @@ implements ProductCUD.CUDopperations {
         });
 
         pSubmitBTN.setOnClickListener(new View.OnClickListener() {
+            // TODO: 11/10/2019 MOVE THIS TO FRAGMENT 
             @Override
             public void onClick(View view) {
 //                vendor = vendorET.getText().toString();
