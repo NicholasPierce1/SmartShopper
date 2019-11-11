@@ -161,7 +161,7 @@ public class Search_screenActivity extends AppCompatActivity{
     public void returnedItemIntent(Commodity commodity){
         Intent itemReturned = new Intent (this, StoreScreenActivity.class);
         itemReturned.putExtra(this.getString(R.string.itemLookupExtraKey), commodity);
-        itemReturned.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //itemReturned.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.startActivity(itemReturned);
 
     }
