@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 // denotes the definition of Commodities and groceries in data access layer
 public final class Commodity extends DataAccess implements Persistable{
-
+    //Comodity class
     // enumerates shared properties
     String objectId;
 

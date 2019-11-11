@@ -49,7 +49,7 @@ public final class Admin extends DataAccess implements Persistable {
 
     // abstract class implementation to render DA object from using a parse object and other composite inputs
     public static class Builder extends DataAccess.Builder{
-
+        //Admin class
         // render DA object from using composite inputs and a Store (NOTE: no need to set object id)
         @NonNull
         public Admin build(@NonNull final Store store, @NonNull final String name, @NonNull final String userName, @NonNull final String pw, @NonNull final AdminLevel level, @NonNull final String empId){
