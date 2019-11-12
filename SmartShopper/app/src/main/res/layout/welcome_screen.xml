@@ -71,6 +71,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.619" />
+
+        <fragment
+            android:id="@+id/fragment2"
+            android:name="com.example.smartshopper.tabBarFragment"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1"
+            tools:layout="@layout/fragment_tab_bar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

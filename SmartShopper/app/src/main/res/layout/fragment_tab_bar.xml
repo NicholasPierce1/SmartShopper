@@ -3,12 +3,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".tabBarFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tabBarGrid"
 
+        app:layout_constraintHeight_percent=".08"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintVertical_bias="1"
+
+        android:rowCount="1"
+        android:columnCount="3"
+
+        android:layout_margin="0dp"
+        android:background="#FF000000" >
+
+        <ImageButton
+            android:id="@+id/tabBarWelcomeScreenTab"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_margin="0dp"
+
+
+            android:scaleType="fitXY"
+            android:src="@drawable/store_selection_tab_image" />
+
+        <ImageButton
+            android:id="@+id/tabBarStoreScreenTab"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+
+            android:layout_margin="0dp"
+
+
+            android:scaleType="fitXY"
+            android:src="@drawable/home_tab_image" />
+
+        <ImageButton
+            android:id="@+id/tabBarFindItem"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+
+            android:layout_margin="0dp"
+
+
+            android:scaleType="fitXY"
+            android:src="@drawable/search_tab_image" />
+    </GridLayout>
 </FrameLayout>
