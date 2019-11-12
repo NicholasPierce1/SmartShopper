@@ -67,6 +67,7 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
         // effectuates intent w/ no data
         super.startActivity(userStoreSelection);
     }
+
     public void onTabBarItemClicked(@NonNull final Class<?> classToIntentTo){
         if(!this.getClass().equals(classToIntentTo))
             this.startActivity(new Intent(this, classToIntentTo));

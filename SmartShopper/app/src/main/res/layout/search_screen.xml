@@ -83,76 +83,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.186" />
 
+        <fragment
+            android:id="@+id/fragment2"
+            android:name="com.example.smartshopper.tabBarFragment"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1"
+            tools:layout="@layout/fragment_tab_bar" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/tabBarGrid"
-
-        app:layout_constraintHeight_percent=".08"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintVertical_bias="1"
-
-        android:rowCount="1"
-        android:columnCount="3"
-
-        android:layout_margin="0dp"
-        android:background="#FF000000" >
-
-        <ImageButton
-            android:id="@+id/tabBarWelcomeScreenTab"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            android:layout_row="0"
-            android:layout_rowWeight="1"
-
-            android:layout_column="0"
-            android:layout_columnWeight="1"
-            android:layout_margin="0dp"
-
-            android:onClick="welcomeScreenIntent"
-            android:scaleType="fitXY"
-            android:src="@drawable/store_selection_tab_image" />
-
-        <ImageButton
-            android:id="@+id/tabBarStoreScreenTab"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            android:layout_row="0"
-            android:layout_rowWeight="1"
-
-            android:layout_column="1"
-            android:layout_columnWeight="1"
-
-            android:layout_margin="0dp"
-            android:onClick="storeScreenIntent"
-
-            android:scaleType="fitXY"
-            android:src="@drawable/home_tab_image" />
-
-        <ImageButton
-            android:id="@+id/tabBarFindItem"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            android:layout_row="0"
-            android:layout_rowWeight="1"
-
-            android:layout_column="2"
-            android:layout_columnWeight="1"
-
-            android:layout_margin="0dp"
-            android:onClick="findItemIntent"
-
-            android:scaleType="fitXY"
-            android:src="@drawable/search_tab_image" />
-    </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

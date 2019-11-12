@@ -261,6 +261,11 @@ public class StoreScreenActivity extends AppCompatActivity {
         return;
     }
 
+    public void onTabBarItemClicked(@NonNull final Class<?> classToIntentTo){
+        if(!this.getClass().equals(classToIntentTo))
+            this.startActivity(new Intent(this, classToIntentTo));
+    }
+
     @Override
     public void onRestart(){
         super.onRestart();
