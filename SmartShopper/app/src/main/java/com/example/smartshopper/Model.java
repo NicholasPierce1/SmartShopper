@@ -3,14 +3,24 @@ package com.example.smartshopper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Model implements BrokerCallbackDelegate {
+    private List<Department> departmentList;
+    private List<Store>  stores;
 
+    public  Model(){}
+    public void findAllStores(){
+       //Adapter.findAllStores(this );
+    }
+    public void populateDeapartmentListForStore(Store store){
+        //Adapter.retrieveAllDepartmentsForStore(store, this);
+    }
 
     @Override
     public void validateIfBarcodeExistHandler(boolean searchWasSuccess, @NonNull BarcodeExistResult barcodeExistResult) {
-        
+
     }
 
     @Override
@@ -65,11 +75,16 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void getStoresHandler(boolean searchSuccess, @Nullable List<Store> storeList) {
-
+        stores = storeList;
+        //Makes a callback to Jared's code
     }
 
     @Override
     public void initializeDepartments(boolean initSuccess, @Nullable List<Department> departmentList) {
+        if(initSuccess){
+            this.departmentList = departmentList;
+            //Does a callback to Jared's code
+        }
 
     }
 }
