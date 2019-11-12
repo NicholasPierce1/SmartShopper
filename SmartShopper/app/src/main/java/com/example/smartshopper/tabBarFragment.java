@@ -47,6 +47,20 @@ public class tabBarFragment extends Fragment{
             }
         });
 
+        ((ImageButton)linearLayout.findViewById(R.id.tabBarFindItemTab)).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(@NonNull final View view){
+                onUserClick((ImageButton)view);
+            }
+        });
+
+        ((ImageButton)linearLayout.findViewById(R.id.tabBarStoreScreenTab)).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(@NonNull final View view){
+                onUserClick((ImageButton)view);
+            }
+        });
+
 
         return linearLayout;
     }
@@ -60,7 +74,7 @@ public class tabBarFragment extends Fragment{
         if(viewId == R.id.tabBarWelcomeScreenTab) {
             classTypeToIntentOverTo = Welcome_screenActivity.class;
         }
-        else if(viewId == R.id.tabBarStoreScreenTab){
+        else if(viewId == R.id.tabBarFindItemTab){
             classTypeToIntentOverTo = Search_screenActivity.class;
         }
         else

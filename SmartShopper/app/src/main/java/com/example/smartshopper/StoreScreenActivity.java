@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class StoreScreenActivity extends AppCompatActivity {
+public class StoreScreenActivity extends AppCompatActivity implements tabBarFragment.TabBarAction{
 
     // enumerates local member state
 

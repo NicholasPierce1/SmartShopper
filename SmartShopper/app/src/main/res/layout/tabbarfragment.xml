@@ -60,7 +60,7 @@
             android:src="@drawable/home_tab_image" />
 
         <ImageButton
-            android:id="@+id/tabBarFindItem"
+            android:id="@+id/tabBarFindItemTab"
             android:layout_width="0dp"
             android:layout_height="0dp"
 
