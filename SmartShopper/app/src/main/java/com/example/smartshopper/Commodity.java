@@ -28,6 +28,8 @@ public final class Commodity extends DataAccess implements Persistable{
 
     public Department department; // denotes the corresponding department that the item pertains in conjunction with store
 
+    public String searchPhrase;
+
     // enumerates local keys for col lookup/set
     private static final String nameKey = "name";
     private static final String vendorNameKey = "vendorName";

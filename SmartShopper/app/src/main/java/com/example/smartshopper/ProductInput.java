@@ -93,6 +93,8 @@ public class ProductInput extends Fragment {
             @Override
             public void onClick(View view) {
                 //NICK
+
+                //Barcode -> callback gives commidity -> to controller //FOR UPDATE
 //             myActivity.submitButtonPushed(AdminProductScreenActivity.submitCode, new Commodity(null, null, null
 //             ,null, null, null, null));
             }
