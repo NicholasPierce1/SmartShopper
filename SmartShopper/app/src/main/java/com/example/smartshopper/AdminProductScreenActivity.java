@@ -16,14 +16,15 @@ import androidx.fragment.app.FragmentTransaction;
 //@Author Matthew Berry
 
 public class AdminProductScreenActivity extends AppCompatActivity
-implements ProductCUD.CUDopperations {
+implements ProductCUD.CUDopperations, ProductInput.buttonInput {
 
     ProductCUD cud;
     ProductInput input;
-    String empid, barcode, vendor, name, dept;
+    String empid,  vendor, name, dept;
     double price;
     String wrong = "";
-    int submitCode = -1;
+    public static int submitCode = -1;
+    public static String barcode;
     TextView resultTV;
     Button crateBTN, modifyBTN, deleteBTN, pSubmitBTN, pCancleBTN, backBTN;
     FragmentManager manager;
@@ -31,7 +32,7 @@ implements ProductCUD.CUDopperations {
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        final AdminProductScreenActivity controller = this;
+
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.admin_product);
         Intent ini = getIntent();
@@ -40,7 +41,7 @@ implements ProductCUD.CUDopperations {
         //Creates new fragments for use
         final FragmentTransaction transaction = manager.beginTransaction();
         cud = new ProductCUD();
-        transaction.add( R.id.modifyCTNR, cud);
+        transaction.add(R.id.modifyCTNR, cud);
         input = new ProductInput();
         transaction.add(R.id.modifyCTNR, input);
         transaction.show(cud);
@@ -49,11 +50,7 @@ implements ProductCUD.CUDopperations {
 
 
         //Button crateBTN, modifyBTN, deleteBTN, pSubmitBTN, pCancleBTN, backBTN;
-        crateBTN = findViewById(R.id.createBTN);
-        modifyBTN = findViewById(R.id.ModifyBTN);
-        deleteBTN = findViewById(R.id.RemoveBTN);
-        pSubmitBTN = findViewById(R.id.pSubmitBTN);
-        pCancleBTN = findViewById(R.id.pCancelBTN);
+
         backBTN = findViewById(R.id.BackBTN);
         hideAndClear();
 
@@ -78,56 +75,20 @@ implements ProductCUD.CUDopperations {
                 //STUBBED LOGIC
 
 
-                if (submitCode == -1) {
-                    resultTV.setText("Not able to submit at this time");
-                } else if (submitCode == 1) {
-//                    if(CommodityMockModelTakeTwo.shared.addCommodity(barcode,name,vendor,dept,price)){
-//                        // success
-//                        Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
-//                    }
-//                    else{
-//                        // fail
-//                        Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
-//                    }
-
-                } else if (submitCode == 2) {
-//                    if(CommodityMockModelTakeTwo.shared.modifyCommodityFromBarcode(barcode,name,vendor,dept,isleNum,price)){
-//                        // success
-//                        Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
-//                    }
-//                    else{
-//                        // fail
-//                        Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
-//                    }
-                } else if (submitCode == 3) {
-                    if (CommodityMockModelTakeTwo.shared.removeItem(barcode)) {
-                        // success
-                        Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // fail
-                        Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-
             }
 
         });
         pCancleBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction1 = manager.beginTransaction();
-                transaction1.show(cud);
-                transaction1.hide(input);
 
             }
         });
 
 
-
-
     }
-    public void goBackAction (View v){
+
+    public void goBackAction(View v) {
         Intent data = new Intent();
         data.putExtra("EMPID", empid);
         setResult(0, data);
@@ -159,6 +120,7 @@ implements ProductCUD.CUDopperations {
 
 
     }
+
     private void showFields() {
 //        nameTV.setVisibility(View.VISIBLE);
 //        nameET.setVisibility(View.VISIBLE);
@@ -173,12 +135,12 @@ implements ProductCUD.CUDopperations {
     }
 
 
-    private boolean isEmpty(String s){
+    private boolean isEmpty(String s) {
         return (s == null || s.equals("") || s.equals(" "));
     }
 
-    public void buttonPressed(int code, String barcode)
-    {
+    public void buttonPressed(int code, String barcode) {
+        this.barcode = barcode;
         FragmentTransaction transaction = manager.beginTransaction();
         if (code == 1) {
             //So you can't do other things
@@ -189,8 +151,7 @@ implements ProductCUD.CUDopperations {
             if (AdminInputValidationHandler.isExistingValue(true, barcode)) {
                 String no = "Product with that Barcode name already exists";
                 resultTV.setText("" + no);
-            }
-            else {
+            } else {
                 //Now we are going to show all of the fields
                 transaction.show(input);
                 transaction.hide(cud);
@@ -236,7 +197,7 @@ implements ProductCUD.CUDopperations {
                 submitCode = 3;
 
 
-             //   Commodity subject = CommodityMockModelTakeTwo.shared.getCommodityFromBarcode(barcode);
+                //   Commodity subject = CommodityMockModelTakeTwo.shared.getCommodityFromBarcode(barcode);
 //                    nameET.setClickable(false);
 //                    vendorET.setClickable(false);
 //                    priceET.setClickable(false);
@@ -253,5 +214,64 @@ implements ProductCUD.CUDopperations {
         }
 
         transaction.commit();
+    }
+
+    public void submitButtonPushed(int actionCode, Commodity c) {
+        //NICK
+        final AdminProductScreenActivity controller = this;
+        if (submitCode == -1) {
+            resultTV.setText("Not able to submit at this time");
+        } else if (submitCode == 1) {
+            if (isInputValid(c)) {
+                // TODO: 11/11/2019 do database stuff here for creation 
+            } else {
+                Toast.makeText(controller, "Failure: " + wrong, Toast.LENGTH_LONG).show();
+            }
+        } else if (submitCode == 2) {
+            if (isInputValid(c)) {
+                // TODO: 11/11/2019 Do Database stuff here for update 
+            } else {
+                Toast.makeText(controller, "Failure: " + wrong, Toast.LENGTH_LONG).show();
+            }
+        } else if (submitCode == 3) {
+            // TODO: 11/11/2019 do database stuff here for delete and use if else block to validate input on call back 
+            if (CommodityMockModelTakeTwo.shared.removeItem(barcode)) {
+                // success
+                Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
+            } else {
+                // fail
+                Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
+    @Override
+    public void cancelButtonPushed() {
+        FragmentTransaction transaction1 = manager.beginTransaction();
+        transaction1.show(cud);
+        transaction1.hide(input);
+        submitCode =-1;
+    }
+
+
+    private boolean isInputValid(Commodity c) {
+        //NICK
+        wrong = "";
+        // TODO: 11/11/2019 replace mocck model with real model methods
+        if (isEmpty(c.vendorName) || isEmpty(c.department.toString()) || isEmpty(c.name)) {
+            wrong += "Blank fields are not allowed";
+        }
+        if (c.price <= 0) {
+            wrong += "Price cannnot be less than zero";
+        }
+        if (CommodityMockModel.vendors.contains(vendor)) {
+            if (name.equals(CommodityMockModel.names.get(CommodityMockModel.vendors.indexOf(vendor)))) {
+                wrong += "Vendor already has a product with this name";
+            }
+        } else ;
+        return wrong.equals("");
+
     }
 }
