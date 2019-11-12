@@ -43,7 +43,7 @@ public class tabBarFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         // Inflate the layout for this fragment
-        final LinearLayout linearLayout = (LinearLayout)inflater.inflate(R.layout.fragment_tab_bar, container, false);
+        final LinearLayout linearLayout = (LinearLayout)inflater.inflate(R.layout.tabbarfragment, container, false);
 
         // acquires image button and sets onclick
         ((ImageButton)linearLayout.findViewById(R.id.tabBarWelcomeScreenTab)).setOnClickListener(new View.OnClickListener(){
