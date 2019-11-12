@@ -1,5 +1,7 @@
 package com.example.smartshopper;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,17 +11,37 @@ import java.util.List;
 public class Model implements BrokerCallbackDelegate {
     private List<Department> departmentList;
     private List<Store>  stores;
+    Store store;
+    int oppCode;
+    String barcode;
 
     public  Model(){}
     public void findAllStores(){
        //Adapter.findAllStores(this );
     }
     public void populateDeapartmentListForStore(Store store){
+        this.store = store;
         //Adapter.retrieveAllDepartmentsForStore(store, this);
     }
+    public void validateBarcode(String barcode, int oppCode){
+        this.oppCode = oppCode;
+        this.barcode = barcode;
+        //Adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
+    }
+
 
     @Override
     public void validateIfBarcodeExistHandler(boolean searchWasSuccess, @NonNull BarcodeExistResult barcodeExistResult) {
+        if(searchWasSuccess){
+            switch (getCaseNumber(barcodeExistResult)){
+                case 0: logCaseProblem(barcodeExistResult);return;
+//                case 1: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1 );
+//                case 2: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2 );
+//                case 3: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3 );
+//                case 4: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4 );
+            }
+
+        }
 
     }
 
@@ -86,5 +108,26 @@ public class Model implements BrokerCallbackDelegate {
             //Does a callback to Jared's code
         }
 
+    }
+
+    private int getCaseNumber(BarcodeExistResult bxr){
+        //returns case number per design document
+        if(bxr.newBarcode && !bxr.newBarcodeToStore){
+            return 1;
+        }
+        else if(bxr.newBarcodeToStore && bxr.newBarcode){
+            return 2;
+        }
+        else if(!bxr.newBarcode && !bxr.newBarcodeToStore){
+            return  3;
+        }
+        else if(bxr.newBarcodeToStore && bxr.newBarcode){
+            return 4;
+        }
+        else return 0;
+    }
+    private void logCaseProblem(BarcodeExistResult bxe){
+        Log.d("Product Case Error", "Error in product case bools. \nDatabse flag is: "
+                + bxe.newBarcode + " \n Store barcode is:  " + bxe.newBarcodeToStore);
     }
 }

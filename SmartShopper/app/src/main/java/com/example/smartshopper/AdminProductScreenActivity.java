@@ -24,6 +24,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput {
     double price;
     String wrong = "";
     public static int submitCode = -1;
+    public static int createCode = -1;
     public static String barcode;
     TextView resultTV;
     Button crateBTN, modifyBTN, deleteBTN, pSubmitBTN, pCancleBTN, backBTN;
@@ -138,8 +139,11 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput {
     private boolean isEmpty(String s) {
         return (s == null || s.equals("") || s.equals(" "));
     }
+    public void buttonPressed(int code, String barcode){
+        //Model.validateBarcode(barcode, code);
+    }
 
-    public void buttonPressed(int code, String barcode) {
+    public void buttonPressedCB(int code, String barcode, int createCase) {
         this.barcode = barcode;
         FragmentTransaction transaction = manager.beginTransaction();
         if (code == 1) {
@@ -148,17 +152,21 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput {
             //Need to make sure the id does not exist
 
 //                barcode = barCodeET.getText().toString();
-            if (AdminInputValidationHandler.isExistingValue(true, barcode)) {
+            if (createCase == 2) {
                 String no = "Product with that Barcode name already exists";
                 resultTV.setText("" + no);
-            } else {
+            }
+            else if(createCase == 3 || createCase == 1){
                 //Now we are going to show all of the fields
                 transaction.show(input);
                 transaction.hide(cud);
                 submitCode = 1;
+                createCode = createCase;
                 Toast.makeText(getApplicationContext(), "Enter commodity details", Toast.LENGTH_LONG).show();
 
             }
+
+
         } else if (code == 2) {
             if (!AdminInputValidationHandler.isExistingValue(true, barcode)) {
                 String no = "Barcode  does not exist";

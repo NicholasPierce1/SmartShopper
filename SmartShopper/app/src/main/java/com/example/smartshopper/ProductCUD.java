@@ -29,7 +29,7 @@ public class ProductCUD extends Fragment {
     Button createBTN, modifyBTN, destroyBTN;
     EditText barcodeET;
     public interface CUDopperations{
-        public void buttonPressed(int modCode, String barcode);
+        public void buttonPressed(int code, String barcode);
     }
     private CUDopperations myActivity = null;
 
