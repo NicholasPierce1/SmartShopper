@@ -29,17 +29,20 @@ public interface BrokerCallbackDelegate {
     public abstract void findItemsBySearchHandler(final boolean searchWasSuccessful, @NonNull final List<Commodity> commodityList);
 
     // handler to access login results
-    public abstract void findAdminByUsernameAndPasswordHandler(final boolean adminSearchWasSuccess, final boolean adminFound, @Nullable final Admin admin);
+    public abstract void isAdminUsernameUniqueHandler(final boolean adminSearchWasSuccess, final boolean adminFound);
+
+    // handler to login admin
+    public abstract void loginAdminByUsernameAndPassword(final boolean adminLoginWasSuccess, final boolean adminFoundAndIsInStore, @Nullable final Admin admin);
 
     // handler to find an admin by an empId
-    // second boolean indicates to broker whether this invocation was for a login action or an update
-    public abstract void findAdminByEmpId(final boolean adminSearchWasSuccess, final boolean adminFound, @Nullable final Admin admin);
+    // second boolean indicates to broker whether this invocation was for a create action or an update
+    public abstract void findAdminByEmpId(final boolean adminSearchWasSuccess, final boolean adminFoundAndIsInStore, final boolean isForUpdate, final boolean didAdminRetainPrivilegesToAcquire, @Nullable final Admin admin);
 
     // handler to access deletion of admin
-    public abstract void deleteAdminHandler(final boolean wasAdminRemoved);
+    public abstract void deleteAdminHandler(final boolean wasAdminRemoved, final boolean didAdminRetainPrivilegesToRemove);
 
     // handler to ensure if update of admin was successful
-    public abstract void updateAdminHandler(final boolean wasAdminUpdated);
+    public abstract void updateAdminHandler(final boolean wasAdminUpdated, final boolean didAdminRetainPrivilegesToUpdate);
 
     // handler to give all stores
     public abstract void getStoresHandler(final boolean searchSuccess, @Nullable final List<Store> storeList);

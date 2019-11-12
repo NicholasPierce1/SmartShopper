@@ -29,20 +29,23 @@ public final class Adapter {
     // searches for an item by a search phrase on predicate the the item's formal name OR its categorical name contains the search
     public void searchForItemByPhrase(@NonNull final Store store, @NonNull final String searchPhrase, @NonNull final List<Department> departmentList, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
-    // finds an admin by its username and password
-    public void findAdminByUsernameAndPassword(@NonNull final Store store, @NonNull final String username, @NonNull final String password, @NonNull BrokerCallbackDelegate brokerCallbackDelegate){}
+    // finds an admin by its username if exist
+    public void isAdminUsernameUnique(@NonNull final Store store, @NonNull final String username, @NonNull BrokerCallbackDelegate brokerCallbackDelegate){}
+
+    // login admin by uName and password
+    public void loginAdminByUsernameAndPassword(@NonNull final Store store, @NonNull final String username, @NonNull final String password, @NonNull BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // finds an admin by its empId and states if invocation is for login or update
-    public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, final boolean isLoggingIn, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, final boolean isLoggingIn, @NonNull final Admin adminThatRequestedSearch, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // creates and saves an admin
     public void saveAdminToStore(@NonNull final Store store, @NonNull final String empId, @NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // deletes an admin by its empId
-    public void deleteAdmin(@NonNull final Store store, @NonNull final String empId, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void deleteAdmin(@NonNull final Store store, @NonNull final String empId, @NonNull final Admin adminThatRequestedDelete, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // updates an admin
-    public void updateAdmin(@NonNull final Admin admin, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void updateAdmin(@NonNull final Admin admin, @NonNull final Admin adminThatRequestedUpdate, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // initializing methods for model implementation
 
