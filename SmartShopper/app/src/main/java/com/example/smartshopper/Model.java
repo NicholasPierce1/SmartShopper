@@ -14,10 +14,14 @@ public class Model implements BrokerCallbackDelegate {
     Store store;
     int oppCode;
     String barcode;
-
-    public  Model(){}
+    private static Model shared = new Model();
+    public static Model getShared(){
+        return shared;
+    }
+    private Adapter adapter = Adapter.getShared();
+    private  AdminProductScreenActivity adminProductScreenActivity = AdminProductScreenActivity.getShared();
     public void findAllStores(){
-       //Adapter.findAllStores(this );
+       adapter.findAllStores(this );
     }
     public void populateDeapartmentListForStore(Store store){
         this.store = store;
@@ -26,7 +30,7 @@ public class Model implements BrokerCallbackDelegate {
     public void validateBarcode(String barcode, int oppCode){
         this.oppCode = oppCode;
         this.barcode = barcode;
-        //Adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
+        adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
     }
 
 
@@ -35,10 +39,10 @@ public class Model implements BrokerCallbackDelegate {
         if(searchWasSuccess){
             switch (getCaseNumber(barcodeExistResult)){
                 case 0: logCaseProblem(barcodeExistResult);return;
-//                case 1: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1 );
-//                case 2: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2 );
-//                case 3: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3 );
-//                case 4: AdminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4 );
+                case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1 );
+                case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2 );
+                case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3 );
+                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4 );
             }
 
         }

@@ -10,6 +10,10 @@ import java.util.List;
 public final class Adapter {
 
     // item's CRUD methods
+    private static  Adapter shared = new Adapter();
+    public  static Adapter getShared(){
+        return shared;
+    }
 
     // searches for, and conditionally combines department, deptStock, and item to create app's full item by barcode
     public void validateIfBarcodeExist(@NonNull final Store store, @NonNull final List<Department> departmentList, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}

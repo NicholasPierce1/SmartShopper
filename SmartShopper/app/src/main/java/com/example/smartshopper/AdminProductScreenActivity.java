@@ -17,6 +17,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class AdminProductScreenActivity extends AppCompatActivity
 implements ProductCUD.CUDopperations, ProductInput.buttonInput {
+    private static AdminProductScreenActivity shared = new AdminProductScreenActivity();
+
+    public static AdminProductScreenActivity getShared(){
+        return  shared;
+    }
 
     ProductCUD cud;
     ProductInput input;
