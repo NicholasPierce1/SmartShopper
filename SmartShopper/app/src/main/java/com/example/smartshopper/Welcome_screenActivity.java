@@ -1,20 +1,16 @@
 package com.example.smartshopper;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Welcome_screenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class Welcome_screenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, tabBarFragment.TabBarAction{
     Store store1 = new Store("Maryville, MO", "Walmart");
     Store store2 = new Store("Clarinda, IA", "Fareway");
     Store store3 = new Store("Maryville, MO", "Hyvee");
@@ -70,6 +66,10 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
 
         // effectuates intent w/ no data
         super.startActivity(userStoreSelection);
+    }
+    public void onTabBarItemClicked(@NonNull final Class<?> classToIntentTo){
+        if(!this.getClass().equals(classToIntentTo))
+            this.startActivity(new Intent(this, classToIntentTo));
     }
 
 }
