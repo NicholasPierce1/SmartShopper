@@ -71,11 +71,14 @@ public class tabBarFragment extends Fragment{
         Class<?> classTypeToIntentOverTo;
 
 
-        if(viewId == R.id.tabBarWelcomeScreenTab) {
+        if(viewId == R.id.tabBarWelcomeScreenTab){
             classTypeToIntentOverTo = Welcome_screenActivity.class;
         }
         else if(viewId == R.id.tabBarFindItemTab){
             classTypeToIntentOverTo = Search_screenActivity.class;
+        }
+        else if(viewId == R.id.tabBarStoreScreenTab){
+            classTypeToIntentOverTo = StoreScreenActivity.class;
         }
         else
             return;
