@@ -9,40 +9,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model implements BrokerCallbackDelegate {
+    //This model is BettleJuice approved
     private List<Department> departmentList;
-    private List<Store>  stores;
-    Store store;
+    private WelcomeScreenModelMethods mm;
+    private AdminProductCBMethods adminProductScreenActivity;
+    private Store store;
     int oppCode;
     String barcode;
     private static Model shared = new Model();
+
     public static Model getShared(){
         return shared;
     }
     private Adapter adapter = Adapter.getShared();
-    private  AdminProductScreenActivity adminProductScreenActivity = AdminProductScreenActivity.getShared();
     public void findAllStores(){
        adapter.findAllStores(this );
     }
-    public void populateDeapartmentListForStore(Store store){
+    public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
+        this.mm = mm;
         this.store = store;
         //Adapter.retrieveAllDepartmentsForStore(store, this);
     }
-    public void validateBarcode(String barcode, int oppCode){
+    public void validateBarcode(String barcode, int oppCode, AdminProductCBMethods cbm){
+        adminProductScreenActivity = cbm;
         this.oppCode = oppCode;
         this.barcode = barcode;
         adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
     }
-
+    public void getNameFromBarcode(String barcode, AdminProductCBMethods cbm){
+        adminProductScreenActivity = cbm;
+    }
 
     @Override
     public void validateIfBarcodeExistHandler(boolean searchWasSuccess, @NonNull BarcodeExistResult barcodeExistResult) {
         if(searchWasSuccess){
             switch (getCaseNumber(barcodeExistResult)){
                 case 0: logCaseProblem(barcodeExistResult);return;
-                case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1 );
-                case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2 );
-                case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3 );
-                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4 );
+                case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1 ); return;
+                case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2 );return;
+                case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3 );return;
+                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4 );return;
             }
 
         }
@@ -101,8 +107,8 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void getStoresHandler(boolean searchSuccess, @Nullable List<Store> storeList) {
-        stores = storeList;
-        //Makes a callback to Jared's code
+        mm.storeCB(searchSuccess,storeList);
+
     }
 
     @Override

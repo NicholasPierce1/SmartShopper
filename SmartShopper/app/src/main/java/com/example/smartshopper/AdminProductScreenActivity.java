@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 //@Author Matthew Berry
 
 public class AdminProductScreenActivity extends AppCompatActivity
-implements ProductCUD.CUDopperations, ProductInput.buttonInput {
+implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMethods {
     private static AdminProductScreenActivity shared = new AdminProductScreenActivity();
 
     public static AdminProductScreenActivity getShared(){
@@ -34,6 +34,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput {
     TextView resultTV;
     Button crateBTN, modifyBTN, deleteBTN, pSubmitBTN, pCancleBTN, backBTN;
     FragmentManager manager;
+   private Model model = Model.getShared();
 
 
     @Override
@@ -58,12 +59,12 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput {
         //Button crateBTN, modifyBTN, deleteBTN, pSubmitBTN, pCancleBTN, backBTN;
 
         backBTN = findViewById(R.id.BackBTN);
-        hideAndClear();
+
 
         pCancleBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hideAndClear();
+
                 crateBTN.setVisibility(View.VISIBLE);
                 modifyBTN.setVisibility(View.VISIBLE);
                 deleteBTN.setVisibility(View.VISIBLE);
@@ -102,133 +103,87 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput {
     }
 
 
-    private void hideAndClear() {
-//        nameTV.setVisibility(View.INVISIBLE);
-//        nameET.setVisibility(View.INVISIBLE);
-//        nameET.setText("");
-//        vendorTV.setVisibility(View.INVISIBLE);
-//        vendorET.setVisibility(View.INVISIBLE);
-//        vendorET.setText("");
-//       deptTV.setVisibility(View.INVISIBLE);
-//       deptET.setVisibility(View.INVISIBLE);
-//       deptET.setText("");
-//       isleTV.setVisibility(View.INVISIBLE);
-//       isleET.setVisibility(View.INVISIBLE);
-//       isleET.setText("");
-//       priceTV.setVisibility(View.INVISIBLE);
-//       priceET.setVisibility(View.INVISIBLE);
-//       priceET.setText("");
-//       nameET.setClickable(true);
-//       vendorET.setClickable(true);
-//       priceET.setClickable(true);
-//       deptET.setClickable(true);
-//       isleET.setClickable(true);
-
-
-    }
-
-    private void showFields() {
-//        nameTV.setVisibility(View.VISIBLE);
-//        nameET.setVisibility(View.VISIBLE);
-//        vendorTV.setVisibility(View.VISIBLE);
-//        vendorET.setVisibility(View.VISIBLE);
-//        deptTV.setVisibility(View.VISIBLE);
-//        deptET.setVisibility(View.VISIBLE);
-//        isleTV.setVisibility(View.VISIBLE);
-//        isleET.setVisibility(View.VISIBLE);
-//        priceTV.setVisibility(View.VISIBLE);
-//        priceET.setVisibility(View.VISIBLE);
-    }
 
 
     private boolean isEmpty(String s) {
         return (s == null || s.equals("") || s.equals(" "));
     }
+
     public void buttonPressed(int code, String barcode){
-        //Model.validateBarcode(barcode, code);
+      if(!isEmpty(barcode))
+       model.validateBarcode( barcode, code, this);
     }
 
     public void buttonPressedCB(int code, String barcode, int createCase) {
         this.barcode = barcode;
+        Bundle bundle = new Bundle();
         FragmentTransaction transaction = manager.beginTransaction();
-        if (code == 1) {
-            //So you can't do other things
+        if (code == 1) { //create
 
-            //Need to make sure the id does not exist
 
 //                barcode = barCodeET.getText().toString();
             if (createCase == 2) {
                 String no = "Product with that Barcode name already exists";
                 resultTV.setText("" + no);
             }
-            else if(createCase == 3 || createCase == 1){
+            else if(createCase == 1){
                 //Now we are going to show all of the fields
                 transaction.show(input);
                 transaction.hide(cud);
-                submitCode = 1;
+                submitCode = code;
                 createCode = createCase;
+                bundle.putString("Barcode",barcode);
+                Toast.makeText(getApplicationContext(), "Enter commodity details", Toast.LENGTH_LONG).show();
+
+            }
+            else if(createCase == 1){
+                //Now we are going to show all of the fields
+                transaction.show(input);
+                transaction.hide(cud);
+                submitCode = code;
+                createCode = createCase;
+
                 Toast.makeText(getApplicationContext(), "Enter commodity details", Toast.LENGTH_LONG).show();
 
             }
 
 
-        } else if (code == 2) {
-            if (!AdminInputValidationHandler.isExistingValue(true, barcode)) {
+        } else if (code == 2) { //update
+            if (createCase != 4) {
                 String no = "Barcode  does not exist";
                 resultTV.setText("" + no);
             } else {
                 transaction.show(input);
                 transaction.hide(cud);
-                submitCode = 2;
+                submitCode = code;
                 //Now we are going to show all of the fields
-
-
-                Commodity subject = CommodityMockModelTakeTwo.shared.getCommodityFromBarcode(barcode);
-//
-//                    nameET.setText("" + subject.name);
-//                    vendorET.setText("" + subject.vendorName);
-//                    priceET.setText("" + subject.price);
-//                    deptET.setText("" + subject.department);
-//                    isleET.setText("" + subject.location);
-
-
                 Toast.makeText(getApplicationContext(), "Modify Commodity details", Toast.LENGTH_LONG).show();
 
             }
-        } else if (code == 3) {
-            crateBTN.setVisibility(View.INVISIBLE);
-            modifyBTN.setVisibility(View.INVISIBLE);
+        }
+        else if (code == 3) { //delete
+
             //Need to make sure the id does not exist
-            hideAndClear();
+
 //                barcode= barCodeET.getText().toString();
-            if (!AdminInputValidationHandler.isExistingValue(true, barcode)) {
+            if (createCase != 4) {
                 String no = "Barcode  does not exist";
                 resultTV.setText("" + no);
             } else {
                 transaction.show(input);
                 transaction.hide(cud);
-                submitCode = 3;
-
-
-                //   Commodity subject = CommodityMockModelTakeTwo.shared.getCommodityFromBarcode(barcode);
-//                    nameET.setClickable(false);
-//                    vendorET.setClickable(false);
-//                    priceET.setClickable(false);
-//                    deptET.setClickable(false);
-//                    isleET.setClickable(false);
-//                    nameET.setText("" + subject.name);
-//                    vendorET.setText("" + subject.vendorName);
-//                    priceET.setText("" + subject.price);
-//                    deptET.setText("" + subject.department);
-//                    isleET.setText("" + subject.location);
+                submitCode = code;
                 Toast.makeText(getApplicationContext(), "Confrim Deletion", Toast.LENGTH_LONG).show();
 
             }
         }
-
+        input.setCreateCase(createCase);
+        input.setSubmitCode(submitCode);
         transaction.commit();
+        input.prepareFragmentForPresentation(barcode);
     }
 
+    // TODO: 11/12/2019 Change paramaters to what you only need not a full comodity 
     public void submitButtonPushed(int actionCode, Commodity c) {
         //NICK
         final AdminProductScreenActivity controller = this;
@@ -287,4 +242,18 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput {
         return wrong.equals("");
 
     }
+
+    // TODO: 11/12/2019 Get nick to create and adapter method that spits out a comodity baased off
+    // TODO: 11/12/2019 a barcode per case one of admin create. 
+    public void getNameandVendorForFragment(String barcode){
+        model.getNameFromBarcode(barcode, this);
+
+    }
+    public void getNameandVendorForFragmentCB(String name, String vendor){
+        Bundle bundle = new Bundle();
+        bundle.putString("name", name);
+        bundle.putString("vendor", vendor);
+        
+    }
+
 }

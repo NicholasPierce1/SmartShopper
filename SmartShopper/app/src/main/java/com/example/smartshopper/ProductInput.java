@@ -29,15 +29,14 @@ public class ProductInput extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public interface buttonInput{
-        //NICK
         public void submitButtonPushed(int actionCode, Commodity commodity);
         public void cancelButtonPushed();
+        public void getNameandVendorForFragment(String barcode);
     }
     private buttonInput myActivity = null;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int createCase, submitCode;
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,23 +44,6 @@ public class ProductInput extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * param param1 Parameter 1.
-     * param param2 Parameter 2.
-     * @return A new instance of fragment ProductInput.
-     */
-    // TODO: Rename and change types and number of parameters
-//    public static ProductInput newInstance(String param1, String param2) {
-//        ProductInput fragment = new ProductInput();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,5 +121,18 @@ public class ProductInput extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public void setCreateCase(int createCase){
+        this.createCase = createCase;
+    }
+    public void setSubmitCode(int sub){
+        submitCode = sub;
+    }
+    public void prepareFragmentForPresentation(String barcode) {
+        if (submitCode == 1) {//creation
+            if (createCase == 1) { //Exisiting product
+                myActivity.getNameandVendorForFragment(barcode);
+            }
+        }
     }
 }
