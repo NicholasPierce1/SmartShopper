@@ -1,5 +1,6 @@
 package com.example.smartshopper;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,8 +23,8 @@ public class Model implements BrokerCallbackDelegate {
         return shared;
     }
     private Adapter adapter = Adapter.getShared();
-    public void findAllStores(){
-       adapter.findAllStores(this );
+    public void findAllStores(@NonNull final Context context){
+       adapter.findAllStores(context, this);
     }
     public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
         this.mm = mm;

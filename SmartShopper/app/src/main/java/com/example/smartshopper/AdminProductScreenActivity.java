@@ -179,7 +179,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         input.setCreateCase(createCase);
         input.setSubmitCode(submitCode);
         transaction.commit();
-        input.prepareFragmentForPresentation(Commodity c);
+        input.prepareFragmentForPresentation(commodity);
     }
 
     // TODO: 11/12/2019 Change paramaters to what you only need not a full comodity 
