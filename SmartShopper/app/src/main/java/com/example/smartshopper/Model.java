@@ -54,6 +54,13 @@ public class Model implements BrokerCallbackDelegate {
     public void findAdminByID(String id, Admin requestor){
         adapter.findAdminByEmpId(store, id, false, requestor, this );
     }
+    public Store getStroe(){
+        return store;
+    }
+    public void createAdmin(@NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel){
+       adapter.saveAdminToStore(store, userName, name, userName, password, adminLevel, this);
+    }
+
 
 
     public void validateComodityInput(boolean weNeedToCheckName, int oppCode,  Bundle c){
@@ -266,6 +273,7 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void addAdminHandler(boolean wasAdminAdded) {
+        ((AdminModCBMethods)mm).aCreateCB(wasAdminAdded);
 
     }
 

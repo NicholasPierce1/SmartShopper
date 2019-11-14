@@ -26,6 +26,9 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     String cAdminID = ""; //ID of admin we want to change
     int submitCode = -1;
     Model model;
+    Store store;
+    String cName, cpw;
+    AdminLevel level;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -47,7 +50,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         passwordET = findViewById(R.id.PasswordET);
         employeeDisTV.setText("");
         model = Model.getShared();
-
+        store = model.getStroe();
         createBTN = findViewById(R.id.CreateAdminBTN);
         modifyBTN = findViewById(R.id.ModifyAdminBTN);
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
@@ -67,15 +70,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 }
                 else if (submitCode == 1){
                 if(isInputValid()){
-                    String name = nameET.getText().toString();
-                    String pw = passwordET.getText().toString();
-                    AdminLevel level = levelFinder();
-                    Store store = AdminMockModelClass.storeBuilder();
-                    Admin newAdmin = new Admin(name, cAdminID, pw, level, store);
+                    cName = nameET.getText().toString();
+                    cpw = passwordET.getText().toString();
+                    level = levelFinder();
+
                     //We would make a real model call to create it, but for now...
-                    AdminMockModelClass.fakeCreator(newAdmin);
-                    outcomeTV.setText("Creation Success!");
-                    hideAndCelar();
+
+                  model.createAdmin(cName, cAdminID,cpw, level );
                 }
                 else{
                     outcomeTV.setText("Invalid input: " +wrong);
@@ -324,4 +325,16 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         Toast.makeText(getApplicationContext(), "Admin was not found", Toast.LENGTH_SHORT);
 
     }
+    public void aCreateCB(boolean success){
+        outcomeTV.setText("Creation Success!");
+        hideAndCelar();
+    }
+    public void aModifyCB(boolean success){
+
+    }
+
+    public void aDelCB(boolean success){
+
+    }
+
 }
