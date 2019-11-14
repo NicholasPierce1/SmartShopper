@@ -90,6 +90,7 @@ final class BackFourAppRepo{
         /* HOOT: possible solution -- AsyncTask does not perform checks on generic arguments held by any object-param so I can create a class that has two members
             one for each of the params and create + pass object into async task (of course I modify the first generic arg to AsyncTask)
          */
+        //noinspection unchecked
         (new BackFourAppRepo.BackFourAppRepoAsyncTask()).execute(new Pair<ExecuteRepoCallTask, RepoCallbackHandler>(repoCallTask, delegate));
     }
 

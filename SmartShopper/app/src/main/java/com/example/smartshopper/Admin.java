@@ -22,7 +22,7 @@ public final class Admin extends DataAccess implements Persistable {
 
     public Store store; // denotes store that admin presides in
 
-    public String empID; // unique id to employee -- NOT primary key to relation
+    public long empID; // unique id to employee -- NOT primary key to relation
 
     // enumerate local keys for col lookup/storing
     static final String nameKey = "name";
@@ -52,7 +52,7 @@ public final class Admin extends DataAccess implements Persistable {
         //Admin class
         // render DA object from using composite inputs and a Store (NOTE: no need to set object id)
         @NonNull
-        public static Admin build(@NonNull final Store store, @NonNull final String name, @NonNull final String userName, @NonNull final String pw, @NonNull final AdminLevel level, @NonNull final String empId){
+        public static Admin build(@NonNull final Store store, @NonNull final String name, @NonNull final String userName, @NonNull final String pw, @NonNull final AdminLevel level, final long empId){
             // creates local ref
             final Admin admin = new Admin();
 
@@ -80,7 +80,7 @@ public final class Admin extends DataAccess implements Persistable {
             admin.password = parseObject.getString(Admin.passwordKey);
             admin.userName = parseObject.getString(Admin.userNameKey);
             admin.name = parseObject.getString(Admin.nameKey);
-            admin.empID = parseObject.getString(Admin.empIdKey);
+            admin.empID = parseObject.getLong(Admin.empIdKey);
             admin.adminLevel = AdminLevel.getAdminLevelFromInt(parseObject.getInt(Admin.adminLevelKey));
 
             admin.setObjectIdFromParseObject(parseObject);
@@ -101,6 +101,7 @@ public final class Admin extends DataAccess implements Persistable {
         parseObject.put(Admin.storeKey, this.store.getObjectId());
         parseObject.put(Admin.adminLevelKey, this.adminLevel.getIdType());
         parseObject.put(Admin.userNameKey, this.userName);
+        parseObject.put(Admin.empIdKey, this.empID);
 
         return parseObject;
     }

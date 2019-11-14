@@ -36,7 +36,7 @@ public interface BrokerCallbackDelegate {
 
     // handler to find an admin by an empId
     // second boolean indicates to broker whether this invocation was for a create action or an update
-    public abstract void findAdminByEmpId(final boolean adminSearchWasSuccess, final boolean adminFoundAndIsInStore, final boolean isForUpdate, final boolean didAdminRetainPrivilegesToAcquire, @Nullable final Admin admin);
+    public abstract void findAdminByEmpId(final boolean adminSearchWasSuccess, final boolean adminFoundAndIsInStore, final boolean didAdminRetainPrivilegesToAcquire, @Nullable final Admin admin);
 
     // handler to access the creation of an admin
     public abstract void addAdminHandler(final boolean wasAdminAdded);

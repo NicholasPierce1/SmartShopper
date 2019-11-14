@@ -525,12 +525,13 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                     }
 
-                } finally {
+                }
+                finally {
 
                     assert(operationResults != null);
 
                     // returns composite repo callback result
-                    return new RepoCallbackResult(operationResults, AdapterMethodType.findAdminByLogin, brokerCallbackDelegate, admin, null);
+                   return new RepoCallbackResult(operationResults, AdapterMethodType.findAdminByLogin, brokerCallbackDelegate, admin, null);
                 }
             }
         };
@@ -540,7 +541,71 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // finds an admin by its empId and states if invocation is for login or update
-    public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, final boolean isLoggingIn, @NonNull final Admin adminThatRequestedSearch, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, final boolean isLoggingIn, @NonNull final Admin adminThatRequestedSearch, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates state promised to callback
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                Admin admin = null;
+
+                // try-catch-finally block to find admin in store w/ empId,
+                // access if admin that requested has higher admin level permissions than the converted admin, and return accordingly
+                try{
+
+                    // creates parse query targeting admin
+                    final ParseQuery<ParseObject> findAdminByEmpIdQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Admin.getRelationName());
+
+                    // sets predicate where store id match and emp id match
+                    findAdminByEmpIdQuery.whereEqualTo(Admin.storeKey, store.getObjectId());
+                    findAdminByEmpIdQuery.whereEqualTo(Admin.empIdKey, empId);
+
+                    // finds admins that match predicate
+                    final List<ParseObject> adminListAsParse = findAdminByEmpIdQuery.find();
+
+                    // asserts size is one (0 throws parse exception)
+                    if (adminListAsParse.size() != 1)
+                        throw new RuntimeException("error state in data integrity-- multiple Admin tailored to store and login credentials. Count: ".concat(String.valueOf(adminListAsParse.size())));
+
+                    // extracts and converts known admin as parse to DA
+                    admin = Admin.Builder.toDataAccessFromParse(adminListAsParse.get(0), store);
+
+                    // asserts that admin that requested search has higher priviledges than admin found
+                    if(admin.adminLevel.getIdType() > adminThatRequestedSearch.adminLevel.getIdType()){
+                        // good case, set success codes
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true, true);
+                    }
+                    else{
+                        // admin level lock codes
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true,true, false);
+                    }
+                }
+                catch(ParseException ex){
+
+                    // differentiates cases of parse exceptions (cases: a. no object found on such predicate, b. internal error incurred)
+                    if(ex.getCode() == ParseException.OBJECT_NOT_FOUND){
+                        // sets error code - no admin found
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
+                    }
+                    else{
+                        // sets error code -- internal error
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                    }
+                }
+                finally{
+
+                    // returns repo callback result composite
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.findAdminByEmpId, brokerCallbackDelegate, admin,null);
+                }
+            }
+        };
+
+        // enjoins repo to execute task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // creates and saves an admin
     public void saveAdminToStore(@NonNull final Store store, @NonNull final String empId, @NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
