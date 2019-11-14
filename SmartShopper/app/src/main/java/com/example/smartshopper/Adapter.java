@@ -14,6 +14,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -181,7 +182,61 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // saves the pending item via composite inputs w/ the denoted store and dept
-    public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String name, @NonNull final String vendorName, final double price, @NonNull final Location location, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String name, @NonNull final String vendorName, @NonNull final String searchPhrase, final double price, @NonNull final Location location, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local ref to repo task
+        BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates state promised to callback
+                HashMap<String, Boolean> operationsResults = null;
+
+                // creates composite commodity
+                Commodity commodity = Commodity.Builder.build(barcode,name, vendorName, searchPhrase);
+
+                // try-catch-finally to save item, create dept stock, and save dept stock
+                try{
+
+                    // converts commodity to parse object
+                    final ParseObject commodityToSave = commodity.toParseObject();
+
+                    // saves commodity
+                    commodityToSave.save();
+
+                    // asserts that commodity's object id is not null
+                    if(commodityToSave.getObjectId() == null)
+                        throw new RuntimeException("saved Commodity does not retain an object id after save");
+
+                    // updates commodity ref
+                    commodity = Commodity.Builder.toDataAccessFromParse(commodityToSave);
+
+                    // creates dept stock
+                    final DepartmentStock departmentStock = DepartmentStock.Builder.build(department, commodity, price, location);
+
+                    // converts and save dept stock
+                    departmentStock.toParseObject().save();
+
+                    // sets success codes
+                    operationsResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                }
+                catch(ParseException ex){
+                    // sets error codes
+                    operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
+                finally {
+                    assert(operationsResults != null);
+
+                    // returns repo callback results
+                    return new RepoCallbackResult(operationsResults, AdapterMethodType.createItem, brokerCallbackDelegate, null, null);
+                }
+            }
+        };
+
+        // enjoins repo to effectuate task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // updates the item via the newly refined item's state positing that non-categorical state (store and dept) hasn't been altered
     public void updateItem(@NonNull final Commodity commodity, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
