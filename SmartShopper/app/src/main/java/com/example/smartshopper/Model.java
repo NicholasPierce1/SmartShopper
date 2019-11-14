@@ -147,4 +147,14 @@ public class Model implements BrokerCallbackDelegate {
         Log.d("Product Case Error", "Error in product case bools. \nDatabse flag is: "
                 + bxe.newBarcode + " \n Store barcode is:  " + bxe.newBarcodeToStore);
     }
+    //This does the magic to get a department
+    public Department getDepartmentFromDepartmentType(DepartmentType dt){
+        for(Department d: departmentList){
+            if(d.type.toString().equals(dt.toString())){
+                return d;
+            }
+        }
+        return null;
+    }
+
 }
