@@ -101,6 +101,12 @@ final class BackFourAppRepo{
         @NonNull
         @SafeVarargs
         public final Pair<RepoCallbackResult, RepoCallbackHandler> doInBackground(@NonNull final Pair<ExecuteRepoCallTask, RepoCallbackHandler>... repoPair){
+
+            // asserts that only one input, generic arg is passed in
+            if(repoPair.length != 1)
+                throw new IndexOutOfBoundsException("must pass an ExecutreRepoCallTask and a RepoCallbackHandler comprised in a Pair");
+
+            // effectuates custom runnable for result
             return new Pair<RepoCallbackResult, RepoCallbackHandler>(repoPair[0].first.executeRepo(), repoPair[0].second);
         }
 
