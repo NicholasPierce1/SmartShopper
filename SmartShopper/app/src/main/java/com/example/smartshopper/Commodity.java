@@ -28,12 +28,13 @@ public final class Commodity extends DataAccess implements Persistable{
 
     public Department department; // denotes the corresponding department that the item pertains in conjunction with store
 
-    public String searchPhrase;
+    public String searchPhrase;  // used to simplify search for consumers to locate items
 
     // enumerates local keys for col lookup/set
     static final String nameKey = "name";
     static final String vendorNameKey = "vendorName";
     static final String barcodeNameKey = "barcode";
+    static final String searchPhraseKey = "searchPhrase";
 
     // temporary public constructor to expedite local-state creation
     @Deprecated
@@ -71,7 +72,7 @@ public final class Commodity extends DataAccess implements Persistable{
 
         // renders composite build from user inputs for saving/validation
         @NonNull
-        public Commodity build(@NonNull final String barcode,@NonNull final String name,@NonNull final String vendorName){
+        public Commodity build(@NonNull final String barcode,@NonNull final String name,@NonNull final String vendorName, @NonNull final String searchPhrase){
 
             // creates local ref
             final Commodity commodity = new Commodity();
@@ -79,6 +80,7 @@ public final class Commodity extends DataAccess implements Persistable{
             commodity.barcode = barcode;
             commodity.name = name;
             commodity.vendorName = vendorName;
+            commodity.searchPhrase = searchPhrase;
 
             return commodity;
         }
@@ -87,11 +89,12 @@ public final class Commodity extends DataAccess implements Persistable{
         @NonNull
         public Commodity toDataAccessFromParse(@NonNull final ParseObject parseObject){
 
-            // creates local commodity from builder's composite method handler
+            // creates local commodity from builder's composite method handler (SAFE operation)
             final Commodity commodity = new Commodity.Builder().build(
                     parseObject.getString(Commodity.barcodeNameKey),
                     parseObject.getString(Commodity.nameKey),
-                    parseObject.getString(Commodity.vendorNameKey));
+                    parseObject.getString(Commodity.vendorNameKey),
+                    parseObject.getString(Commodity.searchPhraseKey));
 
             // sets object id
             commodity.setObjectIdFromParseObject(parseObject);
@@ -114,6 +117,7 @@ public final class Commodity extends DataAccess implements Persistable{
         parseObject.put(Commodity.vendorNameKey, this.vendorName);
         parseObject.put(Commodity.nameKey, this.name);
         parseObject.put(Commodity.barcodeNameKey, this.barcode);
+        parseObject.put(Commodity.searchPhraseKey, this.searchPhrase);
 
         return parseObject;
     }
