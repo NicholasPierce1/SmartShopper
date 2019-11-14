@@ -34,7 +34,7 @@ final class StoredDept extends DataAccess {
     public static class Builder extends DataAccess.Builder{
 
         // renders StoredDept from a parsed object derived from store dept relation
-        public StoredDept build(@NonNull final ParseObject parseObject){
+        public static StoredDept build(@NonNull final ParseObject parseObject){
 
             // creates local ref
             final StoredDept storedDept = new StoredDept();

@@ -1,6 +1,7 @@
 package com.example.smartshopper;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.parse.ParseObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 // retains external methods with internal class w/ helper methods for DA coalescing
@@ -112,10 +114,11 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 }
-
-                // returns call back result
-                return new RepoCallbackResult(operationResults, AdapterMethodType.getAllStores, brokerCallbackDelegate, null, storeList);
-
+                finally {
+                    assert(operationResults != null);
+                    // returns call back result
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.getAllStores, brokerCallbackDelegate, null, storeList);
+                }
             }
         };
 
@@ -128,15 +131,54 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+
             @Override
             public RepoCallbackResult executeRepo() {
 
-                // creates parse query targeting store dept
-                final ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.StoreDept.getRelationName());
+                // local ref to composite return types
+                List<Department> departmentList = null;
+                HashMap<String, Boolean> operationResults = null;
 
-                // sets constraint where store object's id matches store dept's store id
+                try {
+
+                    // creates parse query targeting store dept
+                    final ParseQuery<ParseObject> deptStockParseQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.StoreDept.getRelationName());
+
+                    // sets constraint where store object's id matches store dept's store id
+                    deptStockParseQuery.whereEqualTo(StoredDept.storeObjectIdKey, store.getObjectId());
+
+                    // retrieves, and converts all dept stock
+                    final List<ParseObject> parseObjectList = deptStockParseQuery.find();
+                    final List<StoredDept> storedDeptList = Adapter.ORM_Helper.convertParseObjectsToStoredDept(parseObjectList);
+
+                    // creates parse query targeting Department
+                    final ParseQuery<ParseObject> deptParseQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Department.getRelationName());
+
+                    // retrieves all depts
+                    final List<ParseObject> departmentParseObjectList = deptParseQuery.find();
+
+                    // invokes helper to convert, department as parse object, a list of store dept, and store to create dept list
+                    departmentList = Adapter.ORM_Helper.findAndCreateDepartmentFromRelationalState(departmentParseObjectList, storedDeptList, store);
+
+                    // sets success bool results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                }
+                catch(ParseException ex){
+                    // sets error bool results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
+                finally {
+                    assert(operationResults != null);
+
+                    // returns compiled results to callback
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.initializeDepartments, brokerCallbackDelegate, null, departmentList);
+                }
             }
-        }
+        };
+
+        // enjoins repo to execute custom runnable
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
     }
 
     // public method implementation to receive repo callback, downcast datatype params to appropriate broker callback
@@ -198,8 +240,55 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // local inner class to render helper methods for ORM facilitation
-    private class ORM_Helper{
+    private static class ORM_Helper{
 
+        // retrieves a list of parse objects and converts to StoredDept
+        @NonNull
+        static List<StoredDept> convertParseObjectsToStoredDept(@NonNull final List<ParseObject> parseObjectList){
+
+            // creates local list ref
+            final List<StoredDept> storedDeptList = new ArrayList<StoredDept>();
+
+            // walks through all parse objects, using ORM to convert them into StoredDept
+            for(ParseObject parseObject: parseObjectList)
+                storedDeptList.add(StoredDept.Builder.build(parseObject));
+
+            return storedDeptList;
+        }
+
+        // helper to convert, department as parse object, a list of store dept, and store to create dept list
+        @NonNull
+        static List<Department> findAndCreateDepartmentFromRelationalState(@NonNull final List<ParseObject> departmentsAsParse, @NonNull final List<StoredDept> storedDeptList, @NonNull final Store store){
+
+            // local ref to dept list
+            final List<Department> departmentList = new ArrayList<Department>();
+
+            // walks through all stored departments and finds match where stored dept id == dept id
+            for(StoredDept storedDept: storedDeptList){
+
+                // finds matching dept
+                final ParseObject parseObject = getDepartmentAsParseFromStoreDepartment(storedDept, departmentsAsParse);
+
+                // creates dept, and appends to list
+                departmentList.add(Department.Builder.build(parseObject, storedDept, store));
+            }
+
+            return departmentList;
+        }
+
+        // helper to retrieve department as parse where stored dept's id match
+        @NonNull
+        static ParseObject getDepartmentAsParseFromStoreDepartment(@NonNull final StoredDept storedDept, @NonNull final List<ParseObject> parseObjectList){
+
+            // walks through all parse objects and returns the dept where id's match
+            for(ParseObject parseObject: parseObjectList){
+                if(parseObject.getObjectId().equals(storedDept.getObjectId()))
+                    return parseObject;
+            }
+
+            // throws exception is no match uncovered
+            throw new NoSuchElementException("no department pertains to stored dept");
+        }
 
     }
 }

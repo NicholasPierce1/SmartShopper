@@ -15,6 +15,9 @@ public abstract class DataAccess implements Serializable {
     // defines shared, locally used objectId value (universal, surrogate key used in back4app)
     private String objectId;
 
+    // package accessible string to acquire shared key of "objectId"
+    static final String objectIdKey = "objectId";
+
     // default constructor for empty declaration
     public DataAccess(){}
 

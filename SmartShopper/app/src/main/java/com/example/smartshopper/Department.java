@@ -44,7 +44,7 @@ public final class Department extends DataAccess {
 
         // renders Department from parsed object and stored dept
         @NonNull
-        public Department build(@NonNull final ParseObject parseObject, @NonNull final StoredDept storedDept, @NonNull final Store store){
+        public static Department build(@NonNull final ParseObject parseObject, @NonNull final StoredDept storedDept, @NonNull final Store store){
 
             // creates local reference
             final Department department = new Department();
