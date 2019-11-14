@@ -11,6 +11,7 @@ public enum AdapterMethodType {
     findItemBySearch,
     findAdminByLogin,
     findAdminByEmpId,
+    validateIfAdminUsernameIsUnique,
     addAdmin,
     deleteAdmin,
     updateAdmin,

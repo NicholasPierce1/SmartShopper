@@ -13,6 +13,7 @@ final class RepoCallbackResult {
     public static final String operationSuccessKey = "operationSuccess";
     public static final String adapterOperationSuccessKey = "adapterOperationSuccess";
     public static final String contextOperationSuccessKey = "contextOperationSuccess";
+    public static final String contextAuxiliaryOperationSuccessKey = "contextAuxiliaryOperationSuccess";
 
     // enumerates local output variables conditionally produced, and passed into creation of instance
 
@@ -46,7 +47,7 @@ final class RepoCallbackResult {
 
     // (helper) takes three booleans in order of (operation, adapter, context) and returns hashmap retaining their values
     @NonNull
-    public static HashMap<String, Boolean> setOperationResultBooleans(final boolean operationWasSuccess, final boolean adapterOperationWasSuccess, final boolean contextOperationWasSuccess){
+    public static HashMap<String, Boolean> setOperationResultBooleans(@NonNull final Boolean operationWasSuccess, @NonNull final Boolean adapterOperationWasSuccess, @NonNull final Boolean contextOperationWasSuccess, @NonNull final Boolean contextAuxOperationWasSuccess){
 
         // creates local ref to Hashmap
         final HashMap<String, Boolean> operationResults = new HashMap<String,Boolean>();
@@ -55,7 +56,27 @@ final class RepoCallbackResult {
         operationResults.put(RepoCallbackResult.operationSuccessKey, operationWasSuccess);
         operationResults.put(RepoCallbackResult.adapterOperationSuccessKey, adapterOperationWasSuccess);
         operationResults.put(RepoCallbackResult.contextOperationSuccessKey, contextOperationWasSuccess);
+        operationResults.put(RepoCallbackResult.contextAuxiliaryOperationSuccessKey, contextAuxOperationWasSuccess);
 
         return operationResults;
+    }
+
+    // overloaded helper for operations that only requires three booleans
+    @NonNull
+    public static HashMap<String, Boolean> setOperationResultBooleans(@NonNull final Boolean operationWasSuccess, @NonNull final Boolean adapterOperationWasSuccess, @NonNull final Boolean contextOperationWasSuccess){
+        return RepoCallbackResult.setOperationResultBooleans(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess, false);
+    }
+
+
+    // overloaded helper for operations that only require one boolean
+    @NonNull
+    public static HashMap<String, Boolean> setOperationResultBooleans(@NonNull final Boolean operationWasSuccess){
+        return RepoCallbackResult.setOperationResultBooleans(operationWasSuccess, false);
+    }
+
+    // overloaded helper for operations that only requires two booleans
+    @NonNull
+    public static HashMap<String, Boolean> setOperationResultBooleans(@NonNull final Boolean operationWasSuccess, @NonNull final Boolean adapterOperationWasSuccess){
+        return RepoCallbackResult.setOperationResultBooleans(operationWasSuccess, adapterOperationWasSuccess, false);
     }
 }

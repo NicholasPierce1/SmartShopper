@@ -11,6 +11,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,21 +85,58 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     // public method implementation to receive repo callback, downcast datatype params to appropriate broker callback
     @Override
     @MainThread
-    public void repoCallback(@NonNull final HashMap<String, Boolean> operationResultHolder, @Nullable final DataAccess dataAccess, @Nullable final List<DataAccess> dataAccessList, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
-        // TODO: switch case to institute all callbacks to broker delegate
+    public void repoCallback(@NonNull final HashMap<String, Boolean> operationResultHolder, @Nullable final DataAccess dataAccess, @Nullable final List<? extends DataAccess> dataAccessList, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
 
         // acquires local refs to boolean values (safe unboxing operations -- will always be set)
         final boolean operationWasSuccess = operationResultHolder.get(RepoCallbackResult.operationSuccessKey);
         final boolean adapterOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.adapterOperationSuccessKey);
         final boolean contextOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.contextOperationSuccessKey);
+        final boolean contextAuxillaryOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.contextAuxiliaryOperationSuccessKey);
 
-        // creates switch case on AdapterMethodType
+        // creates switch case on AdapterMethodType (all cast operations are safe)
         switch(adapterMethodType){
             case validateIfBarcodeExist:
                 brokerCallbackDelegate.validateIfBarcodeExistHandler(operationWasSuccess, new BarcodeExistResult(adapterOperationWasSuccess, contextOperationWasSuccess, (Commodity)dataAccess));
                 break;
-            
+            case validateNameForVendorIsUnique:
+                brokerCallbackDelegate.validateNameForVendorIsUniqueHandler(operationWasSuccess, adapterOperationWasSuccess);
+                break;
+            case createItem:
+                brokerCallbackDelegate.createItemForStoreInDepartment(operationWasSuccess);
+            case updateItem:
+                brokerCallbackDelegate.updateItemHandler(operationWasSuccess);
+                break;
+            case deleteItem:
+                brokerCallbackDelegate.deleteItemHandler(operationWasSuccess);
+                break;
+            case findItemBySearch: // (SAFE cast, never not null and is commodity)
+                assert(dataAccessList != null);
+                brokerCallbackDelegate.findItemsBySearchHandler(operationWasSuccess,(List<Commodity>)dataAccessList);
+            case findAdminByLogin:
+                brokerCallbackDelegate.loginAdminByUsernameAndPassword(operationWasSuccess, adapterOperationWasSuccess, (Admin)dataAccess);
+                break;
+            case findAdminByEmpId:
+                brokerCallbackDelegate.findAdminByEmpId(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess, contextAuxillaryOperationWasSuccess, (Admin)dataAccess);
+                break;
+            case validateIfAdminUsernameIsUnique:
+                brokerCallbackDelegate.isAdminUsernameUniqueHandler(operationWasSuccess, adapterOperationWasSuccess);
+                break;
+            case addAdmin:
+                brokerCallbackDelegate.addAdminHandler(operationWasSuccess);
+                break;
+            case deleteAdmin:
+                brokerCallbackDelegate.deleteAdminHandler(operationWasSuccess, adapterOperationWasSuccess);
+                break;
+            case updateAdmin:
+                brokerCallbackDelegate.updateAdminHandler(operationWasSuccess, adapterOperationWasSuccess);
+                break;
+            case initializeDepartments: // (SAFE cast, never not null and is department)
+                assert(dataAccessList != null);
+                brokerCallbackDelegate.initializeDepartments(operationWasSuccess, (List<Department>)dataAccessList);
+                break;
+            default:  // ** getAllStores ** (SAFE cast, never not null and is store)
+                assert(dataAccessList != null);
+                brokerCallbackDelegate.getStoresHandler(operationWasSuccess, (List<Store>)dataAccessList);
         }
     }
 
