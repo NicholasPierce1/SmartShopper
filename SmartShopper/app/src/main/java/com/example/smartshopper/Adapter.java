@@ -401,10 +401,15 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // sets error code
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
+                    // upon empty results the list shall be non-null, empty
+                    if(ex.getCode() == ParseException.OBJECT_NOT_FOUND)
+                        commodityList = new ArrayList<Commodity>();
+
                 }
                 finally{
 
                     assert(operationResults != null);
+                    assert(commodityList != null);
 
                     // returns repo callback results
                     return new RepoCallbackResult(operationResults, AdapterMethodType.findItemBySearch, brokerCallbackDelegate, null, commodityList);
