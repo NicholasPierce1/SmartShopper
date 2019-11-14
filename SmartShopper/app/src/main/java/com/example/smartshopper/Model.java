@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model implements BrokerCallbackDelegate {
-    //This model is BettleJuice approved
+    //This model is Beetlejuice approved
     private List<Department> departmentList;
     private CallBackInterface mm;
     private AdminProductCBMethods adminProductScreenActivity;
@@ -23,7 +23,7 @@ public class Model implements BrokerCallbackDelegate {
         return shared;
     }
     private Adapter adapter = Adapter.getShared();
-    public void findAllStores(@NonNull final Context context){
+    public void findAllStores(@NonNull final Context context) throws ExceptionInInitializerError{
        adapter.findAllStores(context, this);
     }
     public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
@@ -118,6 +118,12 @@ public class Model implements BrokerCallbackDelegate {
             this.departmentList = departmentList;
             //Does a callback to Jared's code
         }
+
+
+    }
+
+    @Override
+    public void addAdminHandler(boolean wasAdminAdded) {
 
     }
 

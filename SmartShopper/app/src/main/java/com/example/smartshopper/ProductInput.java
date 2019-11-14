@@ -26,17 +26,20 @@ public class ProductInput extends Fragment {
     TextView nameTV, vendorTV, deptTV, isleTV, priceTV, resultTV, tagsTV;
     EditText barCodeET, nameET, vendorET, deptET, isleET, priceET, tagsET;
     Button cancleBTN, submitBTN;
+    Commodity c;
+    int submitCode;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public interface buttonInput{
-        public void submitButtonPushed(int actionCode, Commodity commodity);
+        public void submitButtonPushed(int actionCode, Bundle commodity);
         public void cancelButtonPushed();
 
     }
     private buttonInput myActivity = null;
 
     // TODO: Rename and change types of parameters
-    private int createCase, submitCode;
+    private int createCase;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,22 +77,15 @@ public class ProductInput extends Fragment {
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //NICK
-
-                //Barcode -> callback gives commidity -> to controller //FOR UPDATE
-//             myActivity.submitButtonPushed(AdminProductScreenActivity.submitCode, new Commodity(null, null, null
-//             ,null, null, null, null));
+                //We are either creating a comodity or changing. We will pass in the things we are doing
+                //as a bundle to make life easy
             }
         });
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -129,21 +125,72 @@ public class ProductInput extends Fragment {
         submitCode = sub;
     }
     public void prepareFragmentForPresentation(Commodity c) {
+        this.c = c;
+
+
+        if (submitCode == 1) {//creation
+            if (createCase == 1) { //Exisiting product
+                lockNameaAndVendorAndUnlockRest();
+               nameET.setText(""+c.name);
+               vendorET.setText(""+c.vendorName);
+            }
+            else unlockAll();
+        }
+        else if(submitCode == 2){
+            lockNameaAndVendorAndUnlockRest();
+            displayAll(c);
+        }
+        else if(submitCode == 3){
+            lockAll();
+            displayAll(c);
+        }
+
+    }
+
+    public void unlockAll(){
         nameET.setClickable(true);
         vendorET.setClickable(true);
         deptET.setClickable(true);
         isleET.setClickable(true);
         priceET.setClickable(true);
         tagsET.setClickable(true);
-        if (submitCode == 1) {//creation
-            if (createCase == 1) { //Exisiting product
-               nameET.setText(""+c.name);
-               vendorET.setText(""+c.vendorName);
-            }
-        }
-        else if(submitCode == 2){
-
-        }
     }
-    // TODO: 11/13/2019 Create lock and unlock private metods <-------
+    public void lockAll(){
+        nameET.setClickable(false);
+        vendorET.setClickable(false);
+        deptET.setClickable(false);
+        isleET.setClickable(false);
+        priceET.setClickable(false);
+        tagsET.setClickable(false);
+    }
+    public void lockNameaAndVendorAndUnlockRest(){
+        nameET.setClickable(false);
+        vendorET.setClickable(false);
+        deptET.setClickable(true);
+        isleET.setClickable(true);
+        priceET.setClickable(true);
+        tagsET.setClickable(true);
+    }
+    public void displayAll(Commodity c){
+        nameET.setText(""+c.name);
+        vendorET.setText(""+ c.vendorName);
+        deptET .setText(""+c.department.type.toString());
+        isleET.setText("" +Location.getLocationFromLocationId(c.location.getLocationID()));
+        priceET.setText("" + c.price);
+        tagsET.setText(""+ c.searchPhrase);
+    }
+    private Bundle retrive(){
+        //This is for the controller later
+        Bundle b = new Bundle();
+        b.putString("name", nameET.getText().toString());
+        b.putString("vendor", vendorET.getText().toString());
+        b.putInt("dept", Integer.parseInt(deptET.getText().toString()));
+        b.putInt("isle",Integer.parseInt(isleET.getText().toString()));
+        b.putDouble("price", Double.parseDouble(priceET.getText().toString()));
+        b.putString("tags", tagsET.getText().toString());
+        return b;
+    }
+    private void setToComodity(Commodity c){
+
+    }
 }
