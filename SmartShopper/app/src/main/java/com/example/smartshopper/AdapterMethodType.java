@@ -10,6 +10,7 @@ public enum AdapterMethodType {
     deleteItem,
     findItemBySearch,
     findAdminByLogin,
+    findAdminByEmpId,
     addAdmin,
     deleteAdmin,
     updateAdmin,

@@ -1,19 +1,35 @@
 package com.example.smartshopper;
 
+import android.content.Context;
+
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
+import java.util.HashMap;
 import java.util.List;
+
 
 // retains external methods with internal class w/ helper methods for DA coalescing
 // communicates with repo by passing custom runnables
-public final class Adapter {
+public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // item's CRUD methods
-    private static  Adapter shared = new Adapter();
+
+    // denotes shared delegate for repo operations
+    private static Adapter shared = new Adapter();
+
+    // returns shared delegate for broker implementation
     public  static Adapter getShared(){
         return shared;
     }
+
+    private Adapter(){}
 
     // searches for, and conditionally combines department, deptStock, and item to create app's full item by barcode
     public void validateIfBarcodeExist(@NonNull final Store store, @NonNull final List<Department> departmentList, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
@@ -54,8 +70,22 @@ public final class Adapter {
     // initializing methods for model implementation
 
     // retrieves all stores
-    public void findAllStores(@NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void findAllStores(@NonNull final Context applicationContext, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // retrieves, and coalesces, all departments for that store
     public void retrieveAllDepartmentsForStore(@NonNull final Store store, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+
+    // public method implementation to receive repo callback, downcast datatype params to appropriate broker callback
+    @Override
+    @MainThread
+    public void repoCallback(@NonNull final HashMap<String, Boolean> operationResultHolder, @Nullable final DataAccess dataAccess, @Nullable final List<DataAccess> dataAccessList, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // TODO: switch case to institute all callbacks to broker delegate
+    }
+
+    // local inner class to render helper methods for ORM facilitation
+    private class ORM_Helper{
+
+
+    }
 }
