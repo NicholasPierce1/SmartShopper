@@ -23,6 +23,9 @@ public class Model implements BrokerCallbackDelegate {
     private static Model shared = new Model();
     private Commodity co;
     private int createCase = -1;
+    private String username;
+    private Admin requestor;
+    private boolean inHouse;
 
     public static Model getShared(){
         return shared;
@@ -48,6 +51,16 @@ public class Model implements BrokerCallbackDelegate {
     public  void deleteItem(Commodity c){
         adapter.deleteItemFromBarcode(store, c.barcode, this);
     }
+    public void findAdminByID(String id, Admin requestor){
+        adapter.findAdminByEmpId(store, id, false, requestor, this );
+    }
+    public Store getStroe(){
+        return store;
+    }
+    public void createAdmin(@NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel){
+       adapter.saveAdminToStore(store, userName, name, userName, password, adminLevel, this);
+    }
+
 
 
     public void validateComodityInput(boolean weNeedToCheckName, int oppCode,  Bundle c){
@@ -120,9 +133,11 @@ public class Model implements BrokerCallbackDelegate {
         adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
     }
 
-    public void checkForExistingUsername(int oppCode,  String username){
+    public void checkForExistingUsername(int oppCode,  String username, Admin requestor){
+        this.requestor = requestor;
+        this.username = username;
         this.oppCode = oppCode;
-        adapter.isAdminUsernameUnique(store, username, this);
+        adapter.isAdminUsernameUnique(username, this);
     }
 
     @Override
@@ -185,8 +200,25 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void isAdminUsernameUniqueHandler(boolean adminSearchWasSuccess, boolean adminFound) {
-        if(adminSearchWasSuccess)
-            ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, adminFound);
+        if(adminSearchWasSuccess){
+            if(oppCode == 1){
+                ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, adminFound, null);
+                //WE don't care about an admin object so move on.
+            }
+            //For Update
+            else if(oppCode == 2 || oppCode == 3){
+                if(!adminFound){
+                    ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, adminFound, null);
+                }
+                else{
+                    inHouse = true;
+                    findAdminByID(username, requestor);
+                }
+            }
+
+
+        }
+
 
 
     }
@@ -198,6 +230,18 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void findAdminByEmpId(boolean adminSearchWasSuccess, boolean adminFoundAndIsInStore, boolean isForUpdate, boolean didAdminRetainPrivilegesToAcquire, @Nullable Admin admin) {
+            if(adminFoundAndIsInStore && adminFoundAndIsInStore){
+                if(inHouse){
+                    //WE know it's from a mehtod called by model and not an external class
+                    finishisAdminUsernameUniqueHandler(admin);
+                }
+                else{
+                    // TODO: 11/14/2019 Finish this mehtod for external calls if needed
+                }
+            }
+            else{
+                ((AdminModCBMethods)mm).adminNotFound();
+            }
 
     }
 
@@ -229,6 +273,7 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void addAdminHandler(boolean wasAdminAdded) {
+        ((AdminModCBMethods)mm).aCreateCB(wasAdminAdded);
 
     }
 
@@ -264,6 +309,12 @@ public class Model implements BrokerCallbackDelegate {
     private boolean isEmpty(String s) {
         return (s == null || s.equals("") || s.equals(" "));
     }
+    private void finishisAdminUsernameUniqueHandler(Admin a){
+
+        ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, true, a);
+
+    }
+
 }
 
 

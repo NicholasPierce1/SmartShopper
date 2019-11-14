@@ -2,7 +2,6 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,9 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.w3c.dom.Text;
 //@Author Matthew Berry
 
 public class AdminModificationScreenActivity extends AppCompatActivity implements AdminModCBMethods{
@@ -25,9 +23,12 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     String wrong = "";
     Button createBTN, modifyBTN, deleteBTN,cancelBTN;
     Button submitBTN;
-    String empIDDIS = "";
+    String cAdminID = ""; //ID of admin we want to change
     int submitCode = -1;
     Model model;
+    Store store;
+    String cName, cpw;
+    AdminLevel level;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,7 +50,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         passwordET = findViewById(R.id.PasswordET);
         employeeDisTV.setText("");
         model = Model.getShared();
-
+        store = model.getStroe();
         createBTN = findViewById(R.id.CreateAdminBTN);
         modifyBTN = findViewById(R.id.ModifyAdminBTN);
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
@@ -69,15 +70,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 }
                 else if (submitCode == 1){
                 if(isInputValid()){
-                    String name = nameET.getText().toString();
-                    String pw = passwordET.getText().toString();
-                    AdminLevel level = levelFinder();
-                    Store store = AdminMockModelClass.storeBuilder();
-                    Admin newAdmin = new Admin(name, empIDDIS, pw, level, store);
+                    cName = nameET.getText().toString();
+                    cpw = passwordET.getText().toString();
+                    level = levelFinder();
+
                     //We would make a real model call to create it, but for now...
-                    AdminMockModelClass.fakeCreator(newAdmin);
-                    outcomeTV.setText("Creation Success!");
-                    hideAndCelar();
+
+                  model.createAdmin(cName, cAdminID,cpw, level );
                 }
                 else{
                     outcomeTV.setText("Invalid input: " +wrong);
@@ -89,7 +88,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         String pw = passwordET.getText().toString();
                         AdminLevel level = levelFinder();
                         Store store = AdminMockModelClass.storeBuilder();
-                        Admin newAdmin = new Admin(name, empIDDIS, pw, level, store);
+                        Admin newAdmin = new Admin(name, cAdminID, pw, level, store);
                         //We would make a real model call to create it, but for now...
                         AdminMockModelClass.fakeUpdator(newAdmin);
                         outcomeTV.setText("Update Success!");
@@ -100,7 +99,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     }
                 }
                 else if(submitCode == 3){
-                    AdminMockModelClass.fakeDestroyer(empIDDIS);
+                    AdminMockModelClass.fakeDestroyer(cAdminID);
                     outcomeTV.setText("" + "Admin was removed");
                     hideAndCelar();
 
@@ -134,8 +133,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 deleteBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
-                  empIDDIS = adminIDET.getText().toString();
-                  model.checkForExistingUsername(1, empIDDIS);
+                  cAdminID = adminIDET.getText().toString();
+                  model.checkForExistingUsername(1, cAdminID, user);
 
             }
         });
@@ -146,8 +145,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 deleteBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
-                empIDDIS= adminIDET.getText().toString();
-                model.checkForExistingUsername(2, empIDDIS);
+                cAdminID = adminIDET.getText().toString();
+                model.checkForExistingUsername(2, cAdminID, user);
 
             }
         });
@@ -158,13 +157,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 modifyBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
-                empIDDIS= adminIDET.getText().toString();
-                model.checkForExistingUsername( 3, empIDDIS);
+                cAdminID = adminIDET.getText().toString();
+                model.checkForExistingUsername( 3, cAdminID, user);
 
             }
         });
     }
-    public void adminIdCheckCB(int oppCode, boolean exists){
+    public void adminIdCheckCB(int oppCode, boolean exists, @Nullable Admin a){
         if(oppCode ==1) {
             if (exists) {
                 String no = "Admin with that user name already exists";
@@ -174,7 +173,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Now we are going to show all of the fields
                 submitCode = 1;
                 showFields();
-                employeeDisTV.setText("" + empIDDIS);
+                employeeDisTV.setText("" + cAdminID);
                 if (user.adminLevel.equals(AdminLevel.owner)) {
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setVisibility(View.VISIBLE);
@@ -190,7 +189,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 String no = "Admin id does not exist";
                 outcomeTV.setText("" + no);
             }
-            else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
+            else if(!hasPermission(user, a)){
                 outcomeTV.setText("Insufficient Permissions");
             }
             else{
@@ -198,8 +197,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 submitCode = 2;
                 //Now we are going to show all of the fields
                 showFields();
-                employeeDisTV.setText("" + empIDDIS);
-                Admin subject = AdminMockModelClass.adminFinder(empIDDIS);
+                employeeDisTV.setText("" + cAdminID);
+                Admin subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setVisibility(View.VISIBLE);
@@ -222,15 +221,15 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 String no = "Admin id does not exist";
                 outcomeTV.setText("" + no);
             }
-            else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
+            else if(!hasPermission(user,a)){
                 outcomeTV.setText("Insufficient Permissions");
             }
             else{
                 submitCode = 3;
                 //Now we are going to show all of the fields
                 showFields();
-                employeeDisTV.setText("" + empIDDIS);
-                Admin subject = AdminMockModelClass.adminFinder(empIDDIS);
+                employeeDisTV.setText("" + cAdminID);
+                Admin subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setClickable(false);
@@ -319,6 +318,23 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         else if(middleAdminCB.isChecked())
             return  AdminLevel.managingStoreAdmin;
         else return AdminLevel.storeAdmin;
+    }
+
+    @Override
+    public void adminNotFound() {
+        Toast.makeText(getApplicationContext(), "Admin was not found", Toast.LENGTH_SHORT);
+
+    }
+    public void aCreateCB(boolean success){
+        outcomeTV.setText("Creation Success!");
+        hideAndCelar();
+    }
+    public void aModifyCB(boolean success){
+
+    }
+
+    public void aDelCB(boolean success){
+
     }
 
 }
