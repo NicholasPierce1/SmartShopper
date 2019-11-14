@@ -1,8 +1,9 @@
 package com.example.smartshopper;
 
-public class SearchResultHandler{
+import android.widget.LinearLayout;
 
-    interface Interface{
-        public void SearchResultHandler(boolean operationSuccess, boolean searchGood, Commodity listCommodities);
-    }
+import java.util.List;
+
+public interface SearchResultHandler extends CallBackInterface{
+    public void searchCB(boolean operationSuccess, boolean searchGood, List<Commodity> commodityList);
 }
