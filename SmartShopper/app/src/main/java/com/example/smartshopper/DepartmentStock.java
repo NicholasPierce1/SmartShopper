@@ -51,7 +51,7 @@ final class DepartmentStock extends DataAccess implements Persistable {
 
         // renders Department Stock from Department and Comp Item (NOTE: object id need not be set)
         @NonNull
-        public DepartmentStock build(@NonNull final Department department, @NonNull final Commodity commodity, final double price, @NonNull final Location location ){
+        public static DepartmentStock build(@NonNull final Department department, @NonNull final Commodity commodity, final double price, @NonNull final Location location ){
 
             // creates local reference
             DepartmentStock departmentStock = new DepartmentStock();
@@ -69,7 +69,7 @@ final class DepartmentStock extends DataAccess implements Persistable {
 
         // allows for read back4app parsed objects to be converted to composites
         @NonNull
-        public DepartmentStock toDataAccessFromParse(@NonNull final ParseObject parseObject){
+        public static DepartmentStock toDataAccessFromParse(@NonNull final ParseObject parseObject){
 
             // creates local department stock
             final DepartmentStock departmentStock = new DepartmentStock();

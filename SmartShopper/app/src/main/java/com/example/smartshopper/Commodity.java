@@ -52,7 +52,7 @@ public final class Commodity extends DataAccess implements Persistable{
     private Commodity(){}
 
     // updates Commodity ref state
-    public void updateCommodity(@NonNull final Department department, @NonNull final DepartmentStock departmentStock, @NonNull final ParseObject parseObject){
+    public void updateCommodity(@NonNull final Department department, @NonNull final DepartmentStock departmentStock){
 
         // updates department ref
         this.department = department;
@@ -62,8 +62,6 @@ public final class Commodity extends DataAccess implements Persistable{
         this.price = departmentStock.price;
         this.hasAisle = department.hasAisles;
 
-        // updates local object id
-        this.setObjectIdFromParseObject(parseObject);
 
     }
 
@@ -72,7 +70,7 @@ public final class Commodity extends DataAccess implements Persistable{
 
         // renders composite build from user inputs for saving/validation
         @NonNull
-        public Commodity build(@NonNull final String barcode,@NonNull final String name,@NonNull final String vendorName, @NonNull final String searchPhrase){
+        public static Commodity build(@NonNull final String barcode,@NonNull final String name,@NonNull final String vendorName, @NonNull final String searchPhrase){
 
             // creates local ref
             final Commodity commodity = new Commodity();
@@ -87,7 +85,7 @@ public final class Commodity extends DataAccess implements Persistable{
 
         // allows for read back4app parsed objects to be converted to composites
         @NonNull
-        public Commodity toDataAccessFromParse(@NonNull final ParseObject parseObject){
+        public static Commodity toDataAccessFromParse(@NonNull final ParseObject parseObject){
 
             // creates local commodity from builder's composite method handler (SAFE operation)
             final Commodity commodity = new Commodity.Builder().build(

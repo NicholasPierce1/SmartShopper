@@ -2,6 +2,7 @@ package com.example.smartshopper;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.provider.ContactsContract;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -36,7 +37,94 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     private Adapter(){}
 
     // searches for, and conditionally combines department, deptStock, and item to create app's full item by barcode
-    public void validateIfBarcodeExist(@NonNull final Store store, @NonNull final List<Department> departmentList, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void validateIfBarcodeExist(@NonNull final Store store, @NonNull final List<Department> departmentList, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates local state promised to delegate
+                HashMap<String, Boolean> operationsResult = null;
+                Commodity commodity = null;
+
+                // try-catch-finally for all parse operation/s
+                try{
+
+                    // acquires Parse query targeting item
+                    final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
+
+                    // acquires all items where barcode is equal
+                    itemSearchQuery.whereEqualTo(Commodity.barcodeNameKey, barcode);
+                    final List<ParseObject> itemListAsParse = itemSearchQuery.find();
+
+                    // asserts that list size is 1 (0 is thrown as exception)
+                    if(itemListAsParse.size() != 1)
+                        throw new RuntimeException("error state in data integrity-- multiple items exist with such barcode. Count: ".concat(String.valueOf(itemListAsParse.size())));
+
+                    // acquires composite item from list -- known size of 1
+                    commodity = Commodity.Builder.toDataAccessFromParse(itemListAsParse.get(0));
+
+                    // creates parse query targeting DeptStock
+                    final ParseQuery<ParseObject> deptStockQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.DepartmentStock.getRelationName());
+
+                    // sets where clause on predicate that store id match AND commodity id match
+                    deptStockQuery.whereEqualTo(DepartmentStock.storeObjectIdKey, store.getObjectId());
+                    deptStockQuery.whereEqualTo(DepartmentStock.itemObjectIdKey, commodity.getObjectId());
+
+                    // acquires all dept stock that match constraints
+                    final List<ParseObject> deptStockListAsParse = deptStockQuery.find();
+
+                    // asserts size is 1 (0 throws exception)
+                    if(deptStockListAsParse.size() != 1)
+                        throw new RuntimeException("error state in data integrity-- multiple Department Stock tailored to store and commodity. Count: ".concat(String.valueOf(deptStockListAsParse.size())));
+
+                    // renders dept stock builder (known size of 1)
+                    final DepartmentStock departmentStock = DepartmentStock.Builder.toDataAccessFromParse(deptStockListAsParse.get(0));
+
+                    // invokes helper to acquire dept where StoredDept's dept id == dept's
+                    final Department department = Adapter.ORM_Helper.getDepartmentFromDeptStockParseId(departmentStock, departmentList);
+
+                    // updates item with store and dept stock
+                    commodity.updateCommodity(department, departmentStock);
+
+                    // sets success result codes
+                    operationsResult = RepoCallbackResult.setOperationResultBooleans(true, true, true);
+
+                }
+                catch(ParseException ex){
+
+                    // differentiates cases from ( a. parse error in connection, b. commodity exist to database only, c. commodity does not exist at all )
+                    // NOTE : parse exception code will equal "object not found"
+                    if(ex.getCode() == ParseException.OBJECT_NOT_FOUND) { // all cases but 'a'
+
+                        // checks between case 'b' and 'c' on predicate if commodity is null
+                        if (commodity == null) {
+                            // commodity not found in item relation from barcode -- case 'c'
+                            operationsResult = RepoCallbackResult.setOperationResultBooleans(true);
+                        } else {
+                            // commodity existed to item relation from barcode, but not from store -- case 'b'
+                            operationsResult = RepoCallbackResult.setOperationResultBooleans(true, true);
+                        }
+                    }
+                    else{
+                        // some other error-- case 'a'
+                        operationsResult = RepoCallbackResult.setOperationResultBooleans(false);
+                        }
+                }
+                finally{
+                    assert(operationsResult != null);
+                    assert(commodity != null);
+
+                    // renders, and returns, repo callback
+                    return new RepoCallbackResult(operationsResult, AdapterMethodType.validateIfBarcodeExist, brokerCallbackDelegate, commodity, null);
+                }
+            }
+        };
+
+        // enjoins repo to effectuate task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // validates if the name for the pending item is unique to vendor
     public void validateItemNameToVendorIsUnique(@NonNull final String itemName, @NonNull final String vendorName, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
@@ -288,6 +376,20 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
             // throws exception is no match uncovered
             throw new NoSuchElementException("no department pertains to stored dept");
+        }
+
+        // helper to acquire Department dept where StoredDept's dept id == Department's
+        @NonNull
+        static Department getDepartmentFromDeptStockParseId(@NonNull final DepartmentStock deptStock, @NonNull final List<Department> departmentList){
+
+            // walks through all departments and finds department that has same id
+            for(Department department: departmentList){
+                if(department.getObjectId().equals(deptStock.getObjectId()))
+                    return department;
+            }
+
+            // throws exception is no match uncovered
+            throw new NoSuchElementException("no department pertains to dept stock");
         }
 
     }
