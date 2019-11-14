@@ -29,6 +29,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     Store store;
     String cName, cpw;
     AdminLevel level;
+    Admin subject;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -56,6 +57,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
         cancelBTN = findViewById(R.id.cancelBTN);
         submitBTN = findViewById(R.id.submitBTN);
+
        
         hideAndCelar();
         submitBTN.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +75,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     cName = nameET.getText().toString();
                     cpw = passwordET.getText().toString();
                     level = levelFinder();
-
-                    //We would make a real model call to create it, but for now...
-
                   model.createAdmin(cName, cAdminID,cpw, level );
                 }
                 else{
@@ -87,10 +86,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         String name = nameET.getText().toString();
                         String pw = passwordET.getText().toString();
                         AdminLevel level = levelFinder();
-                        Store store = AdminMockModelClass.storeBuilder();
-                        Admin newAdmin = new Admin(name, cAdminID, pw, level, store);
                         //We would make a real model call to create it, but for now...
-                        AdminMockModelClass.fakeUpdator(newAdmin);
+
                         outcomeTV.setText("Update Success!");
                         hideAndCelar();
                     }
@@ -198,7 +195,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Now we are going to show all of the fields
                 showFields();
                 employeeDisTV.setText("" + cAdminID);
-                Admin subject = a;
+                subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setVisibility(View.VISIBLE);
@@ -229,7 +226,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Now we are going to show all of the fields
                 showFields();
                 employeeDisTV.setText("" + cAdminID);
-                Admin subject = a;
+                subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setClickable(false);
