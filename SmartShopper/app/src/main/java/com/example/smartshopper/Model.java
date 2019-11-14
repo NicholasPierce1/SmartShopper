@@ -1,5 +1,6 @@
 package com.example.smartshopper;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,7 +12,7 @@ import java.util.List;
 public class Model implements BrokerCallbackDelegate {
     //This model is BettleJuice approved
     private List<Department> departmentList;
-    private WelcomeScreenModelMethods mm;
+    private CallBackInterface mm;
     private AdminProductCBMethods adminProductScreenActivity;
     private Store store;
     int oppCode;
@@ -22,8 +23,8 @@ public class Model implements BrokerCallbackDelegate {
         return shared;
     }
     private Adapter adapter = Adapter.getShared();
-    public void findAllStores(){
-       adapter.findAllStores(this );
+    public void findAllStores(@NonNull final Context context){
+       adapter.findAllStores(context, this);
     }
     public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
         this.mm = mm;
@@ -45,10 +46,10 @@ public class Model implements BrokerCallbackDelegate {
         if(searchWasSuccess){
             switch (getCaseNumber(barcodeExistResult)){
                 case 0: logCaseProblem(barcodeExistResult);return;
-                case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1 ); return;
-                case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2 );return;
-                case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3 );return;
-                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4 );return;
+                case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1, barcodeExistResult.commodity); return;
+                case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2, barcodeExistResult.commodity );return;
+                case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3, barcodeExistResult.commodity);return;
+                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4, barcodeExistResult.commodity);return;
             }
 
         }
@@ -107,7 +108,7 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void getStoresHandler(boolean searchSuccess, @Nullable List<Store> storeList) {
-        mm.storeCB(searchSuccess,storeList);
+        ((WelcomeScreenModelMethods)mm).storeCB(searchSuccess,storeList);
 
     }
 
