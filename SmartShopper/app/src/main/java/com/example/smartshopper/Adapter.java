@@ -1,8 +1,6 @@
 package com.example.smartshopper;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.provider.ContactsContract;
 import android.util.Pair;
 
 import androidx.annotation.MainThread;
@@ -12,9 +10,7 @@ import androidx.annotation.Nullable;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 
-import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +80,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     final DepartmentStock departmentStock = DepartmentStock.Builder.toDataAccessFromParse(deptStockListAsParse.get(0));
 
                     // invokes helper to acquire dept where StoredDept's dept id == dept's
-                    final Department department = Adapter.ORM_Helper.getDepartmentFromDeptStockParseId(departmentStock, departmentList);
+                    final Department department = Adapter.ORM_Helper.getDepartmentFromDeptStock(departmentStock, departmentList);
 
                     // updates item with store and dept stock
                     commodity.updateCommodity(department, departmentStock);
@@ -301,7 +297,89 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // searches for an item by a search phrase on predicate the the item's formal name OR its categorical name contains the search
-    public void searchForItemByPhrase(@NonNull final Store store, @NonNull final String searchPhrase, @NonNull final List<Department> departmentList, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void searchForItemByPhrase(@NonNull final Store store, @NonNull final String searchPhrase, @NonNull final List<Department> departmentList, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates promised state to callback
+                HashMap<String, Boolean> operationResults = null;
+                List<Commodity> commodityList = null;
+
+                // try-catch-finally block to acquire all items where searchPhrase is contained in name or search phrase,
+                // acquire of DeptStock where store id and commodity id match, convert dept stock,
+                // and update item w/ dept stock and department
+                try{
+
+                    // array list to hold inner queries to be 'or' together
+                    final ArrayList<ParseQuery<ParseObject>> orQueryList = new ArrayList<ParseQuery<ParseObject>>();
+
+                    // creates two inner queries to be 'or' together
+
+                    // query one on Commodity (search phrase contained in searchPhrase)
+                    final ParseQuery<ParseObject> searchPhraseContains = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
+                    searchPhraseContains.whereContains(Commodity.searchPhraseKey, searchPhrase);
+
+                    // query two on Commodity (search phrase contained in name)
+                    final ParseQuery<ParseObject> nameContains = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
+                    nameContains.whereContains(Commodity.nameKey, searchPhrase);
+
+                    // 'or' the queries
+                    final ParseQuery<ParseObject> comprisedCommodityQuery = ParseQuery.or(orQueryList);
+
+                    // invokes search to acquire list of commodities that assuage 'or' predicate
+                    final List<ParseObject> commodityListAsParse = comprisedCommodityQuery.find();
+
+                    // invokes helper to convert list to a commodity list
+                    commodityList = Adapter.ORM_Helper.convertCommodityListAsParseToCommodityList(commodityListAsParse);
+
+                    // invokes helper to convert commodityList to a list of object ids
+                    final List<String> objectIdList = Adapter.ORM_Helper.convertDataAccessToObjectIdList(commodityList);
+
+                    // creates parse query targeting dept stock
+                    final ParseQuery<ParseObject> deptStockQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.DepartmentStock.getRelationName());
+
+                    // sets predicate that dept stock's item id is contained in  object id list
+                    deptStockQuery.whereContainedIn(DepartmentStock.itemObjectIdKey, objectIdList);
+
+                    // acquires all dept stocks that assuage predicate
+                    final List<ParseObject> deptStockListAsParse = deptStockQuery.find();
+
+                    // invokes helper to convert dept stock as parse to a list of DeptStock
+                    final List<DepartmentStock> departmentStockList = Adapter.ORM_Helper.convertParseObjectsToDeptStock(deptStockListAsParse);
+
+                    // invokes helper to amalgamate department stock to department list
+                    List<Pair<DepartmentStock, Department>> departmentStockToDepartmentList = Adapter.ORM_Helper.combineDepartmentStockWithDepartment(departmentStockList, departmentList);
+
+                    // invokes helper to update item from deptmentStockToDepartmentList pairs where object id's match
+                    Adapter.ORM_Helper.updateItemFromDeptStockToDepartmentPairList(commodityList, departmentStockToDepartmentList);
+
+                    // sets success code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                }
+                catch(ParseException ex){
+
+                    // sets error code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+
+                }
+                finally{
+
+                    assert(operationResults != null);
+
+                    // returns repo callback results
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.findItemBySearch, brokerCallbackDelegate, null, commodityList);
+
+                }
+            }
+        };
+
+        // enjoins repo to execute task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // finds an admin by its username if exist
     public void isAdminUsernameUnique(@NonNull final Store store, @NonNull final String username, @NonNull BrokerCallbackDelegate brokerCallbackDelegate){}
@@ -525,6 +603,20 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             return storedDeptList;
         }
 
+        // retrieves a list of parse objects and converts to DeptStock
+        @NonNull
+        static List<DepartmentStock> convertParseObjectsToDeptStock(@NonNull final List<ParseObject> parseObjectList){
+
+            // creates local list ref
+            final List<DepartmentStock> departmentStockList = new ArrayList<DepartmentStock>();
+
+            // walks through all parse objects, using ORM to convert them into StoredDept
+            for(ParseObject parseObject: parseObjectList)
+                departmentStockList.add(DepartmentStock.Builder.toDataAccessFromParse(parseObject));
+
+            return departmentStockList;
+        }
+
         // helper to convert, department as parse object, a list of store dept, and store to create dept list
         @NonNull
         static List<Department> findAndCreateDepartmentFromRelationalState(@NonNull final List<ParseObject> departmentsAsParse, @NonNull final List<StoredDept> storedDeptList, @NonNull final Store store){
@@ -561,7 +653,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
         // helper to acquire Department dept where StoredDept's dept id == Department's
         @NonNull
-        static Department getDepartmentFromDeptStockParseId(@NonNull final DepartmentStock deptStock, @NonNull final List<Department> departmentList){
+        static Department getDepartmentFromDeptStock(@NonNull final DepartmentStock deptStock, @NonNull final List<Department> departmentList){
 
             // walks through all departments and finds department that has same id
             for(Department department: departmentList){
@@ -571,6 +663,82 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
             // throws exception is no match uncovered
             throw new NoSuchElementException("no department pertains to dept stock");
+        }
+
+        // helper to convert a list of parse objects of type commodity to commodity list
+        @NonNull
+        static List<Commodity> convertCommodityListAsParseToCommodityList(@NonNull final List<ParseObject> parseObjectList){
+
+            // creates local ref to commodity list
+            final ArrayList<Commodity> commodityArrayList = new ArrayList<Commodity>();
+
+            // walks through all parse objects, invoking ORM to convert over
+            for(ParseObject parseObject: parseObjectList)
+                commodityArrayList.add(Commodity.Builder.toDataAccessFromParse(parseObject));
+
+            return commodityArrayList;
+        }
+
+        // helper to convert a list of composite of full DAs to list of objectIds
+        @NonNull
+        static List<String> convertDataAccessToObjectIdList(@NonNull final List<? extends  DataAccess> dataAccessList){
+
+            // creates local ref to array list of object ids
+            final ArrayList<String> objectIdList = new ArrayList<String>();
+
+            // walks through all DAs, acquiring their object ids
+            for(DataAccess dataAccess: dataAccessList)
+                objectIdList.add(dataAccess.getObjectId());
+
+            return objectIdList;
+        }
+
+        // helper to amalgamate pairs of dept stock list with department list
+        @NonNull
+        static List<Pair<DepartmentStock, Department>> combineDepartmentStockWithDepartment(@NonNull final List<DepartmentStock> departmentStockList, @NonNull final List<Department> departmentList){
+
+            // creates local list pair ref
+            final List<Pair<DepartmentStock, Department>> deptStockToDeptPairList = new ArrayList<Pair<DepartmentStock, Department>>();
+
+            // walks through all department stock and matches it to department where object id's match
+            for(DepartmentStock departmentStock: departmentStockList){
+
+                // invokes helper to acquire ref of Department where object id's match
+                final Department departmentOfMatch = getDepartmentFromDeptStock(departmentStock, departmentList);
+
+                // appends pair to list
+                deptStockToDeptPairList.add(new Pair<DepartmentStock, Department>(departmentStock, departmentOfMatch));
+            }
+
+            return deptStockToDeptPairList;
+        }
+
+        // helper to update item from dept stock w/ dept pair list
+        static void updateItemFromDeptStockToDepartmentPairList(@NonNull final List<Commodity> commodityList, @NonNull final List<Pair<DepartmentStock, Department>> deptStockToDepartmentPairList){
+
+            // walks through all items, finding and updating where item object id == department stock's commodity id
+            for(Commodity commodity: commodityList){
+
+                // invokes helper to acquire pair where object id's match
+                final Pair<DepartmentStock, Department> pair = getPairOfDeptStockWithDepartmentFromCommodity(commodity, deptStockToDepartmentPairList);
+
+                // invokes update on commodity
+                commodity.updateCommodity(pair.second, pair.first);
+            }
+        }
+
+        // helper method to return dept stock w/ dept pair where it matched commodity object id
+        @NonNull
+        static Pair<DepartmentStock, Department> getPairOfDeptStockWithDepartmentFromCommodity(@NonNull final Commodity commodity, @NonNull final List<Pair<DepartmentStock, Department>> deptStockToDeptPairList){
+
+            // walks through all pairs and returns match on object id equality
+            for(Pair<DepartmentStock, Department> pair: deptStockToDeptPairList){
+                if(pair.first.itemObjectId.equals(commodity.getObjectId()))
+                    return pair;
+            }
+
+            // throws exception is no match uncovered
+            throw new NoSuchElementException("no pair pertains to commodity's object id");
         }
 
     }
