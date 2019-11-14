@@ -29,7 +29,7 @@ public interface BrokerCallbackDelegate {
     public abstract void findItemsBySearchHandler(final boolean searchWasSuccessful, @NonNull final List<Commodity> commodityList);
 
     // handler to access login results
-    public abstract void isAdminUsernameUniqueHandler(final boolean adminSearchWasSuccess, final boolean adminFound);
+    public abstract void isAdminUsernameUniqueHandler(final boolean adminSearchWasSuccess, final boolean adminIsUnique);
 
     // handler to login admin
     public abstract void loginAdminByUsernameAndPassword(final boolean adminLoginWasSuccess, final boolean adminFoundAndIsInStore, @Nullable final Admin admin);

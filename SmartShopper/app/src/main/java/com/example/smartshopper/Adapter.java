@@ -1,6 +1,7 @@
 package com.example.smartshopper;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Pair;
 
 import androidx.annotation.MainThread;
@@ -423,7 +424,59 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // finds an admin by its username if exist
-    public void isAdminUsernameUnique(@NonNull final Store store, @NonNull final String username, @NonNull BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void isAdminUsernameUnique(@NonNull final String username, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates state promised to callback
+                HashMap<String, Boolean> operationResults = null;
+
+                // try-catch-finally block to search for an admin on predicate of username's match
+                try{
+
+                    // creates parse query targeting Admin
+                    final ParseQuery<ParseObject> adminUsernameQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Admin.getRelationName());
+
+                    // sets predicate where username match
+                    adminUsernameQuery.whereEqualTo(Admin.userNameKey, username);
+
+                    // finds all admin that assuage predicate
+                    final List<ParseObject> adminListAsParse = adminUsernameQuery.find();
+
+                    // if here then list is (1-m), regardless of such case issues error results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
+
+                }
+                catch(ParseException ex){
+
+                    // differentiates cases of parse exceptions (cases: a. no object found on such predicate, b. internal error incurred)
+                    if(ex.getCode() == ParseException.OBJECT_NOT_FOUND){
+                        // sets success codes-- no admin uncovered
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
+                    }
+                    else{
+                        // sets error code -- internal error
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                    }
+
+                }
+                finally{
+
+                    assert(operationResults != null);
+
+                    // returns repo callback result
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.validateIfAdminUsernameIsUnique, brokerCallbackDelegate, null, null);
+
+                }
+            }
+        };
+
+        // enjoins repo to instigate repo task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // login admin by uName and password
     public void loginAdminByUsernameAndPassword(@NonNull final Store store, @NonNull final String username, @NonNull final String password, @NonNull BrokerCallbackDelegate brokerCallbackDelegate){}
