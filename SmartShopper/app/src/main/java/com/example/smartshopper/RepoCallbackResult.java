@@ -42,4 +42,20 @@ final class RepoCallbackResult {
         this.dataAccess = dataAccess;
         this.dataAccessList = dataAccessList;
     }
+
+
+    // (helper) takes three booleans in order of (operation, adapter, context) and returns hashmap retaining their values
+    @NonNull
+    public static HashMap<String, Boolean> setOperationResultBooleans(final boolean operationWasSuccess, final boolean adapterOperationWasSuccess, final boolean contextOperationWasSuccess){
+
+        // creates local ref to Hashmap
+        final HashMap<String, Boolean> operationResults = new HashMap<String,Boolean>();
+
+        // sets boolean values with public keys
+        operationResults.put(RepoCallbackResult.operationSuccessKey, operationWasSuccess);
+        operationResults.put(RepoCallbackResult.adapterOperationSuccessKey, adapterOperationWasSuccess);
+        operationResults.put(RepoCallbackResult.contextOperationSuccessKey, contextOperationWasSuccess);
+
+        return operationResults;
+    }
 }

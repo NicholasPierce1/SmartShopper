@@ -70,7 +70,13 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     // initializing methods for model implementation
 
     // retrieves all stores
-    public void findAllStores(@NonNull final Context applicationContext, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void findAllStores(@NonNull final Context applicationContext, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate)throws ExceptionInInitializerError{
+
+        // IMPORTANT: init parse data base connection
+        BackFourAppRepo.getShared().setParseInitialize(applicationContext);
+
+        // TODO: implement
+    }
 
     // retrieves, and coalesces, all departments for that store
     public void retrieveAllDepartmentsForStore(@NonNull final Store store, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
@@ -81,6 +87,19 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     public void repoCallback(@NonNull final HashMap<String, Boolean> operationResultHolder, @Nullable final DataAccess dataAccess, @Nullable final List<DataAccess> dataAccessList, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
 
         // TODO: switch case to institute all callbacks to broker delegate
+
+        // acquires local refs to boolean values (safe unboxing operations -- will always be set)
+        final boolean operationWasSuccess = operationResultHolder.get(RepoCallbackResult.operationSuccessKey);
+        final boolean adapterOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.adapterOperationSuccessKey);
+        final boolean contextOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.contextOperationSuccessKey);
+
+        // creates switch case on AdapterMethodType
+        switch(adapterMethodType){
+            case validateIfBarcodeExist:
+                brokerCallbackDelegate.validateIfBarcodeExistHandler(operationWasSuccess, new BarcodeExistResult(adapterOperationWasSuccess, contextOperationWasSuccess, (Commodity)dataAccess));
+                break;
+            
+        }
     }
 
     // local inner class to render helper methods for ORM facilitation

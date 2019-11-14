@@ -35,7 +35,7 @@ final class BackFourAppRepo{
 
     // static method to return shared instance
     @NonNull
-    public BackFourAppRepo getShared(){
+    public static BackFourAppRepo getShared(){
         return BackFourAppRepo.shared;
     }
 
@@ -71,7 +71,7 @@ final class BackFourAppRepo{
 
     }
 
-    // asserts connection has been rendered to backendless server
+    // asserts connection has been rendered to parse server
     private void assertConnectionToBackFourApp(){
         if(!this.parseInitialize)
             throw new ExceptionInInitializerError("Back4App connection either not set or failed to set.");
@@ -85,6 +85,9 @@ final class BackFourAppRepo{
         this.assertConnectionToBackFourApp();
 
         // creates and executes async task process for repo operation
+        /* HOOT: possible solution -- AsyncTask does not perform checks on generic arguments held by any object-param so I can create a class that has two members
+            one for each of the params and create + pass object into async task (of course I modify the first generic arg to AsyncTask)
+         */
         (new BackFourAppRepo.BackFourAppRepoAsyncTask()).execute(new Pair<ExecuteRepoCallTask, RepoCallbackHandler>(repoCallTask, delegate));
     }
 
