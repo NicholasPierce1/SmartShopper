@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.parse.ParseDecoder;
+import com.parse.ParseObject;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,6 +82,12 @@ public class ProductInput extends Fragment {
             public void onClick(View view) {
                 //We are either creating a comodity or changing. We will pass in the things we are doing
                 //as a bundle to make life easy
+                if(submitCode == 1){ //creation
+                    myActivity.submitButtonPushed(1,retrive());
+                }
+                else if(submitCode == 2){
+                    myActivity.submitButtonPushed( 2, setToComodity(c));
+                }
             }
         });
         return v;
@@ -190,7 +199,10 @@ public class ProductInput extends Fragment {
         b.putString("tags", tagsET.getText().toString());
         return b;
     }
-    private void setToComodity(Commodity c){
+    private Bundle setToComodity(){
+        //PROBLEM c.department =
+        c.location = Location.getLocationFromAisleNumber(Integer.parseInt(isleET.getText().toString()));
+        c.price = Double.parseDouble(priceET.getText().toString());
 
     }
 }
