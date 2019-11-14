@@ -119,8 +119,10 @@ public class Model implements BrokerCallbackDelegate {
 
         adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
     }
-    public void getNameFromBarcode(String barcode, AdminProductCBMethods cbm){
-        adminProductScreenActivity = cbm;
+
+    public void checkForExistingUsername(int oppCode,  String username){
+        this.oppCode = oppCode;
+        adapter.isAdminUsernameUnique(store, username, this);
     }
 
     @Override
@@ -183,6 +185,9 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void isAdminUsernameUniqueHandler(boolean adminSearchWasSuccess, boolean adminFound) {
+        if(adminSearchWasSuccess)
+            ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, adminFound);
+
 
     }
 
