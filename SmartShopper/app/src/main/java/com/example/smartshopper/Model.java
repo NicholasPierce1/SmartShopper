@@ -1,6 +1,7 @@
 package com.example.smartshopper;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ public class Model implements BrokerCallbackDelegate {
     private CallBackInterface mm;
     private AdminProductCBMethods adminProductScreenActivity;
     private Store store;
+    private String no = "";
     int oppCode;
     String barcode;
     private static Model shared = new Model();
@@ -29,8 +31,54 @@ public class Model implements BrokerCallbackDelegate {
     public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
         this.mm = mm;
         this.store = store;
-        //Adapter.retrieveAllDepartmentsForStore(store, this);
+        adapter.retrieveAllDepartmentsForStore(store, this);
     }
+    public void ValidateComodityInput(boolean weNeedToCheckName, int oppCode, Bundle c){
+        this.oppCode = oppCode;
+        String name = "", vendor = "", tags;
+        int dept, isle;
+        double price=-1.0;
+        Department department;
+        Location location;
+        //Now begins all of our validation checks for Comodity.
+        //No will be used as A string of problems that occured.
+        if(oppCode ==1) {
+            name = c.getString("name", "");
+            vendor = c.getString("vendor", "");
+            if(isEmpty(name)){
+                no += "Name is empty";
+                weNeedToCheckName = false;
+            }
+
+            if(isEmpty(vendor)){
+                no += " Venodr is empty";
+                weNeedToCheckName = false;
+            }
+            dept = (c.getInt("dept"));
+            isle = (c.getInt("isle"));
+            DepartmentType dt = DepartmentType.getDepartmentTypeFromID(dept);
+            department =  getDepartmentFromDepartmentType(dt);
+            location = Location.getLocationFromLocationId(isle);
+            tags = c.getString("tags");
+
+        }
+        else {
+            Commodity co = (Commodity) c.getSerializable("C");
+            price = co.price;
+            department = co.department;
+            location = co.location;
+            tags = co.searchPhrase;
+        }
+        if(price < 0){
+            no +=" Price cannot be negative.";
+        }
+        if(tags.isEmpty()){
+            no += " Tags cannot be empty.";
+        }
+
+
+    }
+
     public void validateBarcode(String barcode, int oppCode, AdminProductCBMethods cbm){
         adminProductScreenActivity = cbm;
         this.oppCode = oppCode;
@@ -156,5 +204,138 @@ public class Model implements BrokerCallbackDelegate {
         }
         return null;
     }
-
+    private boolean isEmpty(String s) {
+        return (s == null || s.equals("") || s.equals(" "));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -183,24 +183,17 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     }
 
     // TODO: 11/12/2019 Change paramaters to what you only need not a full comodity 
-    public void submitButtonPushed(int actionCode, Commodity c) {
+    public void submitButtonPushed(int actionCode, Bundle c) {
         //NICK
         final AdminProductScreenActivity controller = this;
         if (submitCode == -1) {
             resultTV.setText("Not able to submit at this time");
-        } else if (submitCode == 1) {
-            if (isInputValid(c)) {
-                // TODO: 11/11/2019 do database stuff here for creation 
-            } else {
-                Toast.makeText(controller, "Failure: " + wrong, Toast.LENGTH_LONG).show();
-            }
-        } else if (submitCode == 2) {
-            if (isInputValid(c)) {
-                // TODO: 11/11/2019 Do Database stuff here for update 
-            } else {
-                Toast.makeText(controller, "Failure: " + wrong, Toast.LENGTH_LONG).show();
-            }
-        } else if (submitCode == 3) {
+        }
+        else if (submitCode == 1 || submitCode == 2) {
+
+
+        }
+        else if (submitCode == 3) {
             // TODO: 11/11/2019 do database stuff here for delete and use if else block to validate input on call back 
             if (CommodityMockModelTakeTwo.shared.removeItem(barcode)) {
                 // success
@@ -255,4 +248,8 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         
     }
 
+    @Override
+    public void validationCB(String wrong, boolean success) {
+
+    }
 }
