@@ -25,14 +25,11 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
     ProductCUD cud;
     ProductInput input;
-    String empid,  vendor, name, dept;
-    double price;
-    String wrong = "";
+    String empid,name;
     public static int submitCode = -1;
     public static int createCode = -1;
     public static String barcode;
     TextView resultTV;
-    Button crateBTN, modifyBTN, deleteBTN, pSubmitBTN, pCancleBTN, backBTN;
     FragmentManager manager;
    private Model model = Model.getShared();
 
@@ -55,44 +52,6 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         transaction.hide(input);
         transaction.commit();
 
-
-        //Button crateBTN, modifyBTN, deleteBTN, pSubmitBTN, pCancleBTN, backBTN;
-
-        backBTN = findViewById(R.id.BackBTN);
-
-
-        pCancleBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                crateBTN.setVisibility(View.VISIBLE);
-                modifyBTN.setVisibility(View.VISIBLE);
-                deleteBTN.setVisibility(View.VISIBLE);
-            }
-        });
-
-        pSubmitBTN.setOnClickListener(new View.OnClickListener() {
-            // TODO: 11/10/2019 MOVE THIS TO FRAGMENT 
-            @Override
-            public void onClick(View view) {
-//                vendor = vendorET.getText().toString();
-//                price = Double.valueOf(vendorET.getText().toString());
-//                dept = deptET.getText().toString();
-//                int isleNum = Integer.valueOf(isleET.getText().toString());
-                //STUBBED LOGIC
-
-
-            }
-
-        });
-        pCancleBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-
     }
 
     public void goBackAction(View v) {
@@ -102,9 +61,6 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         finish();
     }
 
-
-
-
     private boolean isEmpty(String s) {
         return (s == null || s.equals("") || s.equals(" "));
     }
@@ -112,11 +68,13 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     public void buttonPressed(int code, String barcode){
       if(!isEmpty(barcode))
        model.validateBarcode( barcode, code, this);
+      else{
+          Toast.makeText(this, "Barcode is empty", Toast.LENGTH_SHORT);
+      }
     }
 
     public void buttonPressedCB(int code, String barcode, int createCase, Commodity commodity) {
         this.barcode = barcode;
-        Bundle bundle = new Bundle();
         FragmentTransaction transaction = manager.beginTransaction();
         if (code == 1) { //create
             if (createCase == 2) {
@@ -158,10 +116,6 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
             }
         }
         else if (code == 3) { //delete
-
-            //Need to make sure the id does not exist
-
-//                barcode= barCodeET.getText().toString();
             if (createCase != 4) {
                 String no = "Barcode  does not exist";
                 resultTV.setText("" + no);
@@ -180,26 +134,18 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     }
 
     // TODO: 11/12/2019 Change paramaters to what you only need not a full comodity 
-    public void submitButtonPushed(int actionCode, Bundle c) {
+    public void submitButtonPushed(int actionCode, boolean check, Bundle c) {
         c.putString("barcode", barcode);
-        //NICK
-        final AdminProductScreenActivity controller = this;
         if (submitCode == -1) {
             resultTV.setText("Not able to submit at this time");
         }
         else if (submitCode == 1 || submitCode == 2) {
-
-
+            model.validateComodityInput(check, actionCode, c);
+            
         }
         else if (submitCode == 3) {
             // TODO: 11/11/2019 do database stuff here for delete and use if else block to validate input on call back 
-            if (CommodityMockModelTakeTwo.shared.removeItem(barcode)) {
-                // success
-                Toast.makeText(controller, "success", Toast.LENGTH_SHORT).show();
-            } else {
-                // fail
-                Toast.makeText(controller, "fail", Toast.LENGTH_SHORT).show();
-            }
+            model.deleteItem((Commodity)c.getSerializable("c"));
 
         }
 
@@ -207,45 +153,12 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
     @Override
     public void cancelButtonPushed() {
-        FragmentTransaction transaction1 = manager.beginTransaction();
-        transaction1.show(cud);
-        transaction1.hide(input);
-        transaction1.commit();
+       showCUDFragment();
         submitCode =-1;
     }
 
 
-    private boolean isInputValid(Commodity c) {
-        //NICK
-        wrong = "";
-        // TODO: 11/11/2019 replace mocck model with real model methods
-        if (isEmpty(c.vendorName) || isEmpty(c.department.toString()) || isEmpty(c.name)) {
-            wrong += "Blank fields are not allowed";
-        }
-        if (c.price <= 0) {
-            wrong += "Price cannnot be less than zero";
-        }
-        if (CommodityMockModel.vendors.contains(vendor)) {
-            if (name.equals(CommodityMockModel.names.get(CommodityMockModel.vendors.indexOf(vendor)))) {
-                wrong += "Vendor already has a product with this name";
-            }
-        } else ;
-        return wrong.equals("");
 
-    }
-
-    // TODO: 11/12/2019 Get nick to create and adapter method that spits out a comodity baased off
-    // TODO: 11/12/2019 a barcode per case one of admin create. 
-    public void getNameandVendorForFragment(String barcode){
-        model.getNameFromBarcode(barcode, this);
-
-    }
-    public void getNameandVendorForFragmentCB(String name, String vendor){
-        Bundle bundle = new Bundle();
-        bundle.putString("name", name);
-        bundle.putString("vendor", vendor);
-        
-    }
 
     @Override
     public void validationCB(String wrong, int opp, Bundle b) {
@@ -256,25 +169,51 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         if(opp == 1){
             model.createItem(b);
         }
-        // TODO: 11/14/2019 update thingy 
+        else model.updateItem(b);
+
 
     }
-
+//
     @Override
     public void createCB(boolean cb) {
         if(cb){
-            // TODO: 11/14/2019 Neeed to create toast logic and swap fragments
+           Toast.makeText(getApplicationContext(), "Creation was a success!", Toast.LENGTH_SHORT);
+           showCUDFragment();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Creation failed. Please try again later", Toast.LENGTH_SHORT);
         }
 
     }
 
     @Override
     public void updateCB(boolean cb) {
+        if(cb){
+            Toast.makeText(getApplicationContext(), "Update was a success!", Toast.LENGTH_SHORT);
+            showCUDFragment();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Update failed. Please try again later", Toast.LENGTH_SHORT);
+        }
 
     }
 
     @Override
     public void delCB(boolean cb) {
+        if(cb){
+            Toast.makeText(getApplicationContext(), "Deletion was a success!", Toast.LENGTH_SHORT);
+            showCUDFragment();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Deletion failed. Please try again later", Toast.LENGTH_SHORT);
+        }
 
+    }
+
+    private void showCUDFragment(){
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.hide(input);
+        transaction.show(cud);
+        transaction.commit();
     }
 }

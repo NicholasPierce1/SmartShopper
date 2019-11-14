@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Search_screenActivity extends AppCompatActivity implements tabBarFragment.TabBarAction{
+public class Search_screenActivity extends AppCompatActivity implements tabBarFragment.TabBarAction, SearchResultHandler{
     Random rando = new Random();
     TextView errorTV;
     EditText itemEntered;
@@ -78,6 +78,11 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
     public void onTabBarItemClicked(@NonNull final Class<?> classToIntentTo){
         if(!this.getClass().equals(classToIntentTo))
         this.startActivity(new Intent(this, classToIntentTo));
+    }
+
+    @Override
+    public void searchCB(boolean operationSuccess, boolean searchGood, List<Commodity> commodityList){
+
     }
 
     private class RecyclerViewOnGestureListenerForSearchMultiSelection extends GestureDetector.SimpleOnGestureListener {

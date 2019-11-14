@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.w3c.dom.Text;
 //@Author Matthew Berry
 
-public class AdminModificationScreenActivity extends AppCompatActivity {
+public class AdminModificationScreenActivity extends AppCompatActivity implements AdminModCBMethods{
     String empid;
     Admin user;
     EditText adminIDET, nameET, passwordET;
@@ -27,13 +27,15 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
     Button submitBTN;
     String empIDDIS = "";
     int submitCode = -1;
+    Model model;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.admin_modify);
         Intent ini = getIntent();
         empid = ini.getStringExtra("EMPID");
-        user = AdminMockModelClass.adminFinder(empid);
+        // TODO: 11/14/2019 Make login screen pass in admin
+        user = (Admin)ini.getSerializableExtra("admin");
         adminIDET = findViewById(R.id.AdminIDET);
         outcomeTV = findViewById(R.id.outcomeTV);
         middleAdminCB = findViewById(R.id.middleAdminCB);
@@ -46,7 +48,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
         nameET = findViewById(R.id.nameET);
         passwordET = findViewById(R.id.PasswordET);
         employeeDisTV.setText("");
-
+        model = Model.getShared();
 
         createBTN = findViewById(R.id.CreateAdminBTN);
         modifyBTN = findViewById(R.id.ModifyAdminBTN);
@@ -133,25 +135,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
                 //Need to make sure the id does not exist
                 hideAndCelar();
                   empIDDIS = adminIDET.getText().toString();
-                if(AdminInputValidationHandler.isExistingValue(false, empIDDIS)){
-                   String no = "Admin with that user name already exists";
-                   outcomeTV.setText("" + no);
-                }
-                else{
-                    outcomeTV.setText("");
-                    //Now we are going to show all of the fields
-                    submitCode = 1;
-                    showFields();
-                    employeeDisTV.setText("" + empIDDIS);
-                    if(user.adminLevel.equals(AdminLevel.owner)){
-                        rankTV.setVisibility(View.VISIBLE);
-                        middleAdminCB.setVisibility(View.VISIBLE);
-                            ownerCB.setVisibility(View.VISIBLE);
-                        }
+                  model.checkForExistingUsername(1, empIDDIS);
 
-                    Toast.makeText(getApplicationContext(),"Enter new admin credentials", Toast.LENGTH_LONG).show();
-
-                }
             }
         });
         modifyBTN.setOnClickListener(new View.OnClickListener() {
@@ -162,36 +147,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 empIDDIS= adminIDET.getText().toString();
-                if(!AdminInputValidationHandler.isExistingValue(false, empIDDIS)){
-                    String no = "Admin id does not exist";
-                    outcomeTV.setText("" + no);
-                }
-                else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
-                    outcomeTV.setText("Insufficient Permissions");
-                }
-                else{
-                    outcomeTV.setText("");
-                    submitCode = 2;
-                    //Now we are going to show all of the fields
-                    showFields();
-                    employeeDisTV.setText("" + empIDDIS);
-                    Admin subject = AdminMockModelClass.adminFinder(empIDDIS);
-                    if(user.adminLevel.equals(AdminLevel.owner)){
-                        rankTV.setVisibility(View.VISIBLE);
-                        middleAdminCB.setVisibility(View.VISIBLE);
-                        ownerCB.setVisibility(View.VISIBLE);
-                        if(subject.adminLevel.equals(AdminLevel.owner))
-                            ownerCB.setChecked(true);
-                        else if(subject.adminLevel.equals(AdminLevel.managingStoreAdmin))
-                            middleAdminCB.setChecked(true);
+                model.checkForExistingUsername(2, empIDDIS);
 
-                    }
-                    nameET.setText("" + subject.name);
-                    passwordET.setText("" + subject.password);
-
-                    Toast.makeText(getApplicationContext(),"Modify Admin Credentials", Toast.LENGTH_LONG).show();
-
-                }
             }
         });
         deleteBTN.setOnClickListener(new View.OnClickListener() {
@@ -202,42 +159,101 @@ public class AdminModificationScreenActivity extends AppCompatActivity {
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 empIDDIS= adminIDET.getText().toString();
-                if(!AdminInputValidationHandler.isExistingValue(false, empIDDIS)){
-                    String no = "Admin id does not exist";
-                    outcomeTV.setText("" + no);
-                }
-                else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
-                    outcomeTV.setText("Insufficient Permissions");
-                }
-                else{
-                    submitCode = 3;
-                    //Now we are going to show all of the fields
-                    showFields();
-                    employeeDisTV.setText("" + empIDDIS);
-                    Admin subject = AdminMockModelClass.adminFinder(empIDDIS);
-                    if(user.adminLevel.equals(AdminLevel.owner)){
-                        rankTV.setVisibility(View.VISIBLE);
-                        middleAdminCB.setClickable(false);
-                        middleAdminCB.setVisibility(View.VISIBLE);
-                        ownerCB.setClickable(false);
-                        ownerCB.setVisibility(View.VISIBLE);
-                        if(subject.adminLevel.equals(AdminLevel.owner))
-                            ownerCB.setChecked(true);
-                        else if(subject.adminLevel.equals(AdminLevel.managingStoreAdmin))
-                            middleAdminCB.setChecked(true);
+                model.checkForExistingUsername( 3, empIDDIS);
 
-                    }
-                    nameET.setClickable(false);
-                    nameET.setText("" + subject.name);
-                    passwordET.setClickable(false);
-                    passwordET.setText("" + subject.password);
-
-                    Toast.makeText(getApplicationContext(),"Confirm Deletion", Toast.LENGTH_LONG).show();
-
-                }
             }
         });
     }
+    public void adminIdCheckCB(int oppCode, boolean exists){
+        if(oppCode ==1) {
+            if (exists) {
+                String no = "Admin with that user name already exists";
+                outcomeTV.setText("" + no);
+            } else {
+                outcomeTV.setText("");
+                //Now we are going to show all of the fields
+                submitCode = 1;
+                showFields();
+                employeeDisTV.setText("" + empIDDIS);
+                if (user.adminLevel.equals(AdminLevel.owner)) {
+                    rankTV.setVisibility(View.VISIBLE);
+                    middleAdminCB.setVisibility(View.VISIBLE);
+                    ownerCB.setVisibility(View.VISIBLE);
+                }
+
+                Toast.makeText(getApplicationContext(), "Enter new admin credentials", Toast.LENGTH_LONG).show();
+
+            }
+        } else if (oppCode == 2) {
+
+            if(!exists){
+                String no = "Admin id does not exist";
+                outcomeTV.setText("" + no);
+            }
+            else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
+                outcomeTV.setText("Insufficient Permissions");
+            }
+            else{
+                outcomeTV.setText("");
+                submitCode = 2;
+                //Now we are going to show all of the fields
+                showFields();
+                employeeDisTV.setText("" + empIDDIS);
+                Admin subject = AdminMockModelClass.adminFinder(empIDDIS);
+                if(user.adminLevel.equals(AdminLevel.owner)){
+                    rankTV.setVisibility(View.VISIBLE);
+                    middleAdminCB.setVisibility(View.VISIBLE);
+                    ownerCB.setVisibility(View.VISIBLE);
+                    if(subject.adminLevel.equals(AdminLevel.owner))
+                        ownerCB.setChecked(true);
+                    else if(subject.adminLevel.equals(AdminLevel.managingStoreAdmin))
+                        middleAdminCB.setChecked(true);
+
+                }
+                nameET.setText("" + subject.name);
+                passwordET.setText("" + subject.password);
+
+                Toast.makeText(getApplicationContext(),"Modify Admin Credentials", Toast.LENGTH_LONG).show();
+
+            }
+        }
+        else if(oppCode == 3){
+            if(!exists){
+                String no = "Admin id does not exist";
+                outcomeTV.setText("" + no);
+            }
+            else if(!hasPermission(user, AdminMockModelClass.adminFinder(empIDDIS))){
+                outcomeTV.setText("Insufficient Permissions");
+            }
+            else{
+                submitCode = 3;
+                //Now we are going to show all of the fields
+                showFields();
+                employeeDisTV.setText("" + empIDDIS);
+                Admin subject = AdminMockModelClass.adminFinder(empIDDIS);
+                if(user.adminLevel.equals(AdminLevel.owner)){
+                    rankTV.setVisibility(View.VISIBLE);
+                    middleAdminCB.setClickable(false);
+                    middleAdminCB.setVisibility(View.VISIBLE);
+                    ownerCB.setClickable(false);
+                    ownerCB.setVisibility(View.VISIBLE);
+                    if(subject.adminLevel.equals(AdminLevel.owner))
+                        ownerCB.setChecked(true);
+                    else if(subject.adminLevel.equals(AdminLevel.managingStoreAdmin))
+                        middleAdminCB.setChecked(true);
+
+                }
+                nameET.setClickable(false);
+                nameET.setText("" + subject.name);
+                passwordET.setClickable(false);
+                passwordET.setText("" + subject.password);
+
+                Toast.makeText(getApplicationContext(),"Confirm Deletion", Toast.LENGTH_LONG).show();
+
+            }
+        }
+    }
+
 
     public void goBackAction(View v){
         Intent data = new Intent();
