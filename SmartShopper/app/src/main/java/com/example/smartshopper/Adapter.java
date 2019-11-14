@@ -20,7 +20,8 @@ import java.util.List;
 // communicates with repo by passing custom runnables
 public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
-    // item's CRUD methods
+    // holds repo reference
+    private BackFourAppRepo backFourAppRepo;
 
     // denotes shared delegate for repo operations
     private static Adapter shared = new Adapter();
@@ -73,14 +74,70 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     // retrieves all stores
     public void findAllStores(@NonNull final Context applicationContext, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate)throws ExceptionInInitializerError{
 
-        // IMPORTANT: init parse data base connection
-        BackFourAppRepo.getShared().setParseInitialize(applicationContext);
+        // sets local repo reference
+        this.backFourAppRepo = BackFourAppRepo.getShared();
 
-        // TODO: implement
+        // IMPORTANT: init parse data base connection
+        this.backFourAppRepo.setParseInitialize(applicationContext);
+
+        // creates local Repo runnable reference
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // creates parse query to find all stores
+                final ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Store.getRelationName());
+
+                // local refs to RepoCallbackResult params
+                HashMap<String, Boolean> operationResults = null;
+                List<Store> storeList = null;
+
+                // try-catch to retrieve all stores
+                try{
+                    // retrieves and uses ORM to convert to list of stores
+                    List<ParseObject> parseObjectList = parseQuery.find();
+                    storeList = new ArrayList<Store>();
+
+                    // walks through all parse objects holding store info and invokes orm for conversion
+                    for(ParseObject parseObject: parseObjectList)
+                        storeList.add(Store.Builder.build(parseObject));
+
+                    // sets bool results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                }
+                catch(ParseException ex){
+
+                    // sets error state results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+
+                }
+
+                // returns call back result
+                return new RepoCallbackResult(operationResults, AdapterMethodType.getAllStores, brokerCallbackDelegate, null, storeList);
+
+            }
+        };
+
+        // invokes repo to effectuate repo task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
     }
 
     // retrieves, and coalesces, all departments for that store
-    public void retrieveAllDepartmentsForStore(@NonNull final Store store, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void retrieveAllDepartmentsForStore(@NonNull final Store store, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // creates parse query targeting store dept
+                final ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.StoreDept.getRelationName());
+
+                // sets constraint where store object's id matches store dept's store id
+            }
+        }
+    }
 
     // public method implementation to receive repo callback, downcast datatype params to appropriate broker callback
     @Override
@@ -91,7 +148,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
         final boolean operationWasSuccess = operationResultHolder.get(RepoCallbackResult.operationSuccessKey);
         final boolean adapterOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.adapterOperationSuccessKey);
         final boolean contextOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.contextOperationSuccessKey);
-        final boolean contextAuxillaryOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.contextAuxiliaryOperationSuccessKey);
+        final boolean contextAxillaryOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.contextAuxiliaryOperationSuccessKey);
 
         // creates switch case on AdapterMethodType (all cast operations are safe)
         switch(adapterMethodType){
@@ -116,7 +173,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 brokerCallbackDelegate.loginAdminByUsernameAndPassword(operationWasSuccess, adapterOperationWasSuccess, (Admin)dataAccess);
                 break;
             case findAdminByEmpId:
-                brokerCallbackDelegate.findAdminByEmpId(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess, contextAuxillaryOperationWasSuccess, (Admin)dataAccess);
+                brokerCallbackDelegate.findAdminByEmpId(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess, contextAxillaryOperationWasSuccess, (Admin)dataAccess);
                 break;
             case validateIfAdminUsernameIsUnique:
                 brokerCallbackDelegate.isAdminUsernameUniqueHandler(operationWasSuccess, adapterOperationWasSuccess);

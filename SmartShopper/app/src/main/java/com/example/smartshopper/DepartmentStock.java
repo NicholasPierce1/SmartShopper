@@ -16,11 +16,11 @@ final class DepartmentStock extends DataAccess implements Persistable {
     String itemObjectId; // holds foreign key to item relation
 
     // enumerates local keys for parse object lookups and sets
-    private static final String storeObjectIdKey = "storeObjectId";
-    private static final String departmentObjectIdKey = "departmentObjectId";
-    private static final String itemObjectIdKey = "itemObjectId";
-    private static final String locationKey = "location";
-    private static final String priceKey = "price";
+    static final String storeObjectIdKey = "storeObjectId";
+    static final String departmentObjectIdKey = "departmentObjectId";
+    static final String itemObjectIdKey = "itemObjectId";
+    static final String locationKey = "location";
+    static final String priceKey = "price";
 
     // private constructor for facilitated static builders
     private DepartmentStock(){}

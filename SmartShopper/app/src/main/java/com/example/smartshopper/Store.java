@@ -14,8 +14,8 @@ public class Store extends DataAccess {
     public String name; // type of store like "Walmart"
 
     // enumerates local string keys for col lookup/sets
-    private static final String locationKey = "location";
-    private static final String nameKey = "name";
+    static final String locationKey = "location";
+    static final String nameKey = "name";
 
 
     @Deprecated
@@ -33,7 +33,7 @@ public class Store extends DataAccess {
     public static class Builder extends DataAccess.Builder{
 
         @NonNull
-        public Store build(@NonNull final ParseObject parseObject){
+        public static Store build(@NonNull final ParseObject parseObject){
 
             // creates local store
             final Store store = new Store();

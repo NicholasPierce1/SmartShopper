@@ -9,12 +9,12 @@ import java.io.Serializable;
 // relational object to store state between department and store relations-- proxy for creation of department objects
 final class StoredDept extends DataAccess {
 
-    // local string keys to create, and id cols within relation
-    private static final String hasAisleKey = "hasAisle";
-    private static final String minAisleKey = "minAisle";
-    private static final String maxAisleKey = "maxAisle";
-    private static final String departmentObjectIdKey = "departmentObjectId";
-    private static final String storeObjectIdKey = "storeObjectId";
+    // string keys to create, and id cols within relation
+    static final String hasAisleKey = "hasAisle";
+    static final String minAisleKey = "minAisle";
+    static final String maxAisleKey = "maxAisle";
+    static final String departmentObjectIdKey = "departmentObjectId";
+    static final String storeObjectIdKey = "storeObjectId";
 
     // enumerates package private state for proxy-relation
     boolean hasAisle; // used to determine if department retains any aisle range

@@ -31,9 +31,9 @@ public final class Commodity extends DataAccess implements Persistable{
     public String searchPhrase;
 
     // enumerates local keys for col lookup/set
-    private static final String nameKey = "name";
-    private static final String vendorNameKey = "vendorName";
-    private static final String barcodeNameKey = "barcode";
+    static final String nameKey = "name";
+    static final String vendorNameKey = "vendorName";
+    static final String barcodeNameKey = "barcode";
 
     // temporary public constructor to expedite local-state creation
     @Deprecated

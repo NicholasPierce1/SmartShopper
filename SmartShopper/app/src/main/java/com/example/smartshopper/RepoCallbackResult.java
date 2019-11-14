@@ -24,7 +24,7 @@ final class RepoCallbackResult {
     DataAccess dataAccess;
 
     // holds up-castes DA objects (always be full)
-    List<DataAccess> dataAccessList;
+    List<? extends DataAccess> dataAccessList;
 
     // denotes what adapter method is transpiring
     AdapterMethodType adapterMethodType;
@@ -36,7 +36,7 @@ final class RepoCallbackResult {
     private RepoCallbackResult(){}
 
     // accessible constructor to repo & adapter
-    RepoCallbackResult(@NonNull final HashMap<String, Boolean> operationResultHolder, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate, @Nullable final DataAccess dataAccess, @Nullable final List<DataAccess> dataAccessList){
+    RepoCallbackResult(@NonNull final HashMap<String, Boolean> operationResultHolder, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate, @Nullable final DataAccess dataAccess, @Nullable final List<? extends DataAccess> dataAccessList){
         this.operationResultHolder = operationResultHolder;
         this.adapterMethodType = adapterMethodType;
         this.brokerCallbackDelegate = brokerCallbackDelegate;

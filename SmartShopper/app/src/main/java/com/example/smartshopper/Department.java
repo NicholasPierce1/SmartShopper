@@ -26,7 +26,7 @@ public final class Department extends DataAccess {
     public Store store; // stored in StoreDepartments
 
     // enumerates local key values for col lookup/storing
-    private static final String typeKey = "departmentType";
+    static final String typeKey = "departmentType";
 
     @Deprecated
     public Department(final DepartmentType departmentType, final boolean hasAisles, final int minAisle, final int maxAisle, final Store store){

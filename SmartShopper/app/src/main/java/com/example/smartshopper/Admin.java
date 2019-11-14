@@ -25,12 +25,12 @@ public final class Admin extends DataAccess implements Persistable {
     public String empID; // unique id to employee -- NOT primary key to relation
 
     // enumerate local keys for col lookup/storing
-    private static final String nameKey = "name";
-    private static final String userNameKey = "username";
-    private static final String passwordKey = "password";
-    private static final String adminLevelKey = "adminLevel";
-    private static final String storeKey = "storeId";
-    private static final String empIdKey = "empId";
+    static final String nameKey = "name";
+    static final String userNameKey = "username";
+    static final String passwordKey = "password";
+    static final String adminLevelKey = "adminLevel";
+    static final String storeKey = "storeId";
+    static final String empIdKey = "empId";
 
     private Admin(){
 

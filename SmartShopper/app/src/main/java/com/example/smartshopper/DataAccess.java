@@ -31,9 +31,35 @@ public abstract class DataAccess implements Serializable {
         this.objectId = parseObject.getObjectId();
     }
 
-
+    // builder class to facilitate ORM's amalgamation
+    // methods are defined internally from DA's concrete classes
     public static abstract class Builder{
 
     }
+
+    // package accessible enum that holds mappings to DA class names
+    static enum DA_ClassNameRelationMapping{
+        Admin("Admin"),
+        Commodity("Commodity"),
+        Department("Department"),
+        DepartmentStock("Department_Stock"),
+        Store("Store"),
+        StoreDept("Departments_In_Store");
+
+        // local reference relation name
+        String relationName;
+
+        DA_ClassNameRelationMapping(@NonNull final String relationName){
+            this.relationName = relationName;
+        }
+
+        // retrieves relation name
+        @NonNull
+        String getRelationName(){
+            return this.relationName;
+        }
+
+    }
+
 
 }
