@@ -31,7 +31,7 @@ public class ProductInput extends Fragment {
     public interface buttonInput{
         public void submitButtonPushed(int actionCode, Commodity commodity);
         public void cancelButtonPushed();
-        public void getNameandVendorForFragment(String barcode);
+
     }
     private buttonInput myActivity = null;
 
@@ -128,11 +128,22 @@ public class ProductInput extends Fragment {
     public void setSubmitCode(int sub){
         submitCode = sub;
     }
-    public void prepareFragmentForPresentation(String barcode) {
+    public void prepareFragmentForPresentation(Commodity c) {
+        nameET.setClickable(true);
+        vendorET.setClickable(true);
+        deptET.setClickable(true);
+        isleET.setClickable(true);
+        priceET.setClickable(true);
+        tagsET.setClickable(true);
         if (submitCode == 1) {//creation
             if (createCase == 1) { //Exisiting product
-                myActivity.getNameandVendorForFragment(barcode);
+               nameET.setText(""+c.name);
+               vendorET.setText(""+c.vendorName);
             }
         }
+        else if(submitCode == 2){
+
+        }
     }
+    // TODO: 11/13/2019 Create lock and unlock private metods <-------
 }

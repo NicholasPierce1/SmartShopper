@@ -114,7 +114,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
        model.validateBarcode( barcode, code, this);
     }
 
-    public void buttonPressedCB(int code, String barcode, int createCase) {
+    public void buttonPressedCB(int code, String barcode, int createCase, Commodity commodity) {
         this.barcode = barcode;
         Bundle bundle = new Bundle();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -132,11 +132,10 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
                 transaction.hide(cud);
                 submitCode = code;
                 createCode = createCase;
-                bundle.putString("Barcode",barcode);
                 Toast.makeText(getApplicationContext(), "Enter commodity details", Toast.LENGTH_LONG).show();
 
             }
-            else if(createCase == 1){
+            else if(createCase == 3){
                 //Now we are going to show all of the fields
                 transaction.show(input);
                 transaction.hide(cud);
@@ -180,7 +179,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         input.setCreateCase(createCase);
         input.setSubmitCode(submitCode);
         transaction.commit();
-        input.prepareFragmentForPresentation(barcode);
+        input.prepareFragmentForPresentation(Commodity c);
     }
 
     // TODO: 11/12/2019 Change paramaters to what you only need not a full comodity 
