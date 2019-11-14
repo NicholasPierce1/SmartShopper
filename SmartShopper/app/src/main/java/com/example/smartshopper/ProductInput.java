@@ -86,7 +86,7 @@ public class ProductInput extends Fragment {
                     myActivity.submitButtonPushed(1,retrive());
                 }
                 else if(submitCode == 2){
-                    myActivity.submitButtonPushed( 2, setToComodity(c));
+                    myActivity.submitButtonPushed( 2, setToComodity());
                 }
             }
         });
