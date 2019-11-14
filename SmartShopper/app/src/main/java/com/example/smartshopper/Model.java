@@ -18,8 +18,10 @@ public class Model implements BrokerCallbackDelegate {
     private Store store;
     private String no = "";
     int oppCode;
+    private  Bundle rtrn = new Bundle();
     String barcode;
     private static Model shared = new Model();
+    private Commodity co;
 
     public static Model getShared(){
         return shared;
@@ -32,6 +34,11 @@ public class Model implements BrokerCallbackDelegate {
         this.mm = mm;
         this.store = store;
         adapter.retrieveAllDepartmentsForStore(store, this);
+    }
+    public void createItem(Bundle b){
+        adapter.createAndSaveItemForStoreInDept((Department)b.getSerializable("dept"),
+                b.getString("barcode"), b.getString("name"), b.getString("vendor")
+        , b.getDouble("price"), (Location)b.getSerializable("location"), this);
     }
     public void ValidateComodityInput(boolean weNeedToCheckName, int oppCode, Bundle c){
         this.oppCode = oppCode;
@@ -62,19 +69,34 @@ public class Model implements BrokerCallbackDelegate {
             tags = c.getString("tags");
 
         }
-        else {
-            Commodity co = (Commodity) c.getSerializable("C");
+        else { //WE assume the later of the two options it could be
+             co = (Commodity) c.getSerializable("C");
+            name = co.name;
+            vendor = co.vendorName;
             price = co.price;
             department = co.department;
             location = co.location;
             tags = co.searchPhrase;
         }
+        //For the return home if they get one
+        rtrn.putString("name", name);
+        rtrn.putString("vendor", vendor);
+        rtrn.putDouble("price", price);
+        rtrn.putSerializable("dept",department);
+        rtrn.putSerializable("location", location);
+        rtrn.putString("tags", tags);
+
         if(price < 0){
             no +=" Price cannot be negative.";
         }
         if(tags.isEmpty()){
             no += " Tags cannot be empty.";
         }
+        if (weNeedToCheckName){
+            //Callback time.
+            adapter.validateItemNameToVendorIsUnique(name, vendor, this);
+        }
+        else validateNameForVendorIsUniqueHandler(true, true);
 
 
     }
@@ -106,21 +128,39 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void validateNameForVendorIsUniqueHandler(boolean searchWasSuccess, boolean nameIsUnique) {
+        if(searchWasSuccess){
+            if(!nameIsUnique){
+                no += "That product name already exists for the vendor";
+            }
+        }
+        else no = "Cannot Update or create at this time at this time. Please try again later";
+        if(oppCode ==1){
+            ((AdminProductCBMethods)mm).validationCB(no, oppCode, rtrn);
+        }
+
+        else {
+            Bundle r = new Bundle();
+            r.putSerializable("c", co);
+            ((AdminProductCBMethods)mm).validationCB(no, oppCode, r);
+        }
 
     }
 
     @Override
     public void createItemForStoreInDepartment(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).createCB(isSuccessful);
 
     }
 
     @Override
     public void updateItemHandler(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).updateCB(isSuccessful);
 
     }
 
     @Override
     public void deleteItemHandler(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).delCB(isSuccessful);
 
     }
 

@@ -119,9 +119,6 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         Bundle bundle = new Bundle();
         FragmentTransaction transaction = manager.beginTransaction();
         if (code == 1) { //create
-
-
-//                barcode = barCodeET.getText().toString();
             if (createCase == 2) {
                 String no = "Product with that Barcode name already exists";
                 resultTV.setText("" + no);
@@ -184,6 +181,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
     // TODO: 11/12/2019 Change paramaters to what you only need not a full comodity 
     public void submitButtonPushed(int actionCode, Bundle c) {
+        c.putString("barcode", barcode);
         //NICK
         final AdminProductScreenActivity controller = this;
         if (submitCode == -1) {
@@ -212,6 +210,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         FragmentTransaction transaction1 = manager.beginTransaction();
         transaction1.show(cud);
         transaction1.hide(input);
+        transaction1.commit();
         submitCode =-1;
     }
 
@@ -249,7 +248,33 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     }
 
     @Override
-    public void validationCB(String wrong, boolean success) {
+    public void validationCB(String wrong, int opp, Bundle b) {
+        if(!wrong.equals("")){
+            resultTV.setText("Invalid input: \n" + wrong );
+        }
+        //we no KNOW that stuff works soooo....
+        if(opp == 1){
+            model.createItem(b);
+        }
+        // TODO: 11/14/2019 update thingy 
+
+    }
+
+    @Override
+    public void createCB(boolean cb) {
+        if(cb){
+            // TODO: 11/14/2019 Neeed to create toast logic and swap fragments
+        }
+
+    }
+
+    @Override
+    public void updateCB(boolean cb) {
+
+    }
+
+    @Override
+    public void delCB(boolean cb) {
 
     }
 }
