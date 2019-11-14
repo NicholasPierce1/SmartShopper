@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class ProductInput extends Fragment {
     Button cancleBTN, submitBTN;
     Commodity c;
     int submitCode;
+    Model m = Model.getShared();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -88,6 +90,16 @@ public class ProductInput extends Fragment {
                 else if(submitCode == 2){
                     myActivity.submitButtonPushed( 2, setToComodity());
                 }
+                else if(submitCode == 3){
+                    myActivity.submitButtonPushed(3, setToComodity());
+                }
+                else{ Log.d("Broke", "Stuffs' broke");}
+            }
+        });
+        cancleBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myActivity.cancelButtonPushed();
             }
         });
         return v;
@@ -200,9 +212,16 @@ public class ProductInput extends Fragment {
         return b;
     }
     private Bundle setToComodity(){
-        //PROBLEM c.department =
+        //For Updation (catch NotAWordException)
+        c.department =(m.getDepartmentFromDepartmentType(DepartmentType.getDepartmentTypeFromID(
+                Integer.parseInt(deptET.getText().toString())
+        )));
         c.location = Location.getLocationFromAisleNumber(Integer.parseInt(isleET.getText().toString()));
         c.price = Double.parseDouble(priceET.getText().toString());
-
+        c.searchPhrase = tagsET.getText().toString();
+        Bundle b = new Bundle();
+        b.putSerializable("C", c);
+        return b;
     }
+
 }
