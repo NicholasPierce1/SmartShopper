@@ -235,7 +235,43 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // updates the item via the newly refined item's state positing that non-categorical state (store and dept) hasn't been altered
-    public void updateItem(@NonNull final Commodity commodity, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void updateItem(@NonNull final Commodity commodity, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // holds local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates state promised to callback
+                HashMap<String, Boolean> operationResult = null;
+
+                // try-catch-finally block to re-save commodity
+                try{
+
+                    // converts commodity to parse object and saves
+                    commodity.toParseObject().save();
+
+                    // sets success code
+                    operationResult = RepoCallbackResult.setOperationResultBooleans(true);
+
+                }
+                catch(ParseException ex){
+                    // sets error code
+                    operationResult = RepoCallbackResult.setOperationResultBooleans(false);
+                }
+                finally{
+
+                    assert(operationResult != null);
+
+                    // returns repo callback result
+                    return new RepoCallbackResult(operationResult, AdapterMethodType.updateItem, brokerCallbackDelegate, null, null);
+                }
+            }
+        };
+
+        // enjoins repo to execute task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // deletes the item via its barcode
     public void deleteItemFromBarcode(@NonNull final Store store, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
