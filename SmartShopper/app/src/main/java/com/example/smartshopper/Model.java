@@ -1,6 +1,7 @@
 package com.example.smartshopper;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,9 +16,12 @@ public class Model implements BrokerCallbackDelegate {
     private CallBackInterface mm;
     private AdminProductCBMethods adminProductScreenActivity;
     private Store store;
+    private String no = "";
     int oppCode;
+    private  Bundle rtrn = new Bundle();
     String barcode;
     private static Model shared = new Model();
+    private Commodity co;
 
     public static Model getShared(){
         return shared;
@@ -29,8 +33,74 @@ public class Model implements BrokerCallbackDelegate {
     public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
         this.mm = mm;
         this.store = store;
-        //Adapter.retrieveAllDepartmentsForStore(store, this);
+        adapter.retrieveAllDepartmentsForStore(store, this);
     }
+    public void createItem(Bundle b){
+        adapter.createAndSaveItemForStoreInDept((Department)b.getSerializable("dept"),
+                b.getString("barcode"), b.getString("name"), b.getString("vendor")
+        , b.getDouble("price"), (Location)b.getSerializable("location"), this);
+    }
+    public void ValidateComodityInput(boolean weNeedToCheckName, int oppCode, Bundle c){
+        this.oppCode = oppCode;
+        String name = "", vendor = "", tags;
+        int dept, isle;
+        double price=-1.0;
+        Department department;
+        Location location;
+        //Now begins all of our validation checks for Comodity.
+        //No will be used as A string of problems that occured.
+        if(oppCode ==1) {
+            name = c.getString("name", "");
+            vendor = c.getString("vendor", "");
+            if(isEmpty(name)){
+                no += "Name is empty";
+                weNeedToCheckName = false;
+            }
+
+            if(isEmpty(vendor)){
+                no += " Venodr is empty";
+                weNeedToCheckName = false;
+            }
+            dept = (c.getInt("dept"));
+            isle = (c.getInt("isle"));
+            DepartmentType dt = DepartmentType.getDepartmentTypeFromID(dept);
+            department =  getDepartmentFromDepartmentType(dt);
+            location = Location.getLocationFromLocationId(isle);
+            tags = c.getString("tags");
+
+        }
+        else { //WE assume the later of the two options it could be
+             co = (Commodity) c.getSerializable("C");
+            name = co.name;
+            vendor = co.vendorName;
+            price = co.price;
+            department = co.department;
+            location = co.location;
+            tags = co.searchPhrase;
+        }
+        //For the return home if they get one
+        rtrn.putString("name", name);
+        rtrn.putString("vendor", vendor);
+        rtrn.putDouble("price", price);
+        rtrn.putSerializable("dept",department);
+        rtrn.putSerializable("location", location);
+        rtrn.putString("tags", tags);
+
+        if(price < 0){
+            no +=" Price cannot be negative.";
+        }
+        if(tags.isEmpty()){
+            no += " Tags cannot be empty.";
+        }
+        if (weNeedToCheckName){
+            //Callback time.
+            adapter.validateItemNameToVendorIsUnique(name, vendor, this);
+        }
+        else validateNameForVendorIsUniqueHandler(true, true);
+
+
+    }
+
     public void validateBarcode(String barcode, int oppCode, AdminProductCBMethods cbm){
         adminProductScreenActivity = cbm;
         this.oppCode = oppCode;
@@ -58,21 +128,39 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void validateNameForVendorIsUniqueHandler(boolean searchWasSuccess, boolean nameIsUnique) {
+        if(searchWasSuccess){
+            if(!nameIsUnique){
+                no += "That product name already exists for the vendor";
+            }
+        }
+        else no = "Cannot Update or create at this time at this time. Please try again later";
+        if(oppCode ==1){
+            ((AdminProductCBMethods)mm).validationCB(no, oppCode, rtrn);
+        }
+
+        else {
+            Bundle r = new Bundle();
+            r.putSerializable("c", co);
+            ((AdminProductCBMethods)mm).validationCB(no, oppCode, r);
+        }
 
     }
 
     @Override
     public void createItemForStoreInDepartment(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).createCB(isSuccessful);
 
     }
 
     @Override
     public void updateItemHandler(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).updateCB(isSuccessful);
 
     }
 
     @Override
     public void deleteItemHandler(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).delCB(isSuccessful);
 
     }
 
@@ -156,5 +244,138 @@ public class Model implements BrokerCallbackDelegate {
         }
         return null;
     }
-
+    private boolean isEmpty(String s) {
+        return (s == null || s.equals("") || s.equals(" "));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
