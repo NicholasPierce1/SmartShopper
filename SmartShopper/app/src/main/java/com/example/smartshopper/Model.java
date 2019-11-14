@@ -22,6 +22,7 @@ public class Model implements BrokerCallbackDelegate {
     String barcode;
     private static Model shared = new Model();
     private Commodity co;
+    private int createCase = -1;
 
     public static Model getShared(){
         return shared;
@@ -30,6 +31,7 @@ public class Model implements BrokerCallbackDelegate {
     public void findAllStores(@NonNull final Context context) throws ExceptionInInitializerError{
        adapter.findAllStores(context, this);
     }
+    //
     public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
         this.mm = mm;
         this.store = store;
@@ -38,10 +40,19 @@ public class Model implements BrokerCallbackDelegate {
     public void createItem(Bundle b){
         adapter.createAndSaveItemForStoreInDept((Department)b.getSerializable("dept"),
                 b.getString("barcode"), b.getString("name"), b.getString("vendor")
-        , b.getDouble("price"), (Location)b.getSerializable("location"), this);
+        , b.getString("tags"), b.getDouble("price"), (Location)b.getSerializable("location"), this);
     }
-    public void ValidateComodityInput(boolean weNeedToCheckName, int oppCode, Bundle c){
+    public void updateItem(Bundle c){
+        adapter.updateItem((Commodity)c.getSerializable("c"), this);
+    }
+    public  void deleteItem(Commodity c){
+        adapter.deleteItemFromBarcode(store, c.barcode, this);
+    }
+
+
+    public void validateComodityInput(boolean weNeedToCheckName, int oppCode,  Bundle c){
         this.oppCode = oppCode;
+
         String name = "", vendor = "", tags;
         int dept, isle;
         double price=-1.0;
@@ -105,6 +116,7 @@ public class Model implements BrokerCallbackDelegate {
         adminProductScreenActivity = cbm;
         this.oppCode = oppCode;
         this.barcode = barcode;
+
         adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
     }
     public void getNameFromBarcode(String barcode, AdminProductCBMethods cbm){

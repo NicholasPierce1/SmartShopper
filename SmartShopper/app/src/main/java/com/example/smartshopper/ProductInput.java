@@ -37,7 +37,7 @@ public class ProductInput extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public interface buttonInput{
-        public void submitButtonPushed(int actionCode, Bundle commodity);
+        public void submitButtonPushed(int actionCode, boolean check, Bundle commodity);
         public void cancelButtonPushed();
 
     }
@@ -84,16 +84,18 @@ public class ProductInput extends Fragment {
             public void onClick(View view) {
                 //We are either creating a comodity or changing. We will pass in the things we are doing
                 //as a bundle to make life easy
+               boolean check = createCase == 3; //In the event of  create case
                 if(submitCode == 1){ //creation
-                    myActivity.submitButtonPushed(1,retrive());
+                    myActivity.submitButtonPushed(1, check, retrive());
                 }
                 else if(submitCode == 2){
-                    myActivity.submitButtonPushed( 2, setToComodity());
+                    myActivity.submitButtonPushed( 2, false,setToComodity());
                 }
                 else if(submitCode == 3){
-                    myActivity.submitButtonPushed(3, setToComodity());
+                    myActivity.submitButtonPushed(3, false,setToComodity());
                 }
-                else{ Log.d("Broke", "Stuffs' broke");}
+                else{ Log.d("Broke", "Stuffs' broke, submit onClckListener unexpected value of " +
+                        submitCode);}
             }
         });
         cancleBTN.setOnClickListener(new View.OnClickListener() {
