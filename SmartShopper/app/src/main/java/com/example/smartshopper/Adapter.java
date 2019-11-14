@@ -242,7 +242,63 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     public void updateItem(@NonNull final Commodity commodity, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
 
     // deletes the item via its barcode
-    public void deleteItemFromBarcode(@NonNull final Store store, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void deleteItemFromBarcode(@NonNull final Store store, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local reference to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates promised state to callback
+                HashMap<String, Boolean> operationResults = null;
+
+                // try-catch-finally block to find item, find dept stock, delete dept stock, and delete item
+                try{
+
+                    // invokes helper method to acquire item
+                    final Commodity commodityToDelete = findCompositeCommodityFromBarcode(barcode);
+
+                    // creates parse query targeting DeptStock
+                    final ParseQuery<ParseObject> findDeptStock = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.DepartmentStock.getRelationName());
+
+                    // sets predicate where commodity id and store id equal
+                    findDeptStock.whereEqualTo(DepartmentStock.itemObjectIdKey, commodityToDelete.getObjectId());
+                    findDeptStock.whereEqualTo(DepartmentStock.storeObjectIdKey, store.getObjectId());
+
+                    // acquires list of department stocks where predicate is assuaged
+                    List<ParseObject> deptStockListAsParse = findDeptStock.find();
+
+                    // asserts list's size is 1 (0 throws exception)
+                    if(deptStockListAsParse.size() != 1)
+                        throw new RuntimeException("error state in data integrity-- multiple Department Stock tailored to store and commodity. Count: ".concat(String.valueOf(deptStockListAsParse.size())));
+
+                    // acquires, converts, and deletes dept stock w/ known size of 1
+                    deptStockListAsParse.get(0).delete();
+
+                    // converts and deletes commodity
+                    commodityToDelete.toParseObject().delete();
+
+                    // sets success results code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                }
+                catch(ParseException ex){
+                    // sets error results code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
+                finally{
+
+                    assert(operationResults != null);
+
+                    // returns repo callback results
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.deleteItem, brokerCallbackDelegate, null, null);
+                }
+            }
+        };
+
+        // enjoins repo to effectuate task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // searches for an item by a search phrase on predicate the the item's formal name OR its categorical name contains the search
     public void searchForItemByPhrase(@NonNull final Store store, @NonNull final String searchPhrase, @NonNull final List<Department> departmentList, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
@@ -377,29 +433,21 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // private helper method to retrieve an item from a barcode (commodity is composite, boolean is true if item is found OR item doesn't exist to database)
     @NonNull
-    private Pair<Commodity, Boolean> findCompositeCommodityFromBarcode(@NonNull final String barcode){
-        try {
-            // acquires Parse query targeting item
-            final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
+    private Commodity findCompositeCommodityFromBarcode(@NonNull final String barcode) throws ParseException{
 
-            // acquires all items where barcode is equal
-            itemSearchQuery.whereEqualTo(Commodity.barcodeNameKey, barcode);
-            final List<ParseObject> itemListAsParse = itemSearchQuery.find();
+        // acquires Parse query targeting item
+        final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
 
-            // asserts that list size is 1 (0 is thrown as exception)
-            if (itemListAsParse.size() != 1)
-                throw new RuntimeException("error state in data integrity-- multiple items exist with such barcode. Count: ".concat(String.valueOf(itemListAsParse.size())));
+        // acquires all items where barcode is equal
+        itemSearchQuery.whereEqualTo(Commodity.barcodeNameKey, barcode);
+        final List<ParseObject> itemListAsParse = itemSearchQuery.find();
 
-            // acquires composite item from list -- known size of 1
-            return new Pair<Commodity, Boolean>(Commodity.Builder.toDataAccessFromParse(itemListAsParse.get(0)), true);
-        }
-        catch(ParseException ex){ // no item exist OR internal error
+        // asserts that list size is 1 (0 is thrown as exception)
+        if (itemListAsParse.size() != 1)
+            throw new RuntimeException("error state in data integrity-- multiple items exist with such barcode. Count: ".concat(String.valueOf(itemListAsParse.size())));
 
-            // holds local ref to bool of ex's code != Object not found
-            final boolean itemNotFound = ex.getCode() == ParseException.OBJECT_NOT_FOUND;
-
-            return new Pair<Commodity,  Boolean>(null, itemNotFound);
-        }
+        // acquires composite item from list -- known size of 1
+        return Commodity.Builder.toDataAccessFromParse(itemListAsParse.get(0));
     }
 
     // public method implementation to receive repo callback, downcast datatype params to appropriate broker callback
