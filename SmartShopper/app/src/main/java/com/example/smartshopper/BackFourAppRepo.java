@@ -31,10 +31,12 @@ final class BackFourAppRepo{
     private static final BackFourAppRepo shared = new BackFourAppRepo();
 
     // private constructor for universal, shared instance
+    @MainThread
     private BackFourAppRepo(){}
 
     // static method to return shared instance
     @NonNull
+    @MainThread
     public static BackFourAppRepo getShared(){
         return BackFourAppRepo.shared;
     }
