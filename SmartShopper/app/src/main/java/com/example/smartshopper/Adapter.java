@@ -3,6 +3,7 @@ package com.example.smartshopper;
 import android.content.Context;
 import android.content.res.Resources;
 import android.provider.ContactsContract;
+import android.util.Pair;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -50,7 +51,6 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 // try-catch-finally for all parse operation/s
                 try{
-
                     // acquires Parse query targeting item
                     final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
 
@@ -59,10 +59,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     final List<ParseObject> itemListAsParse = itemSearchQuery.find();
 
                     // asserts that list size is 1 (0 is thrown as exception)
-                    if(itemListAsParse.size() != 1)
+                    if (itemListAsParse.size() != 1)
                         throw new RuntimeException("error state in data integrity-- multiple items exist with such barcode. Count: ".concat(String.valueOf(itemListAsParse.size())));
 
-                    // acquires composite item from list -- known size of 1
+                    // creates commodity
                     commodity = Commodity.Builder.toDataAccessFromParse(itemListAsParse.get(0));
 
                     // creates parse query targeting DeptStock
@@ -127,7 +127,58 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // validates if the name for the pending item is unique to vendor
-    public void validateItemNameToVendorIsUnique(@NonNull final String itemName, @NonNull final String vendorName, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void validateItemNameToVendorIsUnique(@NonNull final String itemName, @NonNull final String vendorName, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate) {
+
+        // creates local reference to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates state promised to callback
+                HashMap<String, Boolean> operationResults = null;
+
+                // try-catch-finally block for finding item with same vendor name and barcode
+                try {
+
+                    // creates parse query targeting commodity
+                    final ParseQuery<ParseObject> vendorNameDuplicateQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
+
+                    // sets predicate where a prior commodity has the same vendor name and item name
+                    vendorNameDuplicateQuery.whereEqualTo(Commodity.vendorNameKey, vendorName);
+                    vendorNameDuplicateQuery.whereEqualTo(Commodity.nameKey, itemName);
+
+                    // searches on predicates
+                    final List<ParseObject> duplicates = vendorNameDuplicateQuery.find();
+
+                    // sets error results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
+
+                }
+                catch (ParseException ex) {
+
+                    // differentiates between cases ( a. no duplicates found, b. internal error ) on code value
+                    if(ex.getCode() == ParseException.OBJECT_NOT_FOUND){
+                        // sets success code
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
+                    }
+                    else // error incurred
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                   }
+                finally {
+
+                    assert(operationResults != null);
+
+                    // returns repo callback result
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.validateNameForVendorIsUnique, brokerCallbackDelegate, null, null);
+
+                }
+
+            }
+        };
+
+        // enjoins repo to execute task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // saves the pending item via composite inputs w/ the denoted store and dept
     public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String name, @NonNull final String vendorName, final double price, @NonNull final Location location, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
@@ -267,6 +318,33 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
         // enjoins repo to execute custom runnable
         this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
+
+    // private helper method to retrieve an item from a barcode (commodity is composite, boolean is true if item is found OR item doesn't exist to database)
+    @NonNull
+    private Pair<Commodity, Boolean> findCompositeCommodityFromBarcode(@NonNull final String barcode){
+        try {
+            // acquires Parse query targeting item
+            final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
+
+            // acquires all items where barcode is equal
+            itemSearchQuery.whereEqualTo(Commodity.barcodeNameKey, barcode);
+            final List<ParseObject> itemListAsParse = itemSearchQuery.find();
+
+            // asserts that list size is 1 (0 is thrown as exception)
+            if (itemListAsParse.size() != 1)
+                throw new RuntimeException("error state in data integrity-- multiple items exist with such barcode. Count: ".concat(String.valueOf(itemListAsParse.size())));
+
+            // acquires composite item from list -- known size of 1
+            return new Pair<Commodity, Boolean>(Commodity.Builder.toDataAccessFromParse(itemListAsParse.get(0)), true);
+        }
+        catch(ParseException ex){ // no item exist OR internal error
+
+            // holds local ref to bool of ex's code != Object not found
+            final boolean itemNotFound = ex.getCode() == ParseException.OBJECT_NOT_FOUND;
+
+            return new Pair<Commodity,  Boolean>(null, itemNotFound);
+        }
     }
 
     // public method implementation to receive repo callback, downcast datatype params to appropriate broker callback
