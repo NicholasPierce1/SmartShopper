@@ -479,7 +479,65 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // login admin by uName and password
-    public void loginAdminByUsernameAndPassword(@NonNull final Store store, @NonNull final String username, @NonNull final String password, @NonNull BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void loginAdminByUsernameAndPassword(@NonNull final Store store, @NonNull final String username, @NonNull final String password, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate) {
+
+        // creates local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates local state promised to the callback
+                HashMap<String, Boolean> operationResults = null;
+                Admin admin = null;
+
+                // try-catch-finally block to find an admin in denoted store with login credentials
+                try {
+
+                    // creates parse query targeting admin
+                    final ParseQuery<ParseObject> adminLoginQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Admin.getRelationName());
+
+                    // sets predicates on where store matches, username matches, and password matches
+                    adminLoginQuery.whereEqualTo(Admin.storeKey, store.getObjectId());
+                    adminLoginQuery.whereEqualTo(Admin.userNameKey, username);
+                    adminLoginQuery.whereEqualTo(Admin.passwordKey, password);
+
+                    // finds admin list where predicate matches
+                    final List<ParseObject> adminListAsParse = adminLoginQuery.find();
+
+                    // asserts that list's size is only one (0 throws parse exception)
+                    if (adminListAsParse.size() != 1)
+                        throw new RuntimeException("error state in data integrity-- multiple Admin tailored to store and login credentials. Count: ".concat(String.valueOf(adminListAsParse.size())));
+
+                    // extracts known admin as parse, covert to admin, and sets to admin
+                    admin = Admin.Builder.toDataAccessFromParse(adminListAsParse.get(0), store);
+
+                    // sets success code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
+
+                } catch (ParseException ex) {
+                    // differentiates cases of parse exceptions (cases: a. no object found on such predicate, b. internal error incurred)
+                    if(ex.getCode() == ParseException.OBJECT_NOT_FOUND){
+                        // sets error code - no admin found
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
+                    }
+                    else{
+                        // sets error code -- internal error
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                    }
+
+                } finally {
+
+                    assert(operationResults != null);
+
+                    // returns composite repo callback result
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.findAdminByLogin, brokerCallbackDelegate, admin, null);
+                }
+            }
+        };
+
+        // enjoins repo to instigate repo task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // finds an admin by its empId and states if invocation is for login or update
     public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, final boolean isLoggingIn, @NonNull final Admin adminThatRequestedSearch, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}

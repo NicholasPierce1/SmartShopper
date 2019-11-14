@@ -52,7 +52,7 @@ public final class Admin extends DataAccess implements Persistable {
         //Admin class
         // render DA object from using composite inputs and a Store (NOTE: no need to set object id)
         @NonNull
-        public Admin build(@NonNull final Store store, @NonNull final String name, @NonNull final String userName, @NonNull final String pw, @NonNull final AdminLevel level, @NonNull final String empId){
+        public static Admin build(@NonNull final Store store, @NonNull final String name, @NonNull final String userName, @NonNull final String pw, @NonNull final AdminLevel level, @NonNull final String empId){
             // creates local ref
             final Admin admin = new Admin();
 
@@ -70,7 +70,7 @@ public final class Admin extends DataAccess implements Persistable {
 
         // appends functionality to convert a composite OR complete to a parsed object for persistence
         @NonNull
-        public Admin toDataAccessFromParse(@NonNull final ParseObject parseObject, @NonNull final Store store){
+        public static Admin toDataAccessFromParse(@NonNull final ParseObject parseObject, @NonNull final Store store){
 
             // creates local admin object
             final Admin admin = new Admin();
