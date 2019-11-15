@@ -45,7 +45,6 @@ public class Model implements BrokerCallbackDelegate {
     public void initializeDeapartmentListForStore(@NonNull final Store store, @NonNull final WelcomeScreenModelMethods mm){
 
         // upcast delegate reference
-        this.mm = mm;
 
         // assigns user selected store
         this.store = store;
