@@ -377,13 +377,16 @@ public class Model implements BrokerCallbackDelegate {
         this.oppCode = oppCode;
 
         // enjoins adapter to corroborate if admin username is unique
+        Log.d("AdminValid", "Username in model call: " + username);
         adapter.isAdminUsernameUnique(username, this);
     }
 
     @Override
     public void isAdminUsernameUniqueHandler(boolean adminSearchWasSuccess, boolean adminFound) {
         if(adminSearchWasSuccess){
+            Log.d("AdminValid", "AdminFound: " + adminFound + " oppcode: " + oppCode);
             if(oppCode == 1){
+                Log.d("AdminValid", "username in handler: " + username);
                 ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, adminFound, null);
                 //WE don't care about an admin object so move on.
             }
@@ -394,6 +397,7 @@ public class Model implements BrokerCallbackDelegate {
                 }
                 else{
                     inHouse = true;
+                    Log.d("AdminValid", "username: " + username);
                     findAdminByID(username, requestor, (AdminModCBMethods)mm);
                 }
             }
