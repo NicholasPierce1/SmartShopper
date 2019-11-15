@@ -648,7 +648,61 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // deletes an admin by its empId
-    public void deleteAdmin(@NonNull final Store store, @NonNull final String empId, @NonNull final Admin adminThatRequestedDelete, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void deleteAdmin(@NonNull final Store store, @NonNull final String empId, @NonNull final Admin adminThatRequestedDelete, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates shared state promised to callback
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+
+                // try-catch-finally block to find admin where id's match, check admin rank is higher from request, and delete
+                try {
+
+                    // creates parse query targeting admin
+                    final ParseQuery<ParseObject> adminToDeleteQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Admin.getRelationName());
+
+                    // sets predicate where admin id matches and store id matches
+                    adminToDeleteQuery.whereEqualTo(Admin.storeKey, store.getObjectId());
+                    adminToDeleteQuery.whereEqualTo(Admin.empIdKey, empId);
+
+                    // finds admins that match predicate
+                    final List<ParseObject> adminListAsParse = adminToDeleteQuery.find();
+
+                    // asserts size is one (0 throws parse exception)
+                    if (adminListAsParse.size() != 1)
+                        throw new RuntimeException("error state in data integrity-- multiple Admin tailored to store and login credentials. Count: ".concat(String.valueOf(adminListAsParse.size())));
+
+                    // extracts and converts known admin as parse to DA
+                    final Admin adminToDelete = Admin.Builder.toDataAccessFromParse(adminListAsParse.get(0), store);
+
+                    // checks if admin rank of request is higher than to delete
+                    if(adminThatRequestedDelete.adminLevel.getIdType() > adminToDelete.adminLevel.getIdType()){
+
+                        // 
+                    }
+
+                    // sets success codes
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                } catch (ParseException ex) {
+                    // sets bad codes
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
+                finally {
+
+                    // returns composites RepoCallBackResult
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.addAdmin, brokerCallbackDelegate, null, null);
+                }
+
+            }
+        };
+
+        // invokes repo to instigate task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // updates an admin
     public void updateAdmin(@NonNull final Admin admin, @NonNull final Admin adminThatRequestedUpdate, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
