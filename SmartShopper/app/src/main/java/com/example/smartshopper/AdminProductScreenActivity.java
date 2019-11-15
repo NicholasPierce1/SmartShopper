@@ -3,6 +3,7 @@ package com.example.smartshopper;
 import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceControl;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +52,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         transaction.show(cud);
         transaction.hide(input);
         transaction.commit();
+        resultTV = findViewById(R.id.ResultTV);
 
     }
 
@@ -162,6 +164,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
     @Override
     public void validationCB(String wrong, int opp, Bundle b) {
+        Log.d("ProductProbs", wrong);
         if(!wrong.equals("")){
             resultTV.setText("Invalid input: \n" + wrong );
         }
