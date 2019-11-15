@@ -316,7 +316,7 @@ public class Model implements BrokerCallbackDelegate {
 
     // TODO: sure this method is needed to be separate from the handler (called directly above)
     private void finishisAdminUsernameUniqueHandler(Admin a){
-
+        Log.d("AdminValid", "In Finnisher method");
         ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, true, a);
 
     }
