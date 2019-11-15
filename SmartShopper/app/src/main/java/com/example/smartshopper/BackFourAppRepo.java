@@ -20,9 +20,9 @@ import java.util.List;
 final class BackFourAppRepo{
 
     // enumerates local keys to procure Back4App database connection
-    private static String appId = "";
-    private static String clientId = "";
-    private static String backFourAppURL = "";
+    private static String appId = "a2UBLfNzFtYEwqmCF7OGYtIAyY0J8EBB7kdOkFXr";
+    private static String clientKey = "ptdnsh9YvpwfcXiCi3Su2h8fnsqQOviyRxIfT8U5";
+    private static String backFourAppURL = "https://parseapi.back4app.com";
 
     // private member to assert Parse connection has been initialized
     private boolean parseInitialize = false;
@@ -65,7 +65,7 @@ final class BackFourAppRepo{
         // inits parse by passing application context
         Parse.initialize(new Parse.Configuration.Builder(context)
                 .applicationId(BackFourAppRepo.appId)
-                .clientKey(BackFourAppRepo.clientId)
+                .clientKey(BackFourAppRepo.clientKey)
                 .server(BackFourAppRepo.backFourAppURL).build());
 
         // assures connection has been rendered
@@ -87,7 +87,7 @@ final class BackFourAppRepo{
         this.assertConnectionToBackFourApp();
 
         // creates and executes async task process for repo operation
-        /* HOOT: possible solution -- AsyncTask does not perform checks on generic arguments held by any object-param so I can create a class that has two members
+        /* possible solution -- AsyncTask does not perform checks on generic arguments held by any object-param so I can create a class that has two members
             one for each of the params and create + pass object into async task (of course I modify the first generic arg to AsyncTask)
          */
         //noinspection unchecked
