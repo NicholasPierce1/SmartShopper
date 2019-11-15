@@ -73,6 +73,7 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
 
 
         // items within range of [1-3] acquired, create adapter, set to RV, propagate update to adapter
+        assert(commodityList != null);
         final Search_Screen_RecyclerView_Adapter adapter = new Search_Screen_RecyclerView_Adapter(commodityList);
         this.recyclerView.setAdapter(adapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));

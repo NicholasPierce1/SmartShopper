@@ -116,12 +116,11 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
     // if success is true- get intent that was set and start it, else alert dialog to inform user and ask if they want a re-try
     @Override
     public void departmentCB(boolean success) {
-        /*
-        // acquires current store and passes into init depts
-        Model.getShared().initializeDeapartmentListForStore(this.currentStore, this);
-         */
-        if(success = true){
 
+        // acquires current store and passes into init depts
+
+        if(success){
+            startActivity(this.intentToExecute);
         }
         else{
             // local ref to this
@@ -134,7 +133,7 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
             builder.setTitle("Oops...");
 
             // sets message of error
-            builder.setMessage("Looks like an error occurred getting your stores! Please try again or come back later!");
+            builder.setMessage("Looks like an error occur proccessing your selection.");
 
             // sets only, positive message
             builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
@@ -142,7 +141,7 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
                 public void onClick(DialogInterface dialogInterface, int i) {
 
                     // invoke operation again
-                    Model.getShared().findAllStores(getApplicationContext(), welcome_screenActivity);
+                    Model.getShared().initializeDeapartmentListForStore(welcome_screenActivity.currentStore, welcome_screenActivity);
                 }
             });
 

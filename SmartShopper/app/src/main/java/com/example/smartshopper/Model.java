@@ -208,8 +208,21 @@ public class Model implements BrokerCallbackDelegate {
 
     }
 
+
+    // implements handler to process adapter response for searching items
     @Override
     public void findItemsBySearchHandler(boolean searchWasSuccessful, @NonNull List<Commodity> commodityList) {
+
+        // if operation was error, invoke handler, passing error results + converse
+        if(!searchWasSuccessful)
+            ((SearchResultHandler)this.mm).searchCB(false, false, false, null);
+
+        // search was success, assert size of list is in context of business rules
+        if(commodityList.size() > 3 || commodityList.isEmpty())
+            ((SearchResultHandler)this.mm).searchCB(searchWasSuccessful, false, false, null);
+
+        // else, operation was success AND search size yielded within scopes
+        ((SearchResultHandler)this.mm).searchCB(searchWasSuccessful, true, false, commodityList);
 
     }
 
