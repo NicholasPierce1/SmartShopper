@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CancellationException;
 
 
 // retains external methods with internal class w/ helper methods for DA coalescing
@@ -74,6 +75,11 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // acquires all dept stock that match constraints
                     final List<ParseObject> deptStockListAsParse = deptStockQuery.find();
 
+                    // asserts that list is not empty
+                    if(deptStockListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
+
                     // asserts size is 1 (0 throws exception)
                     if(deptStockListAsParse.size() != 1)
                         throw new RuntimeException("error state in data integrity-- multiple Department Stock tailored to store and commodity. Count: ".concat(String.valueOf(deptStockListAsParse.size())));
@@ -111,6 +117,17 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         operationsResult = RepoCallbackResult.setOperationResultBooleans(false);
                         }
                 }
+                catch(CancellationException ex){
+                    // checks between case 'b' and 'c' on predicate if commodity is null
+                    if (commodity == null) {
+                        // commodity not found in item relation from barcode -- case 'c'
+                        operationsResult = RepoCallbackResult.setOperationResultBooleans(true);
+                    } else {
+                        // commodity existed to item relation from barcode, but not from store -- case 'b'
+                        operationsResult = RepoCallbackResult.setOperationResultBooleans(true, true);
+                    }
+                }
+
                 finally{
                     assert(operationsResult != null);
                     assert(commodity != null);
@@ -148,6 +165,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // searches on predicates
                     final List<ParseObject> duplicates = vendorNameDuplicateQuery.find();
+                    // asserts that list is not empty
+                    if(duplicates.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
 
                     // sets error results
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
@@ -163,6 +184,12 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     else // error incurred
                         operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                    }
+                catch(CancellationException ex){
+
+                    // personalize exception result w/ known of empty data set retrieval
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
+
+                }
                 finally {
 
                     assert(operationResults != null);
@@ -188,7 +215,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             public RepoCallbackResult executeRepo() {
 
                 // enumerates state promised to callback
-                HashMap<String, Boolean> operationsResults = null;
+                HashMap<String, Boolean> operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 // creates composite commodity
                 Commodity commodity = Commodity.Builder.build(barcode,name, vendorName, searchPhrase);
@@ -224,7 +251,6 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
                 }
                 finally {
-                    assert(operationsResults != null);
 
                     // returns repo callback results
                     return new RepoCallbackResult(operationsResults, AdapterMethodType.createItem, brokerCallbackDelegate, null, null);
@@ -245,7 +271,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             public RepoCallbackResult executeRepo() {
 
                 // enumerates state promised to callback
-                HashMap<String, Boolean> operationResult = null;
+                HashMap<String, Boolean> operationResult = RepoCallbackResult.setOperationResultBooleans(false);
 
                 // try-catch-finally block to re-save commodity
                 try{
@@ -262,8 +288,6 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     operationResult = RepoCallbackResult.setOperationResultBooleans(false);
                 }
                 finally{
-
-                    assert(operationResult != null);
 
                     // returns repo callback result
                     return new RepoCallbackResult(operationResult, AdapterMethodType.updateItem, brokerCallbackDelegate, null, null);
@@ -284,7 +308,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             public RepoCallbackResult executeRepo() {
 
                 // enumerates promised state to callback
-                HashMap<String, Boolean> operationResults = null;
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 // try-catch-finally block to find item, find dept stock, delete dept stock, and delete item
                 try{
@@ -301,6 +325,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // acquires list of department stocks where predicate is assuaged
                     List<ParseObject> deptStockListAsParse = findDeptStock.find();
+                    // asserts that list is not empty
+                    if(deptStockListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
 
                     // asserts list's size is 1 (0 throws exception)
                     if(deptStockListAsParse.size() != 1)
@@ -320,10 +348,11 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // sets error results code
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                 }
+                catch(CancellationException ex){
+                    // sets error results code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
                 finally{
-
-                    assert(operationResults != null);
-
                     // returns repo callback results
                     return new RepoCallbackResult(operationResults, AdapterMethodType.deleteItem, brokerCallbackDelegate, null, null);
                 }
@@ -343,7 +372,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             public RepoCallbackResult executeRepo() {
 
                 // enumerates promised state to callback
-                HashMap<String, Boolean> operationResults = null;
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                 List<Commodity> commodityList = null;
 
                 // try-catch-finally block to acquire all items where searchPhrase is contained in name or search phrase,
@@ -374,10 +403,13 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // invokes search to acquire list of commodities that assuage 'or' predicate
                     final List<ParseObject> commodityListAsParse = comprisedCommodityQuery.find();
+                    if(commodityListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
 
                     // invokes helper to convert list to a commodity list
                     commodityList = Adapter.ORM_Helper.convertCommodityListAsParseToCommodityList(commodityListAsParse);
-                    Log.d("CONVERT TO COMMODITY LIST", String.valueOf(commodityList.size()));
+
                     // invokes helper to convert commodityList to a list of object ids
                     final List<String> objectIdList = Adapter.ORM_Helper.convertDataAccessToObjectIdList(commodityList);
 
@@ -390,12 +422,9 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // acquires all dept stocks that assuage predicate
                     final List<ParseObject> deptStockListAsParse = deptStockQuery.find();
                     if(deptStockListAsParse.size() == 0) {
-                        Log.d("PARSE EXCEPTION NOT THROWN", "!!!");
-                        operationResults = RepoCallbackResult.setOperationResultBooleans(true);
-                        commodityList.clear();
-                        throw new Exception("list size is zero");
+                        throw new CancellationException("list size is zero");
                     }
-                    Log.d("GETS ALL DEPT STOCKS", String.valueOf(deptStockListAsParse.size()));
+
                     // invokes helper to convert dept stock as parse to a list of DeptStock
                     final List<DepartmentStock> departmentStockList = Adapter.ORM_Helper.convertParseObjectsToDeptStock(deptStockListAsParse);
 
@@ -419,13 +448,13 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         commodityList = new ArrayList<Commodity>();
 
                 }
-                catch(Exception ex){
-                    Log.d("Exception", ex.getLocalizedMessage());
+                catch(CancellationException ex){
+                    Log.d("EXCEPTION", ex.getLocalizedMessage());
+
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+                    commodityList = new ArrayList<Commodity>();
                 }
                 finally{
-
-
-                    if(operationResults == null) throw new NullPointerException("null thrown here");
                     // returns repo callback results
                     return new RepoCallbackResult(operationResults, AdapterMethodType.findItemBySearch, brokerCallbackDelegate, null, commodityList);
 
@@ -446,7 +475,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             public RepoCallbackResult executeRepo() {
 
                 // enumerates state promised to callback
-                HashMap<String, Boolean> operationResults = null;
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 // try-catch-finally block to search for an admin on predicate of username's match
                 try{
@@ -459,6 +488,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // finds all admin that assuage predicate
                     final List<ParseObject> adminListAsParse = adminUsernameQuery.find();
+                    // asserts that list is not empty
+                    if(adminListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
 
                     // if here then list is (1-m), regardless of such case issues error results
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
@@ -476,6 +509,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                     }
 
+                }
+                catch(CancellationException ex){
+                    // sets success codes-- no admin uncovered
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
                 }
                 finally{
 
@@ -501,7 +538,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             public RepoCallbackResult executeRepo() {
 
                 // enumerates local state promised to the callback
-                HashMap<String, Boolean> operationResults = null;
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                 Admin admin = null;
 
                 // try-catch-finally block to find an admin in denoted store with login credentials
@@ -517,6 +554,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // finds admin list where predicate matches
                     final List<ParseObject> adminListAsParse = adminLoginQuery.find();
+                    // asserts that list is not empty
+                    if(adminListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
 
                     // asserts that list's size is only one (0 throws parse exception)
                     if (adminListAsParse.size() != 1)
@@ -533,16 +574,18 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     if(ex.getCode() == ParseException.OBJECT_NOT_FOUND){
                         // sets error code - no admin found
                         operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
-                    }
+                   }
                     else{
                         // sets error code -- internal error
                         operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                     }
 
                 }
+                catch(CancellationException ex){
+                    // sets error code - no admin found
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
+                }
                 finally {
-
-                    assert(operationResults != null);
 
                     // returns composite repo callback result
                    return new RepoCallbackResult(operationResults, AdapterMethodType.findAdminByLogin, brokerCallbackDelegate, admin, null);
@@ -579,6 +622,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // finds admins that match predicate
                     final List<ParseObject> adminListAsParse = findAdminByEmpIdQuery.find();
+                    // asserts that list is not empty
+                    if(adminListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
 
                     // asserts size is one (0 throws parse exception)
                     if (adminListAsParse.size() != 1)
@@ -608,6 +655,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         // sets error code -- internal error
                         operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                     }
+                }
+                catch(CancellationException ex){
+                    // sets error code - no admin found
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
                 }
                 finally{
 
@@ -687,6 +738,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // finds admins that match predicate
                     final List<ParseObject> adminListAsParse = adminToDeleteQuery.find();
+                    // asserts that list is not empty
+                    if(adminListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
 
                     // asserts size is one (0 throws parse exception)
                     if (adminListAsParse.size() != 1)
@@ -721,6 +776,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         // internal error
                         operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                     }
+                }
+                catch(CancellationException ex){
+                    // sets error codes admin not found
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
                 }
                 finally {
 
@@ -793,13 +852,19 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 final ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Store.getRelationName());
 
                 // local refs to RepoCallbackResult params
-                HashMap<String, Boolean> operationResults = null;
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                 List<Store> storeList = null;
 
                 // try-catch to retrieve all stores
                 try{
                     // retrieves and uses ORM to convert to list of stores
                     List<ParseObject> parseObjectList = parseQuery.find();
+                    // asserts that list is not empty
+                    if(parseObjectList.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
+
+                    // intializes store list-- knowning operation of acquiring stores entailed success
                     storeList = new ArrayList<Store>();
 
                     // walks through all parse objects holding store info and invokes orm for conversion
@@ -816,8 +881,12 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 }
+                catch(CancellationException ex){
+                    // sets error state results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+
+                }
                 finally {
-                    assert(operationResults != null);
                     // returns call back result
                     return new RepoCallbackResult(operationResults, AdapterMethodType.getAllStores, brokerCallbackDelegate, null, storeList);
                 }
@@ -839,7 +908,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 // local ref to composite return types
                 List<Department> departmentList = null;
-                HashMap<String, Boolean> operationResults = null;
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 try {
 
@@ -851,6 +920,13 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // retrieves, and converts all dept stock
                     final List<ParseObject> parseObjectList = deptStockParseQuery.find();
+
+                    // asserts that list is not empty
+                    if(parseObjectList.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
+
+                    // converts all objects to stored dept
                     final List<StoredDept> storedDeptList = Adapter.ORM_Helper.convertParseObjectsToStoredDept(parseObjectList);
 
                     // creates parse query targeting Department
@@ -858,21 +934,27 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // retrieves all depts
                     final List<ParseObject> departmentParseObjectList = deptParseQuery.find();
-                    Log.d("INIT 1", String.valueOf("1"));
+                    // asserts that list is not empty
+                    if(departmentParseObjectList.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
+
                     // invokes helper to convert, department as parse object, a list of store dept, and store to create dept list
                     departmentList = Adapter.ORM_Helper.findAndCreateDepartmentFromRelationalState(departmentParseObjectList, storedDeptList, store);
-                    Log.d("INIT 2", String.valueOf("1"));
+
                     // sets success bool results
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true);
-                    Log.d("is null", String.valueOf(operationResults == null));
+
                 }
                 catch(ParseException ex){
                     // sets error bool results
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                 }
+                catch(CancellationException ex){
+                    // sets error bool results
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
                 finally {
-                    assert(operationResults != null);
-
                     // returns compiled results to callback
                     return new RepoCallbackResult(operationResults, AdapterMethodType.initializeDepartments, brokerCallbackDelegate, null, departmentList);
                 }
