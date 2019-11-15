@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -137,6 +138,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //So you can't do other things
                 modifyBTN.setVisibility(View.INVISIBLE);
                 deleteBTN.setVisibility(View.INVISIBLE);
+                createBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
                   cAdminID = adminIDET.getText().toString();
@@ -150,6 +152,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             public void onClick(View view) {
                 createBTN.setVisibility(View.INVISIBLE);
                 deleteBTN.setVisibility(View.INVISIBLE);
+                modifyBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
@@ -163,6 +166,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             public void onClick(View view) {
                 createBTN.setVisibility(View.INVISIBLE);
                 modifyBTN.setVisibility(View.INVISIBLE);
+                deleteBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
@@ -182,7 +186,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Now we are going to show all of the fields
                 submitCode = 1;
                 showFields();
-                aEmployeeDisET.setText("" + cAdminID);
                 if (user.adminLevel.equals(AdminLevel.owner)) {
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setVisibility(View.VISIBLE);
@@ -336,6 +339,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     }
     public void aCreateCB(boolean success){
        if(success) {
+           Log.d("AdminValid", "Admin was added successfully");
            outcomeTV.setText("Creation Success!");
            hideAndCelar();
            showButtons();

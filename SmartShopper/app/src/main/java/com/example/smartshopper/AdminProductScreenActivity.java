@@ -30,7 +30,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     public static int submitCode = -1;
     public static int createCode = -1;
     public static String barcode;
-    TextView resultTV;
+    TextView resultTV, msgCenterTV;
     FragmentManager manager;
    private Model model = Model.getShared();
 
@@ -41,6 +41,8 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.admin_product);
         Intent ini = getIntent();
+        msgCenterTV = findViewById(R.id.msgCenterTV);
+        msgCenterTV.setText("Enter Barcode Number");
         empid = ini.getStringExtra("EMPID");
         manager = getSupportFragmentManager();
         //Creates new fragments for use
@@ -132,6 +134,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         input.setCreateCase(createCase);
         input.setSubmitCode(submitCode);
         transaction.commit();
+        msgCenterTV.setText("Enter prodcut details");
         input.prepareFragmentForPresentation(commodity);
     }
 

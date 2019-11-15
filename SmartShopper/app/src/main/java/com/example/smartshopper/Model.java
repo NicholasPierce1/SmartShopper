@@ -90,12 +90,13 @@ public class Model implements BrokerCallbackDelegate {
         adminProductScreenActivity = cbm;
         this.oppCode = oppCode;
         this.barcode = barcode;
-
+        Log.d("ProductProbs", "IN Validatebarcode" + barcode);
         adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
     }
 
     @Override
     public void validateIfBarcodeExistHandler(boolean searchWasSuccess, @NonNull BarcodeExistResult barcodeExistResult) {
+        Log.d("ProductProbs", "New bar: " + barcodeExistResult.newBarcode + "Is new to store: " + barcodeExistResult.newBarcodeToStore);
         if(searchWasSuccess){
             switch (getCaseNumber(barcodeExistResult)){
                 case 0: logCaseProblem(barcodeExistResult);return;
@@ -131,7 +132,7 @@ public class Model implements BrokerCallbackDelegate {
     public void updateItem(Bundle c, AdminProductCBMethods cbm){
         this.mm = cbm;
 
-        // TODO: Mat, you have the commodity already, just pass it in param list instead of bundle
+
         adapter.updateItem((Commodity)c.getSerializable("c"), this);
     }
 
@@ -229,6 +230,7 @@ public class Model implements BrokerCallbackDelegate {
             department =  getDepartmentFromDepartmentType(dt);
             location = Location.getLocationFromLocationId(isle);
             tags = c.getString("tags");
+            price = (c.getDouble("price"));
 
         }
         else { //WE assume the later of the two options it could be

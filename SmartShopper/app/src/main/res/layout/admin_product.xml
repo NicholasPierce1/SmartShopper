@@ -19,17 +19,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.004" />
 
+
     <TextView
         android:id="@+id/ResultTV"
-        android:layout_width="289dp"
-        android:layout_height="25dp"
-        android:text="asdf"
+        android:layout_width="290dp"
+        android:layout_height="191dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.303"
+        app:layout_constraintHorizontal_bias="0.396"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.668" />
+        app:layout_constraintVertical_bias="0.97" />
 
     <Button
         android:id="@+id/BackBTN"
@@ -39,16 +39,15 @@
         android:text="Back to Hub"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.434"
+        app:layout_constraintHorizontal_bias="0.427"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.613" />
-
+        app:layout_constraintVertical_bias="0.695" />
 
     <FrameLayout
         android:id="@+id/modifyCTNR"
-        android:layout_width="464dp"
-        android:layout_height="376dp"
+        android:layout_width="471dp"
+        android:layout_height="436dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
