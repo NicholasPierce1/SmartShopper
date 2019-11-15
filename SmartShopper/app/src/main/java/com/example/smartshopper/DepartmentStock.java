@@ -96,7 +96,7 @@ final class DepartmentStock extends DataAccess implements Persistable {
     public ParseObject toParseObject(){
 
         // creates local ref for parse object
-        final ParseObject parseObject = new ParseObject("DepartmentStock");
+        final ParseObject parseObject = new ParseObject(DA_ClassNameRelationMapping.DepartmentStock.getRelationName());
 
         // appends local state
         parseObject.put(DepartmentStock.departmentObjectIdKey, this.departmentObjectId);
