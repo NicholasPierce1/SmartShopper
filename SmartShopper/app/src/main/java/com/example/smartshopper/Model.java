@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Model implements BrokerCallbackDelegate {
@@ -81,6 +80,9 @@ public class Model implements BrokerCallbackDelegate {
     }
     public void deleteAdmin(Admin user, Admin subject){
         adapter.deleteAdmin(store, subject.empID, user,this);
+    }
+    public void login(String username, String password){
+        adapter.loginAdminByUsernameAndPassword(store, username,password, this);
     }
 
 
@@ -253,14 +255,11 @@ public class Model implements BrokerCallbackDelegate {
 
 
         }
-
-
-
     }
 
     @Override
     public void loginAdminByUsernameAndPassword(boolean adminLoginWasSuccess, boolean adminFoundAndIsInStore, @Nullable Admin admin) {
-
+        ((LoginCB)mm).loginCB(adminLoginWasSuccess, admin);
     }
 
     @Override
@@ -277,7 +276,6 @@ public class Model implements BrokerCallbackDelegate {
             else{
                 ((AdminModCBMethods)mm).adminNotFound();
             }
-
     }
 
     @Override

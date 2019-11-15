@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AdminLoginScreenActivity extends AppCompatActivity {
+public class AdminLoginScreenActivity extends AppCompatActivity implements LoginCB {
     TextView errorTV;
     //@Author Matthew Berry
     @Override
@@ -22,7 +22,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         errorTV.setVisibility(View.INVISIBLE);
 
             Log.d("loginbugs", "fake data populated");
-           
+
 
 
     }
@@ -31,15 +31,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         String user = usernameET.getText().toString();
         EditText passwordET = findViewById(R.id.PasswordET);
         String pw = passwordET.getText().toString();
-        if(validateLogin(user, pw)){
 
-          Intent toHub = new Intent(this, AdminScreenActivity.class);
-            toHub.putExtra("EMPID", user);
-            startActivity(toHub);
-        }
-        else{
-            errorTV.setVisibility(View.VISIBLE);
-        }
 
     }
     private boolean validateLogin(String user, String pw){
@@ -71,6 +63,17 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         startActivity(goBack);
     }
 
+    public void loginCB(boolean success, Admin admin){
+        if(success){
+
+            Intent toHub = new Intent(this, AdminScreenActivity.class);
+            toHub.putExtra("Admin", admin);
+            startActivity(toHub);
+        }
+        else{
+            errorTV.setVisibility(View.VISIBLE);
+        }
+    }
 
 
 

@@ -25,7 +25,7 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="AdminID (assign Admin ID for create)"
-        android:inputType="textPersonName"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
         android:id="@+id/nameET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="12dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -102,7 +102,7 @@
         android:id="@+id/RankTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="Rank:"
         android:textSize="18sp"
         android:visibility="invisible"
@@ -115,8 +115,8 @@
         android:id="@+id/EmployeeIdDisET"
         android:layout_width="218dp"
         android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:hint="Enter the username "
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/EmployeeIDTV"
@@ -131,15 +131,16 @@
         android:text="Managing Admin"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/RankTV"
-        app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisTV" />
+        app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisET" />
 
     <Button
         android:id="@+id/submitBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.383"
+        app:layout_constraintHorizontal_bias="0.256"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/middleAdminCB" />
 
@@ -148,7 +149,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="This will display an outcome"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.398"
@@ -180,19 +180,21 @@
 
     <EditText
         android:id="@+id/PasswordET"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_width="189dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintStart_toEndOf="@+id/PasswordTV"
-        app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisTV" />
+        app:layout_constraintTop_toBottomOf="@+id/EmployeeIdDisET" />
 
     <CheckBox
         android:id="@+id/ownerCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Owner"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/middleAdminCB"
@@ -202,11 +204,14 @@
         android:id="@+id/cancelBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Cancel"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.693"
+        app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/middleAdminCB" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
