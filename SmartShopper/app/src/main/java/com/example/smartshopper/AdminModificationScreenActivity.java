@@ -2,6 +2,7 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -136,6 +137,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                   cAdminID = adminIDET.getText().toString();
+                  Log.d("AdminValid", "Username in controller: " + cAdminID);
                   model.checkForExistingUsername(1, cAdminID, user, myActivity);
 
             }
@@ -148,6 +150,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
+                Log.d("AdminValid", "Username in controller: " + cAdminID);
                 model.checkForExistingUsername(2, cAdminID, user, myActivity);
 
             }
@@ -160,6 +163,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
+                Log.d("AdminValid", "Username in controller: " + cAdminID);
                 model.checkForExistingUsername( 3, cAdminID, user, myActivity);
 
             }
