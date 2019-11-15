@@ -271,6 +271,21 @@ public class Model implements BrokerCallbackDelegate {
 
     }
 
+    // external method to be invoked by search controller to enjoin adapter to commence search by phrase
+    public void searchCommoditiesBySearchPhrase(@NonNull final String searchPhrase, @NonNull final SearchResultHandler searchResultHandler){
+
+        // assigns upcasted delegate handler
+        this.mm = searchResultHandler;
+
+        // checks length is greater than three
+        if(searchPhrase.length() <= 3)
+            searchResultHandler.searchCB(false, false, true, null);
+
+        // acquires shared adapter to invoke search
+        this.adapter.searchForItemByPhrase(this.store, searchPhrase, this.departmentList, this);
+
+    }
+
     @Override
     public void addAdminHandler(boolean wasAdminAdded) {
         ((AdminModCBMethods)mm).aCreateCB(wasAdminAdded);

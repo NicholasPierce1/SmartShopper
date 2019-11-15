@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface SearchResultHandler extends CallBackInterface{
 
-    public void searchCB(boolean operationSuccess, boolean searchGood, List<Commodity> commodityList);
+    public void searchCB(boolean operationSuccess, boolean searchGood, boolean wasSearchTooShort, List<Commodity> commodityList);
 }

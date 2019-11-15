@@ -56,10 +56,29 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         this.startActivity(new Intent(this, classToIntentTo));
     }
 
-    // TODO: check if both bools are true ( check list size > 1 -- if so, create adapter and set to RV + notify data set change )
-    // TODO: if 1st bool false (tell user to try again), 1st true and 2nd false ( tell user to refine search )
+
     @Override
-    public void searchCB(boolean operationSuccess, boolean searchGood, List<Commodity> commodityList){
+    public void searchCB(boolean operationSuccess, boolean searchGood, boolean wasSearchTooShort, List<Commodity> commodityList){
+
+
+        // if search was too short- or if operation succeeded, but no results were yielded- apprise user of faulty case
+        if(wasSearchTooShort || (operationSuccess && !searchGood)) {
+            this.updateResultTextViewWithString("Please refine search.");
+            return;
+        }
+        else if(!operationSuccess){
+            this.updateResultTextViewWithString("Error in search. Please try again.");
+            return;
+        }
+
+
+        // items within range of [1-3] acquired, create adapter, set to RV, propagate update to adapter
+        final Search_Screen_RecyclerView_Adapter adapter = new Search_Screen_RecyclerView_Adapter(commodityList);
+        this.recyclerView.setAdapter(adapter);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // set visibility
+        this.recyclerView.setVisibility(View.VISIBLE);
 
     }
 
@@ -80,8 +99,8 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
                     int position = holder.getAdapterPosition();
 
                     // acquire item from position and invoke intent w/ clear top
-                    // TODO: extract item from list displayed
-                    controller.returnedItemIntent(null);
+
+                    controller.returnedItemIntent(controller.adapter.getAdapterDataRef().get(position));
 
                     return true; // Use up the tap gesture
                 }
@@ -91,14 +110,12 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         }
     }
 
-    // TODO: extract string value, assert length > 3, invoke model method giving string in
+
     public void itemSearch(View v){
         itemEntered = findViewById(R.id.itemNameET);
         final String searchPhrase = String.valueOf(itemEntered.getText());
 
-        if(searchPhrase.length() > 3){
-
-        }
+        Model.getShared().searchCommoditiesBySearchPhrase(searchPhrase, this);
     }
 
 
@@ -109,6 +126,10 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         //itemReturned.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.startActivity(itemReturned);
 
+    }
+
+    private void updateResultTextViewWithString(@NonNull final String textViewVale){
+        this.errorTV.setText(textViewVale);
     }
 
 
