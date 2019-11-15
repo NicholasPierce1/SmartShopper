@@ -722,7 +722,42 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // updates an admin
-    public void updateAdmin(@NonNull final Admin admin, @NonNull final Admin adminThatRequestedUpdate, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void updateAdmin(@NonNull final Admin admin, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates local state promised to callback
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+
+                // try-catch-final block to convert to parse and resave
+                try {
+
+                    // converts to parse object and saves
+                    admin.toParseObject().save();
+
+                    // sets success code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                } catch (ParseException ex) {
+
+                    // sets errors code
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+
+                } finally {
+
+                    // renders return repo callback result
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.updateAdmin, brokerCallbackDelegate, null, null);
+
+                }
+            }
+        };
+
+        // enjoins repo to effectuate task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // initializing methods for model implementation
 
@@ -899,7 +934,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 brokerCallbackDelegate.deleteAdminHandler(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess);
                 break;
             case updateAdmin:
-                brokerCallbackDelegate.updateAdminHandler(operationWasSuccess, adapterOperationWasSuccess);
+                brokerCallbackDelegate.updateAdminHandler(operationWasSuccess);
                 break;
             case initializeDepartments: // (SAFE cast, never not null and is department)
                 assert(dataAccessList != null);

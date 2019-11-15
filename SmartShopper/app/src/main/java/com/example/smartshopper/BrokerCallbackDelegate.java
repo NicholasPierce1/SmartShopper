@@ -45,7 +45,7 @@ public interface BrokerCallbackDelegate {
     public abstract void deleteAdminHandler(final boolean wasAdminRemoved, final boolean wasAdminFound, final boolean didAdminRetainPrivilegesToRemove);
 
     // handler to ensure if update of admin was successful
-    public abstract void updateAdminHandler(final boolean wasAdminUpdated, final boolean didAdminRetainPrivilegesToUpdate);
+    public abstract void updateAdminHandler(final boolean wasAdminUpdated);
 
     // handler to give all stores
     public abstract void getStoresHandler(final boolean searchSuccess, @Nullable final List<Store> storeList);
