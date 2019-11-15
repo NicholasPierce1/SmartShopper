@@ -23,18 +23,22 @@ public class AdminScreenActivity extends AppCompatActivity {
         super.setContentView(R.layout.admin_screen);
         Intent ini = getIntent();
 
-        Log.d("LoginDeBug", "Size of admin list is: "+
-                AdminMockModelClass.adminList.size());
-        Log.d("LoginDeBug", "Testing admin in activity: " +
-                AdminMockModelClass.adminList.get(AdminMockModelClass.adminUserNames.indexOf(empid)).name);
-        Log.d("LoginDeBug", "empid: "+ empid);
+//
+//        Log.d("LoginDeBug", "Size of admin list is: "+
+//                AdminMockModelClass.adminList.size());
+//        Log.d("LoginDeBug", "Testing admin in activity: " +
+//                AdminMockModelClass.adminList.get(AdminMockModelClass.adminUserNames.indexOf(empid)).name);
+//        Log.d("LoginDeBug", "empid: "+ empid);
         Admin admin;
         admin = (Admin)ini.getSerializableExtra("Admin");
+        if(admin ==null){
+            Log.d("AdminNull", "Admin is null");
+        }
         msgCntrTV = findViewById(R.id.msgCenterTV);
         String base = msgCntrTV.getText().toString();
         String add = admin.name.substring(0, admin.name.indexOf(" ")); //Trying to get the first name;
-         base  +=add;
-         msgCntrTV.setText(""+base);
+        base  +=add;
+        msgCntrTV.setText(""+base);
          empid = admin.empID;
         nameTV = findViewById(R.id.NameTV);
         name = (nameTV.getText().toString() + admin.name);

@@ -412,7 +412,7 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void loginAdminByUsernameAndPassword(boolean adminLoginWasSuccess, boolean adminFoundAndIsInStore, @Nullable Admin admin) {
-        ((LoginCB)mm).loginCB(adminLoginWasSuccess, admin);
+        ((LoginCB)mm).loginCB(adminLoginWasSuccess, adminFoundAndIsInStore,admin);
     }
 
 
