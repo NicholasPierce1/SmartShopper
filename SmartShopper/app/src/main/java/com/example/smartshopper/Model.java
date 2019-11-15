@@ -123,6 +123,7 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void createItemForStoreInDepartment(boolean isSuccessful) {
+        Log.d("ProductProbs", "Success of creation: " + isSuccessful);
         ((AdminProductCBMethods)mm).createCB(isSuccessful);
 
     }

@@ -138,7 +138,6 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         input.prepareFragmentForPresentation(commodity);
     }
 
-    // TODO: 11/12/2019 Change paramaters to what you only need not a full comodity 
     public void submitButtonPushed(int actionCode, boolean check, Bundle c) {
         c.putString("barcode", barcode);
         if (submitCode == -1) {
