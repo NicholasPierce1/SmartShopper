@@ -16,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AdminModificationScreenActivity extends AppCompatActivity implements AdminModCBMethods{
     String empid;
     Admin user;
-    EditText adminIDET, nameET, passwordET;
-    TextView outcomeTV, rankTV, employeeDisTV, employeeTV, nameTV, passwordTV, adminIDTV;
+    EditText adminIDET, nameET, passwordET, usernameET;
+    TextView outcomeTV, rankTV, aEmployeeDisET, employeeTV, nameTV, passwordTV;
     CheckBox middleAdminCB;
     CheckBox ownerCB;
     String wrong = "";
@@ -27,7 +27,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     int submitCode = -1;
     Model model;
     Store store;
-    String cName, cpw;
+    String cName, cpw, username;
     AdminLevel level;
     Admin subject;
     @Override
@@ -43,13 +43,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         middleAdminCB = findViewById(R.id.middleAdminCB);
         ownerCB = findViewById(R.id.ownerCB);
         rankTV = findViewById(R.id.RankTV);
-        employeeDisTV = findViewById(R.id.EmployeeIdDisTV);
+        aEmployeeDisET = findViewById(R.id.EmployeeIdDisET);
         employeeTV = findViewById(R.id.EmployeeIDTV);
         nameTV = findViewById(R.id.NameTV);
         passwordTV = findViewById(R.id.PasswordTV);
         nameET = findViewById(R.id.nameET);
         passwordET = findViewById(R.id.PasswordET);
-        employeeDisTV.setText("");
+        aEmployeeDisET.setText("");
         model = Model.getShared();
         store = model.getStroe();
         createBTN = findViewById(R.id.CreateAdminBTN);
@@ -75,7 +75,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     cName = nameET.getText().toString();
                     cpw = passwordET.getText().toString();
                     level = levelFinder();
-                  model.createAdmin(cName, cAdminID,cpw, level );
+                  model.createAdmin(cName, cAdminID,username, cpw, level );
                 }
                 else{
                     outcomeTV.setText("Invalid input: " +wrong);
@@ -83,22 +83,26 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             }
                 else if(submitCode == 2){
                     if(isInputValid()){
-                        String name = nameET.getText().toString();
-                        String pw = passwordET.getText().toString();
-                        AdminLevel level = levelFinder();
+                        cName = nameET.getText().toString();
+                        cpw = passwordET.getText().toString();
+                        username = aEmployeeDisET.getText().toString();
+                         level = levelFinder();
                         //We would make a real model call to create it, but for now...
+                        subject.name = cName;
+                        subject.password = cpw;
+                        subject.userName = username;
+                        subject.empID = cAdminID;
+                        subject.adminLevel = level;
+                        model.updateAdmin(subject);
 
-                        outcomeTV.setText("Update Success!");
-                        hideAndCelar();
                     }
                     else{
                         outcomeTV.setText("Invalid input: " +wrong);
                     }
                 }
                 else if(submitCode == 3){
-                    AdminMockModelClass.fakeDestroyer(cAdminID);
-                    outcomeTV.setText("" + "Admin was removed");
-                    hideAndCelar();
+                    model.deleteAdmin(user, subject);
+
 
                 }
                 createBTN.setVisibility(View.VISIBLE);
@@ -170,7 +174,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Now we are going to show all of the fields
                 submitCode = 1;
                 showFields();
-                employeeDisTV.setText("" + cAdminID);
+                aEmployeeDisET.setText("" + cAdminID);
                 if (user.adminLevel.equals(AdminLevel.owner)) {
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setVisibility(View.VISIBLE);
@@ -194,7 +198,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 submitCode = 2;
                 //Now we are going to show all of the fields
                 showFields();
-                employeeDisTV.setText("" + cAdminID);
+                aEmployeeDisET.setText("" + cAdminID);
                 subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
@@ -225,7 +229,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 submitCode = 3;
                 //Now we are going to show all of the fields
                 showFields();
-                employeeDisTV.setText("" + cAdminID);
+                aEmployeeDisET.setText("" + cAdminID);
                 subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
@@ -274,7 +278,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         nameET.setText("");
         nameET.setVisibility(View.INVISIBLE);
         employeeTV.setVisibility(View.INVISIBLE);
-        employeeDisTV.setVisibility(View.INVISIBLE);
+        aEmployeeDisET.setVisibility(View.INVISIBLE);
         passwordTV.setVisibility(View.INVISIBLE);
         passwordET.setText("");
         passwordET.setVisibility(View.INVISIBLE);
@@ -289,7 +293,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         nameET.setVisibility(View.VISIBLE);
         nameET.setClickable(true);
         employeeTV.setVisibility(View.VISIBLE);
-        employeeDisTV.setVisibility(View.VISIBLE);
+        aEmployeeDisET.setVisibility(View.VISIBLE);
         passwordTV.setVisibility(View.VISIBLE);
         passwordET.setVisibility(View.VISIBLE);
         passwordET.setClickable(true);
@@ -323,15 +327,37 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
 
     }
     public void aCreateCB(boolean success){
-        outcomeTV.setText("Creation Success!");
-        hideAndCelar();
+       if(success) {
+           outcomeTV.setText("Creation Success!");
+           hideAndCelar();
+           showButtons();
+       }
+       else Toast.makeText(getApplicationContext(), "Unable to create admin at this time", Toast.LENGTH_LONG);
     }
     public void aModifyCB(boolean success){
+        if(success) {
+            outcomeTV.setText("Update Success!");
+            hideAndCelar();
+            showButtons();
+        }
+        else Toast.makeText(getApplicationContext(), "Unable to update admin at this time", Toast.LENGTH_LONG);
 
     }
 
     public void aDelCB(boolean success){
+        if(success) {
+            outcomeTV.setText("Deletion Success!");
+            hideAndCelar();
+            showButtons();
+        }
+        else Toast.makeText(getApplicationContext(), "Unable to delete admin at this time", Toast.LENGTH_LONG);
 
     }
+    private void showButtons(){
+        createBTN.setVisibility(View.VISIBLE);
+        modifyBTN.setVisibility(View.VISIBLE);
+        deleteBTN.setVisibility(View.VISIBLE);
+    }
+
 
 }

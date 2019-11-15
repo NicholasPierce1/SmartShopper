@@ -72,8 +72,15 @@ public class Model implements BrokerCallbackDelegate {
     public Store getStroe(){
         return store;
     }
-    public void createAdmin(@NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel){
-       adapter.saveAdminToStore(store, userName, name, userName, password, adminLevel, this);
+    public void createAdmin(@NonNull final String name, @NonNull String id, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel){
+       adapter.saveAdminToStore(store, id, name, userName, password, adminLevel, this);
+    }
+    public void updateAdmin(Admin admin){
+        adapter.updateAdmin(admin, this);
+
+    }
+    public void deleteAdmin(Admin user, Admin subject){
+        adapter.deleteAdmin(store, subject.empID, user,this);
     }
 
 
@@ -275,12 +282,12 @@ public class Model implements BrokerCallbackDelegate {
 
     @Override
     public void deleteAdminHandler(boolean wasAdminRemoved, boolean wasAdminFound, boolean didAdminRetainPrivilegesToRemove) {
-
+        ((AdminModCBMethods)mm).aDelCB(wasAdminRemoved);
     }
 
     @Override
     public void updateAdminHandler(boolean wasAdminUpdated) {
-
+        ((AdminModCBMethods)mm).aModifyCB(wasAdminUpdated);
     }
 
     @Override

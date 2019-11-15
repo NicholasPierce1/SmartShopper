@@ -22,24 +22,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity {
         errorTV.setVisibility(View.INVISIBLE);
 
             Log.d("loginbugs", "fake data populated");
-            if(AdminMockModelClass.firstTime) {
-                AdminMockModelClass.firstTime = false;
-                AdminMockModelClass.adminList.add(AdminMockModelClass.a1);
-                AdminMockModelClass.adminUserNames.add(AdminMockModelClass.a1.userName);
-                AdminMockModelClass.adminPw.add(AdminMockModelClass.a1.password);
-                AdminMockModelClass.adminList.add(AdminMockModelClass.a2);
-                AdminMockModelClass.adminUserNames.add(AdminMockModelClass.a2.userName);
-                AdminMockModelClass.adminPw.add(AdminMockModelClass.a2.password);
-                AdminMockModelClass.adminList.add(AdminMockModelClass.a3);
-                AdminMockModelClass.adminUserNames.add(AdminMockModelClass.a3.userName);
-                AdminMockModelClass.adminPw.add(AdminMockModelClass.a3.password);
-                Log.d("LoginDeBug", "Fake data populated");
-                Log.d("LoginDeBug", AdminMockModelClass.adminUserNames.get(1));
-                Log.d("LoginDeBug", "Testing admin: " +
-                        AdminMockModelClass.adminList.get(0).name);
-                Log.d("LoginDeBug", "Size of admin list is: "+
-                        AdminMockModelClass.adminList.size());
-            }
+           
 
 
     }
