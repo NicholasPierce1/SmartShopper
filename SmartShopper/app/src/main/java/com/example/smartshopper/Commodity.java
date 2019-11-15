@@ -109,7 +109,7 @@ public final class Commodity extends DataAccess implements Persistable{
     public ParseObject toParseObject(){
 
         // creates local ref for parse object
-        final ParseObject parseObject = new ParseObject("Commodity");
+        final ParseObject parseObject = new ParseObject(DA_ClassNameRelationMapping.Commodity.getRelationName());
 
         // assigns local member state
         parseObject.put(Commodity.vendorNameKey, this.vendorName);

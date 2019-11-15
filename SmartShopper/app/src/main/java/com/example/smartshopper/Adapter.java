@@ -229,7 +229,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // converts commodity to parse object
                     final ParseObject commodityToSave = commodity.toParseObject();
-
+                    Log.d("Adapter : converted commodity to parse object to save","!!");
                     // saves commodity
                     commodityToSave.save();
                     Log.d("Adapter : commodity saved","!!!");
@@ -436,7 +436,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // invokes helper to amalgamate department stock to department list
                     List<Pair<DepartmentStock, Department>> departmentStockToDepartmentList = Adapter.ORM_Helper.combineDepartmentStockWithDepartment(departmentStockList, departmentList);
                     Log.d("Adapter : GETTING LIST OF PAIRS", String.valueOf(departmentStockToDepartmentList.size()));
-                    // invokes helper to update item from deptmentStockToDepartmentList pairs where object id's match
+                    // invokes helper to update item from departmentStockToDepartmentList pairs where object id's match
                     Adapter.ORM_Helper.updateItemFromDeptStockToDepartmentPairList(commodityList, departmentStockToDepartmentList);
 
                     // sets success code
