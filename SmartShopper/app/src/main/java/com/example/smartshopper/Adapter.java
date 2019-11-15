@@ -1019,7 +1019,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
             // walks through all departments and finds department that has same id
             for(Department department: departmentList){
-                if(department.getObjectId().equals(deptStock.getObjectId()))
+                if(department.getObjectId().equals(deptStock.departmentObjectId))
                     return department;
             }
 
