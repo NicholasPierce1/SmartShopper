@@ -177,6 +177,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         });
     }
     public void adminIdCheckCB(int oppCode, boolean exists, @Nullable Admin a){
+        Log.d("AdminValid", "Exits: " + exists);
         if(oppCode ==1) {
             if (exists) {
                 String no = "Admin with that user name already exists";
