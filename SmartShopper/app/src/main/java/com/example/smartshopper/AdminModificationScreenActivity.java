@@ -30,6 +30,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     String cName, cpw, username;
     AdminLevel level;
     Admin subject;
+    final AdminModificationScreenActivity myActivity = this;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -75,7 +76,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     cName = nameET.getText().toString();
                     cpw = passwordET.getText().toString();
                     level = levelFinder();
-                 // model.createAdmin(cName, cAdminID,username, cpw, level, this );
+                  model.createAdmin(cName, cAdminID,username, cpw, level, myActivity );
                 }
                 else{
                     outcomeTV.setText("Invalid input: " +wrong);
@@ -93,7 +94,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         subject.userName = username;
                         subject.empID = cAdminID;
                         subject.adminLevel = level;
-                        //model.updateAdmin(subject, this);
+                        model.updateAdmin(subject, myActivity);
 
                     }
                     else{
@@ -101,7 +102,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     }
                 }
                 else if(submitCode == 3){
-                    //model.deleteAdmin(user, subject, this);
+                    model.deleteAdmin(user, subject, myActivity);
 
 
                 }
@@ -135,7 +136,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                   cAdminID = adminIDET.getText().toString();
-                  model.checkForExistingUsername(1, cAdminID, user);
+                  model.checkForExistingUsername(1, cAdminID, user, myActivity);
 
             }
         });
@@ -147,7 +148,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
-                model.checkForExistingUsername(2, cAdminID, user);
+                model.checkForExistingUsername(2, cAdminID, user, myActivity);
 
             }
         });
@@ -159,7 +160,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
-                model.checkForExistingUsername( 3, cAdminID, user);
+                model.checkForExistingUsername( 3, cAdminID, user, myActivity);
 
             }
         });
