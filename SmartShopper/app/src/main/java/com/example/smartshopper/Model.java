@@ -251,7 +251,7 @@ public class Model implements BrokerCallbackDelegate {
     }
 
     @Override
-    public void updateAdminHandler(boolean wasAdminUpdated, boolean didAdminRetainPrivilegesToUpdate) {
+    public void updateAdminHandler(boolean wasAdminUpdated) {
 
     }
 
