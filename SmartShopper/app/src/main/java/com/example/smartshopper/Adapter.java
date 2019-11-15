@@ -608,7 +608,44 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // creates and saves an admin
-    public void saveAdminToStore(@NonNull final Store store, @NonNull final String empId, @NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
+    public void saveAdminToStore(@NonNull final Store store, @NonNull final String empId, @NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+
+        // creates local ref to repo task
+        final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
+            @Override
+            public RepoCallbackResult executeRepo() {
+
+                // enumerates shared state promised to callback
+                HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+
+                // try-catch-finally block to create full admin and save
+                try {
+
+                    // creates full admin
+                    final Admin adminToSave = Admin.Builder.build(store, name, userName, password, adminLevel, empId);
+
+                    // converts admin to parse and saves admin
+                    adminToSave.toParseObject().save();
+
+                    // sets success codes
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                } catch (ParseException ex) {
+                    // sets bad codes
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
+                finally {
+
+                    // returns composites RepoCallBackResult
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.addAdmin, brokerCallbackDelegate, null, null);
+                }
+
+            }
+        };
+
+        // invokes repo to instigate task
+        this.backFourAppRepo.instigateAsyncRepoTask(executeRepoCallTask, this);
+    }
 
     // deletes an admin by its empId
     public void deleteAdmin(@NonNull final Store store, @NonNull final String empId, @NonNull final Admin adminThatRequestedDelete, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){}
@@ -779,7 +816,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 brokerCallbackDelegate.loginAdminByUsernameAndPassword(operationWasSuccess, adapterOperationWasSuccess, (Admin)dataAccess);
                 break;
             case findAdminByEmpId:
-                brokerCallbackDelegate.findAdminByEmpId(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess, contextAxillaryOperationWasSuccess, (Admin)dataAccess);
+                brokerCallbackDelegate.findAdminByEmpId(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess, (Admin)dataAccess);
                 break;
             case validateIfAdminUsernameIsUnique:
                 brokerCallbackDelegate.isAdminUsernameUniqueHandler(operationWasSuccess, adapterOperationWasSuccess);

@@ -50,6 +50,24 @@ public enum DepartmentType implements Serializable {
         }
     }
 
+    // helper to convert dept types from a string
+    @Nullable
+    public static DepartmentType getDepartmentTypeFromName(@NonNull final String deptName){
+
+        switch(deptName){
+            case "grocery": return DepartmentType.grocery;
+            case "floral": return DepartmentType.floral;
+            case "deli": return DepartmentType.deli;
+            case "bakery": return DepartmentType.bakery;
+            case "produce": return DepartmentType.produce;
+            case "meat": return DepartmentType.meat;
+            case "seafood": return DepartmentType.seafood;
+            case "dairy": return DepartmentType.dairy;
+            case "frozen": return DepartmentType.frozen;
+            default: return null;
+        }
+    }
+
     // returns largest department id/ how many departments there are
     public static int getDepartmentCount(){
         return DepartmentType.values().length;

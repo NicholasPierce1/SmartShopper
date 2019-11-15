@@ -50,7 +50,7 @@ public final class Department extends DataAccess {
             final Department department = new Department();
 
             // assigns local state
-            department.type = DepartmentType.getDepartmentTypeFromID(parseObject.getInt(Department.typeKey));
+            department.type = DepartmentType.getDepartmentTypeFromName(parseObject.getString(Department.typeKey));
             department.hasAisles = storedDept.hasAisle;
             department.minAisle = storedDept.minAisle;
             department.maxAisle = storedDept.maxAisle;
