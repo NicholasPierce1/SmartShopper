@@ -43,7 +43,7 @@ public class Model implements BrokerCallbackDelegate {
 
     // from user selection, set store ref and acquire all depts per store
     public void initializeDeapartmentListForStore(@NonNull final Store store, @NonNull final WelcomeScreenModelMethods mm){
-
+        // TODO: 11/14/2019 This cannot work. This sets later opperations on fire. mm needs to stay type CallBackInterface.
         // upcast delegate reference
         this.mm = mm;
 
