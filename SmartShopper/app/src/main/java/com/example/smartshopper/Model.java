@@ -54,15 +54,18 @@ public class Model implements BrokerCallbackDelegate {
         adapter.retrieveAllDepartmentsForStore(store, this);
     }
 
-    public void createItem(Bundle b){
+    public void createItem(Bundle b, AdminProductCBMethods cmb){
+        this.mm = cmb;
         adapter.createAndSaveItemForStoreInDept((Department)b.getSerializable("dept"),
                 b.getString("barcode"), b.getString("name"), b.getString("vendor")
         , b.getString("tags"), b.getDouble("price"), (Location)b.getSerializable("location"), this);
     }
-    public void updateItem(Bundle c){
+    public void updateItem(Bundle c, AdminProductCBMethods cbm){
+        this.mm = cbm;
         adapter.updateItem((Commodity)c.getSerializable("c"), this);
     }
-    public  void deleteItem(Commodity c){
+    public  void deleteItem(Commodity c, AdminProductCBMethods cbm){
+        this.mm = cbm;
         adapter.deleteItemFromBarcode(store, c.barcode, this);
     }
     public void findAdminByID(String id, Admin requestor){

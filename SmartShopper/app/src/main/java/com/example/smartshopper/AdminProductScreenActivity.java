@@ -145,7 +145,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         }
         else if (submitCode == 3) {
             // TODO: 11/11/2019 do database stuff here for delete and use if else block to validate input on call back 
-            model.deleteItem((Commodity)c.getSerializable("c"));
+            model.deleteItem((Commodity)c.getSerializable("c"), this);
 
         }
 
@@ -167,9 +167,9 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         }
         //we no KNOW that stuff works soooo....
         if(opp == 1){
-            model.createItem(b);
+            model.createItem(b, this);
         }
-        else model.updateItem(b);
+        else model.updateItem(b, this);
 
 
     }
