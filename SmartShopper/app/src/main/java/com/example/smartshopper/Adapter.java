@@ -598,7 +598,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // finds an admin by its empId and states if invocation is for login or update
-    public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, final boolean isLoggingIn, @NonNull final Admin adminThatRequestedSearch, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+    public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, @NonNull final Admin adminThatRequestedSearch, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
 
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {

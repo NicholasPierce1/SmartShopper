@@ -31,6 +31,15 @@ public class Model implements BrokerCallbackDelegate {
     }
     private Adapter adapter = Adapter.getShared();
 
+    // returns local store ref stored by model after user selection in initialization
+    public Store getStore(){
+        return store;
+    }
+
+
+    // INIT METHODS (Controller--Model)
+
+
     // initial method for model/broker -- acquire all stores for user selection / initialization
     public void findAllStores(@NonNull final Context context, @NonNull final WelcomeScreenModelMethods welcomeScreenModelMethods) throws ExceptionInInitializerError{
 
@@ -41,9 +50,16 @@ public class Model implements BrokerCallbackDelegate {
         adapter.findAllStores(context, this);
     }
 
+    @Override
+    public void getStoresHandler(boolean searchSuccess, @Nullable List<Store> storeList) {
+        ((WelcomeScreenModelMethods)mm).storeCB(searchSuccess,storeList);
+    }
+
+
+
     // from user selection, set store ref and acquire all depts per store
     public void initializeDeapartmentListForStore(@NonNull final Store store, @NonNull final WelcomeScreenModelMethods mm){
-        // TODO: 11/14/2019 This cannot work. This sets later opperations on fire. mm needs to stay type CallBackInterface.
+
         // upcast delegate reference
         this.mm = mm;
 
@@ -54,48 +70,137 @@ public class Model implements BrokerCallbackDelegate {
         adapter.retrieveAllDepartmentsForStore(store, this);
     }
 
+    @Override
+    public void initializeDepartmentsHandler(boolean initSuccess, @Nullable List<Department> departmentList) {
+        if(initSuccess)
+            this.departmentList = departmentList;
+
+        // invokes downcast delegate for apt callback
+        ((WelcomeScreenModelMethods)this.mm).departmentCB(initSuccess);
+    }
+
+
+
+
+    // ITEM METHODS (CONTROLLER-MODEL)
+
+    // validate uniqueness of item via barcode
+    // TODO, Mat why aren't you using callbacks? The delegate is not used in this transaction
+    public void validateBarcode(String barcode, int oppCode, AdminProductCBMethods cbm){
+        adminProductScreenActivity = cbm;
+        this.oppCode = oppCode;
+        this.barcode = barcode;
+
+        adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
+    }
+
+    @Override
+    public void validateIfBarcodeExistHandler(boolean searchWasSuccess, @NonNull BarcodeExistResult barcodeExistResult) {
+        if(searchWasSuccess){
+            switch (getCaseNumber(barcodeExistResult)){
+                case 0: logCaseProblem(barcodeExistResult);return;
+                case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1, barcodeExistResult.commodity); return;
+                case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2, barcodeExistResult.commodity );return;
+                case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3, barcodeExistResult.commodity);return;
+                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4, barcodeExistResult.commodity);return;
+            }
+
+        }
+
+    }
+
+
+
+    // creates/adds item
     public void createItem(Bundle b, AdminProductCBMethods cmb){
         this.mm = cmb;
+
         adapter.createAndSaveItemForStoreInDept((Department)b.getSerializable("dept"),
                 b.getString("barcode"), b.getString("name"), b.getString("vendor")
         , b.getString("tags"), b.getDouble("price"), (Location)b.getSerializable("location"), this);
     }
+
+    @Override
+    public void createItemForStoreInDepartment(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).createCB(isSuccessful);
+
+    }
+
+
+    // updates item
     public void updateItem(Bundle c, AdminProductCBMethods cbm){
         this.mm = cbm;
+
+        // TODO: Mat, you have the commodity already, just pass it in param list instead of bundle
         adapter.updateItem((Commodity)c.getSerializable("c"), this);
     }
+
+    @Override
+    public void updateItemHandler(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).updateCB(isSuccessful);
+
+    }
+
+
+
+    // deletes item
     public  void deleteItem(Commodity c, AdminProductCBMethods cbm){
         this.mm = cbm;
+
+        // TODO: Mat, we only need barcode, you can change the commodity to a string of barcode
+        // TODO: I find the item internally for you, that why the callback let's you know if it worked
         adapter.deleteItemFromBarcode(store, c.barcode, this);
     }
-    public void findAdminByID(String id, Admin requestor, AdminModCBMethods cbm){
-        this.mm= cbm;
-        adapter.findAdminByEmpId(store, id, false, requestor, this );
-    }
-    public Store getStore(){
-        return store;
-    }
-    public void createAdmin(@NonNull final String name, @NonNull String id, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, AdminModCBMethods cbm){
-        this.mm = cbm;
-        adapter.saveAdminToStore(store, id, name, userName, password, adminLevel, this);
-    }
-    public void updateAdmin(Admin admin, AdminModCBMethods cbm){
-        this.mm = cbm;
-        adapter.updateAdmin(admin, this);
 
-    }
-    public void deleteAdmin(Admin user, Admin subject, AdminModCBMethods cbm){
-        this.mm = cbm;
-        adapter.deleteAdmin(store, subject.empID, user,this);
-    }
-    public void login(String username, String password, LoginCB cbm){
-        this.mm = cbm;
-        adapter.loginAdminByUsernameAndPassword(store, username,password, this);
+    @Override
+    public void deleteItemHandler(boolean isSuccessful) {
+        ((AdminProductCBMethods)mm).delCB(isSuccessful);
+
     }
 
 
 
+
+    // searches for item via search phrase
+    public void searchCommoditiesBySearchPhrase(@NonNull final String searchPhrase, @NonNull final SearchResultHandler searchResultHandler){
+
+        // assigns upcasted delegate handler
+        this.mm = searchResultHandler;
+
+        // checks length is greater than three
+        if(searchPhrase.length() <= 3)
+            searchResultHandler.searchCB(false, false, true, null);
+
+        // acquires shared adapter to invoke search
+        this.adapter.searchForItemByPhrase(this.store, searchPhrase, this.departmentList, this);
+    }
+
+    // implements handler to process adapter response for searching items
+    @Override
+    public void findItemsBySearchHandler(boolean searchWasSuccessful, @NonNull List<Commodity> commodityList) {
+
+        // if operation was error, invoke handler, passing error results + converse
+        if(!searchWasSuccessful) {
+            ((SearchResultHandler) this.mm).searchCB(false, false, false, null);
+            return;
+        }
+
+        // search was success, assert size of list is in context of business rules
+        if(commodityList.size() > 3 || commodityList.isEmpty()) {
+            ((SearchResultHandler) this.mm).searchCB(searchWasSuccessful, false, false, null);
+            return;
+        }
+
+        // else, operation was success AND search size yielded within scopes
+        ((SearchResultHandler)this.mm).searchCB(searchWasSuccessful, true, false, commodityList);
+
+    }
+
+
+
+    // validates commodity is sound to add
     public void validateComodityInput(boolean weNeedToCheckName, int oppCode,  Bundle c, AdminProductCBMethods cbm){
+
         this.mm = cbm;
         this.oppCode = oppCode;
 
@@ -127,7 +232,7 @@ public class Model implements BrokerCallbackDelegate {
 
         }
         else { //WE assume the later of the two options it could be
-             co = (Commodity) c.getSerializable("C");
+            co = (Commodity) c.getSerializable("C");
             name = co.name;
             vendor = co.vendorName;
             price = co.price;
@@ -153,39 +258,9 @@ public class Model implements BrokerCallbackDelegate {
             //Callback time.
             adapter.validateItemNameToVendorIsUnique(name, vendor, this);
         }
+
+        // TODO, Mat be VERY sure to call a handler directly from the model
         else validateNameForVendorIsUniqueHandler(true, true);
-
-
-    }
-
-    public void validateBarcode(String barcode, int oppCode, AdminProductCBMethods cbm){
-        adminProductScreenActivity = cbm;
-        this.oppCode = oppCode;
-        this.barcode = barcode;
-
-        adapter.validateIfBarcodeExist(store, departmentList, barcode, this);
-    }
-
-    public void checkForExistingUsername(int oppCode,  String username, Admin requestor){
-        this.requestor = requestor;
-        this.username = username;
-        this.oppCode = oppCode;
-        adapter.isAdminUsernameUnique(username, this);
-    }
-
-    @Override
-    public void validateIfBarcodeExistHandler(boolean searchWasSuccess, @NonNull BarcodeExistResult barcodeExistResult) {
-        if(searchWasSuccess){
-            switch (getCaseNumber(barcodeExistResult)){
-                case 0: logCaseProblem(barcodeExistResult);return;
-                case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1, barcodeExistResult.commodity); return;
-                case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2, barcodeExistResult.commodity );return;
-                case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3, barcodeExistResult.commodity);return;
-                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4, barcodeExistResult.commodity);return;
-            }
-
-        }
-
     }
 
     @Override
@@ -208,44 +283,101 @@ public class Model implements BrokerCallbackDelegate {
 
     }
 
-    @Override
-    public void createItemForStoreInDepartment(boolean isSuccessful) {
-        ((AdminProductCBMethods)mm).createCB(isSuccessful);
 
+
+
+    // ADMIN METHODS (CONTROLLER- MODEL)
+
+    // adds admin
+    public void findAdminByID(String id, Admin adminThatIssuedRequest, AdminModCBMethods cbm){
+        this.mm= cbm;
+
+        adapter.findAdminByEmpId(store, id, adminThatIssuedRequest, this );
     }
 
     @Override
-    public void updateItemHandler(boolean isSuccessful) {
-        ((AdminProductCBMethods)mm).updateCB(isSuccessful);
-
-    }
-
-    @Override
-    public void deleteItemHandler(boolean isSuccessful) {
-        ((AdminProductCBMethods)mm).delCB(isSuccessful);
-
-    }
-
-
-    // implements handler to process adapter response for searching items
-    @Override
-    public void findItemsBySearchHandler(boolean searchWasSuccessful, @NonNull List<Commodity> commodityList) {
-
-        // if operation was error, invoke handler, passing error results + converse
-        if(!searchWasSuccessful) {
-            ((SearchResultHandler) this.mm).searchCB(false, false, false, null);
-            return;
+    public void findAdminByEmpId(boolean adminSearchWasSuccess, boolean adminFoundAndIsInStore, boolean didAdminRetainPrivilegesToAcquire, @Nullable Admin admin) {
+        if(adminFoundAndIsInStore && adminFoundAndIsInStore){
+            if(inHouse){
+                //WE know it's from a method called by model and not an external class
+                finishisAdminUsernameUniqueHandler(admin);
+            }
+            else{
+                // TODO: 11/14/2019 Finish this mehtod for external calls if needed
+            }
         }
-
-        // search was success, assert size of list is in context of business rules
-        if(commodityList.size() > 3 || commodityList.isEmpty()) {
-            ((SearchResultHandler) this.mm).searchCB(searchWasSuccessful, false, false, null);
-            return;
+        else{
+            ((AdminModCBMethods)mm).adminNotFound();
         }
+    }
 
-        // else, operation was success AND search size yielded within scopes
-        ((SearchResultHandler)this.mm).searchCB(searchWasSuccessful, true, false, commodityList);
+    // TODO: sure this method is needed to be separate from the handler (called directly above)
+    private void finishisAdminUsernameUniqueHandler(Admin a){
 
+        ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, true, a);
+
+    }
+
+
+
+    // creates/adds admin
+    public void createAdmin(@NonNull final String name, @NonNull String id, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, AdminModCBMethods cbm){
+        this.mm = cbm;
+
+        adapter.saveAdminToStore(store, id, name, userName, password, adminLevel, this);
+    }
+
+    @Override
+    public void addAdminHandler(boolean wasAdminAdded) {
+        ((AdminModCBMethods)mm).aCreateCB(wasAdminAdded);
+    }
+
+
+
+    // updates admin
+    public void updateAdmin(Admin admin, AdminModCBMethods cbm){
+        this.mm = cbm;
+
+        adapter.updateAdmin(admin, this);
+    }
+
+    @Override
+    public void updateAdminHandler(boolean wasAdminUpdated) {
+        ((AdminModCBMethods)mm).aModifyCB(wasAdminUpdated);
+    }
+
+
+
+    // deletes admin
+    public void deleteAdmin(Admin user, Admin subject, AdminModCBMethods cbm){
+        this.mm = cbm;
+
+        // TODO, Mat the purpose of the adapter method is to help your model implementation, I find the admin for you by the empId
+        // TODO, lemme help and just pass the unverified empId value to me
+        adapter.deleteAdmin(store, subject.empID, user,this);
+    }
+
+    @Override
+    public void deleteAdminHandler(boolean wasAdminRemoved, boolean wasAdminFound, boolean didAdminRetainPrivilegesToRemove) {
+        ((AdminModCBMethods)mm).aDelCB(wasAdminRemoved);
+    }
+
+
+
+    // validates uniqueness of admin's username
+    public void checkForExistingUsername(int oppCode,  String username, Admin requestor, @NonNull final AdminModCBMethods adminModCBMethods){
+
+        // upcast delegate ref to singleton member
+        this.mm = adminModCBMethods;
+
+        // TODO, Mat why are you setting 'requestor'? Does controller not have local ref of the loggedInAdmin?
+        // TODO, Mat, are you validating a username is unqiue, then retrieving and admin by empId -- which is different -- with that username?
+        this.requestor = requestor;
+        this.username = username;
+        this.oppCode = oppCode;
+
+        // enjoins adapter to corroborate if admin username is unique
+        adapter.isAdminUsernameUnique(username, this);
     }
 
     @Override
@@ -265,9 +397,17 @@ public class Model implements BrokerCallbackDelegate {
                     findAdminByID(username, requestor, (AdminModCBMethods)mm);
                 }
             }
-
-
         }
+    }
+
+
+
+    // ADMIN METHOD (LOGIN CONTROLLER- MODEL)
+    // logins an admin
+    public void login(String username, String password, LoginCB cbm){
+        this.mm = cbm;
+
+        adapter.loginAdminByUsernameAndPassword(store, username, password, this);
     }
 
     @Override
@@ -275,67 +415,9 @@ public class Model implements BrokerCallbackDelegate {
         ((LoginCB)mm).loginCB(adminLoginWasSuccess, admin);
     }
 
-    @Override
-    public void findAdminByEmpId(boolean adminSearchWasSuccess, boolean adminFoundAndIsInStore, boolean didAdminRetainPrivilegesToAcquire, @Nullable Admin admin) {
-            if(adminFoundAndIsInStore && adminFoundAndIsInStore){
-                if(inHouse){
-                    //WE know it's from a mehtod called by model and not an external class
-                    finishisAdminUsernameUniqueHandler(admin);
-                }
-                else{
-                    // TODO: 11/14/2019 Finish this mehtod for external calls if needed
-                }
-            }
-            else{
-                ((AdminModCBMethods)mm).adminNotFound();
-            }
-    }
 
-    @Override
-    public void deleteAdminHandler(boolean wasAdminRemoved, boolean wasAdminFound, boolean didAdminRetainPrivilegesToRemove) {
-        ((AdminModCBMethods)mm).aDelCB(wasAdminRemoved);
-    }
+    // internal model calls to corroborate business logic
 
-    @Override
-    public void updateAdminHandler(boolean wasAdminUpdated) {
-        ((AdminModCBMethods)mm).aModifyCB(wasAdminUpdated);
-    }
-
-    @Override
-    public void getStoresHandler(boolean searchSuccess, @Nullable List<Store> storeList) {
-        ((WelcomeScreenModelMethods)mm).storeCB(searchSuccess,storeList);
-
-    }
-
-    @Override
-    public void initializeDepartmentsHandler(boolean initSuccess, @Nullable List<Department> departmentList) {
-        if(initSuccess)
-            this.departmentList = departmentList;
-
-        // invokes downcast delegate for apt callback
-        ((WelcomeScreenModelMethods)this.mm).departmentCB(initSuccess);
-    }
-
-    // external method to be invoked by search controller to enjoin adapter to commence search by phrase
-    public void searchCommoditiesBySearchPhrase(@NonNull final String searchPhrase, @NonNull final SearchResultHandler searchResultHandler){
-
-        // assigns upcasted delegate handler
-        this.mm = searchResultHandler;
-
-        // checks length is greater than three
-        if(searchPhrase.length() <= 3)
-            searchResultHandler.searchCB(false, false, true, null);
-
-        // acquires shared adapter to invoke search
-        this.adapter.searchForItemByPhrase(this.store, searchPhrase, this.departmentList, this);
-
-    }
-
-    @Override
-    public void addAdminHandler(boolean wasAdminAdded) {
-        ((AdminModCBMethods)mm).aCreateCB(wasAdminAdded);
-
-    }
 
     private int getCaseNumber(BarcodeExistResult bxr){
         //returns case number per design document
@@ -358,7 +440,7 @@ public class Model implements BrokerCallbackDelegate {
                 + bxe.newBarcode + " \n Store barcode is:  " + bxe.newBarcodeToStore);
     }
     //This does the magic to get a department
-    public Department getDepartmentFromDepartmentType(DepartmentType dt){
+    Department getDepartmentFromDepartmentType(DepartmentType dt){
         for(Department d: departmentList){
             if(d.type.toString().equals(dt.toString())){
                 return d;
@@ -369,141 +451,5 @@ public class Model implements BrokerCallbackDelegate {
     private boolean isEmpty(String s) {
         return (s == null || s.equals("") || s.equals(" "));
     }
-    private void finishisAdminUsernameUniqueHandler(Admin a){
-
-        ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, true, a);
-
-    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
