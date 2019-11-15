@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AdminLoginScreenActivity extends AppCompatActivity implements LoginCB {
     TextView errorTV;
+    Model model;
     //@Author Matthew Berry
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -20,7 +21,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity implements Login
         Intent ini = getIntent();
         errorTV = findViewById(R.id.ErrorTV);
         errorTV.setVisibility(View.INVISIBLE);
-
+        model = Model.getShared();
             Log.d("loginbugs", "fake data populated");
 
 
@@ -31,7 +32,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity implements Login
         String user = usernameET.getText().toString();
         EditText passwordET = findViewById(R.id.PasswordET);
         String pw = passwordET.getText().toString();
-
+        model.login(user, pw);
 
     }
     private boolean validateLogin(String user, String pw){
