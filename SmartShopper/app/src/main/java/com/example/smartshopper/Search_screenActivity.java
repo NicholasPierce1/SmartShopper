@@ -14,11 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Search_screenActivity extends AppCompatActivity implements tabBarFragment.TabBarAction, SearchResultHandler{
 
-    Random rando = new Random();
+
     TextView errorTV;
     EditText itemEntered;
     String fake;
@@ -39,15 +38,7 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         this.recyclerView.setVisibility(View.INVISIBLE);
 
 
-        // Make a Listener for taps
-        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListenerForSearchMultiSelection(this));
-        // add the listener to the recycler
-        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e){
-                return detector.onTouchEvent(e);
-            }
-        });
+
     }
 
     @Override
@@ -60,7 +51,7 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
     @Override
     public void searchCB(boolean operationSuccess, boolean searchGood, boolean wasSearchTooShort, List<Commodity> commodityList){
 
-
+        Log.d("test bool", "search good: ".concat(String.valueOf(searchGood)) + "operation success: ".concat(String.valueOf(operationSuccess)));
         // if search was too short- or if operation succeeded, but no results were yielded- apprise user of faulty case
         if(wasSearchTooShort || (operationSuccess && !searchGood)) {
             this.updateResultTextViewWithString("Please refine search.");
@@ -74,6 +65,15 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
 
         // items within range of [1-3] acquired, create adapter, set to RV, propagate update to adapter
         assert(commodityList != null);
+        // Make a Listener for taps
+        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListenerForSearchMultiSelection(this));
+        // add the listener to the recycler
+        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e){
+                return detector.onTouchEvent(e);
+            }
+        });
         final Search_Screen_RecyclerView_Adapter adapter = new Search_Screen_RecyclerView_Adapter(commodityList);
         this.recyclerView.setAdapter(adapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
