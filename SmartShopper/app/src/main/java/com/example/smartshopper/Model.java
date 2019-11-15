@@ -68,29 +68,35 @@ public class Model implements BrokerCallbackDelegate {
         this.mm = cbm;
         adapter.deleteItemFromBarcode(store, c.barcode, this);
     }
-    public void findAdminByID(String id, Admin requestor){
+    public void findAdminByID(String id, Admin requestor, AdminModCBMethods cbm){
+        this.mm= cbm;
         adapter.findAdminByEmpId(store, id, false, requestor, this );
     }
-    public Store getStroe(){
+    public Store getStore(){
         return store;
     }
-    public void createAdmin(@NonNull final String name, @NonNull String id, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel){
-       adapter.saveAdminToStore(store, id, name, userName, password, adminLevel, this);
+    public void createAdmin(@NonNull final String name, @NonNull String id, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, AdminModCBMethods cbm){
+        this.mm = cbm;
+        adapter.saveAdminToStore(store, id, name, userName, password, adminLevel, this);
     }
-    public void updateAdmin(Admin admin){
+    public void updateAdmin(Admin admin, AdminModCBMethods cbm){
+        this.mm = cbm;
         adapter.updateAdmin(admin, this);
 
     }
-    public void deleteAdmin(Admin user, Admin subject){
+    public void deleteAdmin(Admin user, Admin subject, AdminModCBMethods cbm){
+        this.mm = cbm;
         adapter.deleteAdmin(store, subject.empID, user,this);
     }
-    public void login(String username, String password){
+    public void login(String username, String password, LoginCB cbm){
+        this.mm = cbm;
         adapter.loginAdminByUsernameAndPassword(store, username,password, this);
     }
 
 
 
-    public void validateComodityInput(boolean weNeedToCheckName, int oppCode,  Bundle c){
+    public void validateComodityInput(boolean weNeedToCheckName, int oppCode,  Bundle c, AdminProductCBMethods cbm){
+        this.mm = cbm;
         this.oppCode = oppCode;
 
         String name = "", vendor = "", tags;
@@ -256,7 +262,7 @@ public class Model implements BrokerCallbackDelegate {
                 }
                 else{
                     inHouse = true;
-                    findAdminByID(username, requestor);
+                    findAdminByID(username, requestor, (AdminModCBMethods)mm);
                 }
             }
 

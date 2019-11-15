@@ -140,7 +140,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
             resultTV.setText("Not able to submit at this time");
         }
         else if (submitCode == 1 || submitCode == 2) {
-            model.validateComodityInput(check, actionCode, c);
+            model.validateComodityInput(check, actionCode, c, this);
             
         }
         else if (submitCode == 3) {

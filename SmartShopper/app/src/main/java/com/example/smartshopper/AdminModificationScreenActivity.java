@@ -51,14 +51,14 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         passwordET = findViewById(R.id.PasswordET);
         aEmployeeDisET.setText("");
         model = Model.getShared();
-        store = model.getStroe();
+        store = model.getStore();
         createBTN = findViewById(R.id.CreateAdminBTN);
         modifyBTN = findViewById(R.id.ModifyAdminBTN);
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
         cancelBTN = findViewById(R.id.cancelBTN);
         submitBTN = findViewById(R.id.submitBTN);
 
-       
+        // TODO: 11/14/2019 Refactor buttons to use normal onClicks
         hideAndCelar();
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +75,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     cName = nameET.getText().toString();
                     cpw = passwordET.getText().toString();
                     level = levelFinder();
-                  model.createAdmin(cName, cAdminID,username, cpw, level );
+                 // model.createAdmin(cName, cAdminID,username, cpw, level, this );
                 }
                 else{
                     outcomeTV.setText("Invalid input: " +wrong);
@@ -93,7 +93,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         subject.userName = username;
                         subject.empID = cAdminID;
                         subject.adminLevel = level;
-                        model.updateAdmin(subject);
+                        //model.updateAdmin(subject, this);
 
                     }
                     else{
@@ -101,7 +101,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     }
                 }
                 else if(submitCode == 3){
-                    model.deleteAdmin(user, subject);
+                    //model.deleteAdmin(user, subject, this);
 
 
                 }

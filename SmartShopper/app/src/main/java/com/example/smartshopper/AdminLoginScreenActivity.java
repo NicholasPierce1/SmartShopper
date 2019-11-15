@@ -32,7 +32,7 @@ public class AdminLoginScreenActivity extends AppCompatActivity implements Login
         String user = usernameET.getText().toString();
         EditText passwordET = findViewById(R.id.PasswordET);
         String pw = passwordET.getText().toString();
-        model.login(user, pw);
+        model.login(user, pw, this);
 
     }
     private boolean validateLogin(String user, String pw){
