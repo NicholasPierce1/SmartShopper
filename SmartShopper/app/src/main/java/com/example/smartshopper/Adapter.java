@@ -972,7 +972,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // private helper method to retrieve an item from a barcode (commodity is composite, boolean is true if item is found OR item doesn't exist to database)
     @NonNull
-    private Commodity findCompositeCommodityFromBarcode(@NonNull final String barcode) throws ParseException{
+    private Commodity findCompositeCommodityFromBarcode(@NonNull final String barcode) throws ParseException, CancellationException{
         Log.d("Adapter: Composite barcode helper","!!!");
         // acquires Parse query targeting item
         final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
