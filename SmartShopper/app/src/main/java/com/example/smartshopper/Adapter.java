@@ -473,7 +473,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // finds an admin by its username if exist
     public void isAdminUsernameUnique(@NonNull final String username, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : Username is unique start","!!!");
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -604,7 +604,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // finds an admin by its empId and states if invocation is for login or update
     public void findAdminByEmpId(@NonNull final Store store, @NonNull final String empId, @NonNull final Admin adminThatRequestedSearch, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : find admin by emp id","!!!");
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -679,7 +679,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // creates and saves an admin
     public void saveAdminToStore(@NonNull final Store store, @NonNull final String empId, @NonNull final String name, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : save admin to store","!!!");
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -719,7 +719,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // deletes an admin by its empId
     public void deleteAdmin(@NonNull final Store store, @NonNull final String empId, @NonNull final Admin adminThatRequestedDelete, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : delete admin","!!!");
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -801,7 +801,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // updates an admin
     public void updateAdmin(@NonNull final Admin admin, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : update admin","!!!");
         // local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
