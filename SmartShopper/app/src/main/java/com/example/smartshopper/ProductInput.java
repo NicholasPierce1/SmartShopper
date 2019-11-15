@@ -46,7 +46,7 @@ public class ProductInput extends Fragment {
     // TODO: Rename and change types of parameters
     private int createCase;
 
-    private OnFragmentInteractionListener mListener;
+    //private OnFragmentInteractionListener mListener;
 
     public ProductInput() {
         // Required empty public constructor
@@ -98,6 +98,7 @@ public class ProductInput extends Fragment {
                         submitCode);}
             }
         });
+        cancleBTN = v.findViewById(R.id.pCancelBTN);
         cancleBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,18 +114,18 @@ public class ProductInput extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+       // mListener = null;
     }
 
     /**
