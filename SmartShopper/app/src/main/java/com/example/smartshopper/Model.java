@@ -246,7 +246,7 @@ public class Model implements BrokerCallbackDelegate {
     }
 
     @Override
-    public void deleteAdminHandler(boolean wasAdminRemoved, boolean didAdminRetainPrivilegesToRemove) {
+    public void deleteAdminHandler(boolean wasAdminRemoved, boolean wasAdminFound, boolean didAdminRetainPrivilegesToRemove) {
 
     }
 
