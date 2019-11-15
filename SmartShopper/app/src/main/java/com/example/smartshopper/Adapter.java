@@ -223,10 +223,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 // creates composite commodity
                 Commodity commodity = Commodity.Builder.build(barcode,name, vendorName, searchPhrase);
-
+                Log.d("Adapter : create commodity for save","!!");
                 // try-catch-finally to save item, create dept stock, and save dept stock
                 try{
-
+                    Log.d("Adapter : about to convert parse object to save","!!");
                     // converts commodity to parse object
                     final ParseObject commodityToSave = commodity.toParseObject();
                     Log.d("Adapter : converted commodity to parse object to save","!!");
