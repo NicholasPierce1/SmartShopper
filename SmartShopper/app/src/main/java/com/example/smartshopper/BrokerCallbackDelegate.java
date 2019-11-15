@@ -51,5 +51,5 @@ public interface BrokerCallbackDelegate {
     public abstract void getStoresHandler(final boolean searchSuccess, @Nullable final List<Store> storeList);
 
     // handler to give all complete departments per store
-    public abstract void initializeDepartments(final boolean initSuccess, @Nullable final List<Department> departmentList);
+    public abstract void initializeDepartmentsHandler(final boolean initSuccess, @Nullable final List<Department> departmentList);
 }

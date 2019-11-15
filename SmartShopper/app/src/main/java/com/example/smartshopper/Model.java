@@ -31,15 +31,30 @@ public class Model implements BrokerCallbackDelegate {
         return shared;
     }
     private Adapter adapter = Adapter.getShared();
-    public void findAllStores(@NonNull final Context context) throws ExceptionInInitializerError{
-       adapter.findAllStores(context, this);
+
+    // initial method for model/broker -- acquire all stores for user selection / initialization
+    public void findAllStores(@NonNull final Context context, @NonNull final WelcomeScreenModelMethods welcomeScreenModelMethods) throws ExceptionInInitializerError{
+
+        // upcast delegate reference
+        this.mm = welcomeScreenModelMethods;
+
+        // enjoins compiler to commence retrieval of all stores
+        adapter.findAllStores(context, this);
     }
-    //
-    public void populateDeapartmentListForStore(Store store, WelcomeScreenModelMethods mm){
+
+    // from user selection, set store ref and acquire all depts per store
+    public void initializeDeapartmentListForStore(@NonNull final Store store, @NonNull final WelcomeScreenModelMethods mm){
+
+        // upcast delegate reference
         this.mm = mm;
+
+        // assigns user selected store
         this.store = store;
+
+        // invokes adapter to retrieve all departments per store
         adapter.retrieveAllDepartmentsForStore(store, this);
     }
+
     public void createItem(Bundle b){
         adapter.createAndSaveItemForStoreInDept((Department)b.getSerializable("dept"),
                 b.getString("barcode"), b.getString("name"), b.getString("vendor")
@@ -262,13 +277,12 @@ public class Model implements BrokerCallbackDelegate {
     }
 
     @Override
-    public void initializeDepartments(boolean initSuccess, @Nullable List<Department> departmentList) {
-        if(initSuccess){
+    public void initializeDepartmentsHandler(boolean initSuccess, @Nullable List<Department> departmentList) {
+        if(initSuccess)
             this.departmentList = departmentList;
-            //Does a callback to Jared's code
-        }
 
-
+        // invokes downcast delegate for apt callback
+        ((WelcomeScreenModelMethods)this.mm).departmentCB(initSuccess);
     }
 
     // external method to be invoked by search controller to enjoin adapter to commence search by phrase
