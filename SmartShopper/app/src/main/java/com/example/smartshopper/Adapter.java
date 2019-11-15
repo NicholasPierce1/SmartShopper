@@ -938,7 +938,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 break;
             case initializeDepartments: // (SAFE cast, never not null and is department)
                 assert(dataAccessList != null);
-                brokerCallbackDelegate.initializeDepartments(operationWasSuccess, (List<Department>)dataAccessList);
+                brokerCallbackDelegate.initializeDepartmentsHandler(operationWasSuccess, (List<Department>)dataAccessList);
                 break;
             default:  // ** getAllStores ** (SAFE cast, never not null and is store)
                 assert(dataAccessList != null);
