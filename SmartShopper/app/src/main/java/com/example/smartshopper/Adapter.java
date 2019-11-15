@@ -39,7 +39,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // searches for, and conditionally combines department, deptStock, and item to create app's full item by barcode
     public void validateIfBarcodeExist(@NonNull final Store store, @NonNull final List<Department> departmentList, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : start barcode validate","!!!");
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -53,15 +53,19 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 try{
                     // acquires Parse query targeting item
                     final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
-
+                    Log.d("Adapter : Start validation","!!!");
                     // acquires all items where barcode is equal
                     itemSearchQuery.whereEqualTo(Commodity.barcodeNameKey, barcode);
                     final List<ParseObject> itemListAsParse = itemSearchQuery.find();
 
+                    // asserts that item was uncovered (0 - not thrown by back 4 app)
+                    if(itemListAsParse.size() == 0)
+                        throw new CancellationException("list is 0");
+
                     // asserts that list size is 1 (0 is thrown as exception)
                     if (itemListAsParse.size() != 1)
                         throw new RuntimeException("error state in data integrity-- multiple items exist with such barcode. Count: ".concat(String.valueOf(itemListAsParse.size())));
-
+                    Log.d("Adapter : commodity as parse list found and good","!!!");
                     // creates commodity
                     commodity = Commodity.Builder.toDataAccessFromParse(itemListAsParse.get(0));
 
@@ -74,7 +78,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // acquires all dept stock that match constraints
                     final List<ParseObject> deptStockListAsParse = deptStockQuery.find();
-
+                    Log.d("Adapter : dept stock found not verified","!!!");
                     // asserts that list is not empty
                     if(deptStockListAsParse.size() == 0) {
                         throw new CancellationException("list size is zero");
@@ -144,7 +148,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // validates if the name for the pending item is unique to vendor
     public void validateItemNameToVendorIsUnique(@NonNull final String itemName, @NonNull final String vendorName, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate) {
-
+        Log.d("Adapter : VALIDATE ITEM TO VENDOR NAME","!!!");
         // creates local reference to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -208,7 +212,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // saves the pending item via composite inputs w/ the denoted store and dept
     public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String name, @NonNull final String vendorName, @NonNull final String searchPhrase, final double price, @NonNull final Location location, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : SAVE ITEM","!!!");
         // creates local ref to repo task
         BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -228,17 +232,17 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // saves commodity
                     commodityToSave.save();
-                    Log.d("commodity saved","");
+                    Log.d("Adapter : commodity saved","!!!");
                     // asserts that commodity's object id is not null
                     if(commodityToSave.getObjectId() == null)
                         throw new RuntimeException("saved Commodity does not retain an object id after save");
 
                     // updates commodity ref
                     commodity = Commodity.Builder.toDataAccessFromParse(commodityToSave);
-                    Log.d("commodity saved and object id non-null","");
+                    Log.d("Adapter : commodity saved and object id non-null","!!!");
                     // creates dept stock
                     final DepartmentStock departmentStock = DepartmentStock.Builder.build(department, commodity, price, location);
-                    Log.d("dept stock built","");
+                    Log.d("Adapter : dept stock built","!!!");
                     // converts and save dept stock
                     departmentStock.toParseObject().save();
 
@@ -247,6 +251,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 }
                 catch(ParseException ex){
+                    Log.d("Adapter : parse exception", ex.getLocalizedMessage());
                     // sets error codes
                     operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
                 }
@@ -264,7 +269,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // updates the item via the newly refined item's state positing that non-categorical state (store and dept) hasn't been altered
     public void updateItem(@NonNull final Commodity commodity, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d(" Adapter : UPDATE ITEM","!!!");
         // holds local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -301,7 +306,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // deletes the item via its barcode
     public void deleteItemFromBarcode(@NonNull final Store store, @NonNull final String barcode, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter : DELETE ITEM","!!!");
         // creates local reference to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -370,7 +375,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
             public RepoCallbackResult executeRepo() {
-
+                Log.d("Adapter : SEARCH ITEM","!!!");
                 // enumerates promised state to callback
                 HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                 List<Commodity> commodityList = null;
@@ -430,7 +435,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // invokes helper to amalgamate department stock to department list
                     List<Pair<DepartmentStock, Department>> departmentStockToDepartmentList = Adapter.ORM_Helper.combineDepartmentStockWithDepartment(departmentStockList, departmentList);
-                    Log.d("GETTING LIST OF PAIRS", String.valueOf(departmentStockToDepartmentList.size()));
+                    Log.d("Adapter : GETTING LIST OF PAIRS", String.valueOf(departmentStockToDepartmentList.size()));
                     // invokes helper to update item from deptmentStockToDepartmentList pairs where object id's match
                     Adapter.ORM_Helper.updateItemFromDeptStockToDepartmentPairList(commodityList, departmentStockToDepartmentList);
 
@@ -439,7 +444,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 }
                 catch(ParseException ex){
-                    Log.d("PARSE EXCEPTION", String.valueOf(ex.getCode() == ParseException.OBJECT_NOT_FOUND));
+                    Log.d("Adapter : PARSE EXCEPTION", String.valueOf(ex.getCode() == ParseException.OBJECT_NOT_FOUND));
                     // sets error code
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
@@ -449,7 +454,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 }
                 catch(CancellationException ex){
-                    Log.d("EXCEPTION", ex.getLocalizedMessage());
+                    Log.d("Adapter : EXCEPTION", ex.getLocalizedMessage());
 
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true);
                     commodityList = new ArrayList<Commodity>();
@@ -531,7 +536,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // login admin by uName and password
     public void loginAdminByUsernameAndPassword(@NonNull final Store store, @NonNull final String username, @NonNull final String password, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate) {
-
+        Log.d("Adapter : LOGIN ADMIN","!!!");
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
             @Override
@@ -836,7 +841,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // retrieves all stores
     public void findAllStores(@NonNull final Context applicationContext, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate)throws ExceptionInInitializerError{
-
+        Log.d("Adapter: Store Search","!!");
         // sets local repo reference
         this.backFourAppRepo = BackFourAppRepo.getShared();
 
@@ -899,7 +904,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
     // retrieves, and coalesces, all departments for that store
     public void retrieveAllDepartmentsForStore(@NonNull final Store store, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter: Dept Init","!!!");
         // creates local ref to repo task
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
 
@@ -968,7 +973,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     // private helper method to retrieve an item from a barcode (commodity is composite, boolean is true if item is found OR item doesn't exist to database)
     @NonNull
     private Commodity findCompositeCommodityFromBarcode(@NonNull final String barcode) throws ParseException{
-
+        Log.d("Adapter: Composite barcode helper","!!!");
         // acquires Parse query targeting item
         final ParseQuery<ParseObject> itemSearchQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Commodity.getRelationName());
 
@@ -988,7 +993,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     @Override
     @MainThread
     public void repoCallback(@NonNull final HashMap<String, Boolean> operationResultHolder, @Nullable final DataAccess dataAccess, @Nullable final List<? extends DataAccess> dataAccessList, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-
+        Log.d("Adapter: REPO Callback in adapter","!!");
         // acquires local refs to boolean values (safe unboxing operations -- will always be set)
         final boolean operationWasSuccess = operationResultHolder.get(RepoCallbackResult.operationSuccessKey);
         final boolean adapterOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.adapterOperationSuccessKey);
@@ -1190,7 +1195,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
             // walks through all pairs and returns match on object id equality
             for(Pair<DepartmentStock, Department> pair: deptStockToDeptPairList){
-                Log.d("GETTING ITEMS BACK FROM SEARCH", "dept stock com id: ".concat(pair.first.itemObjectId) +
+                Log.d("Adapter: GETTING ITEMS BACK FROM SEARCH", "dept stock com id: ".concat(pair.first.itemObjectId) +
                         "com id: ".concat(commodity.getObjectId()));
                 if(pair.first.itemObjectId.equals(commodity.getObjectId()))
                     return pair;
