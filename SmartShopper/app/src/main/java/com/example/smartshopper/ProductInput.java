@@ -120,6 +120,7 @@ public class ProductInput extends Fragment {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
+        myActivity = (buttonInput) context;
     }
 
     @Override

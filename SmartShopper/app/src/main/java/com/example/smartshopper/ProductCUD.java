@@ -113,6 +113,7 @@ public class ProductCUD extends Fragment {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
+        myActivity = (CUDopperations)context;
     }
 
     @Override
