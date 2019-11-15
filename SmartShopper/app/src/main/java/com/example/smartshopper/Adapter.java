@@ -658,6 +658,9 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 // enumerates shared state promised to callback
                 HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
+                // enumerates local state needed outside of try's scopes
+                Admin adminToDelete = null;
+
                 // try-catch-finally block to find admin where id's match, check admin rank is higher from request, and delete
                 try {
 
@@ -676,20 +679,34 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         throw new RuntimeException("error state in data integrity-- multiple Admin tailored to store and login credentials. Count: ".concat(String.valueOf(adminListAsParse.size())));
 
                     // extracts and converts known admin as parse to DA
-                    final Admin adminToDelete = Admin.Builder.toDataAccessFromParse(adminListAsParse.get(0), store);
+                    adminToDelete = Admin.Builder.toDataAccessFromParse(adminListAsParse.get(0), store);
 
                     // checks if admin rank of request is higher than to delete
                     if(adminThatRequestedDelete.adminLevel.getIdType() > adminToDelete.adminLevel.getIdType()){
 
-                        // 
+                        //  converts admin to parse and delete
+                        adminToDelete.toParseObject().delete();
+
+                        // sets success codes
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true, true);
+                    }
+                    else {
+
+                        // sets error codes -- admin did not retain level
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true, false);
                     }
 
-                    // sets success codes
-                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
-
                 } catch (ParseException ex) {
-                    // sets bad codes
-                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                    // differentiates cases (a. search for admin was unsuccessful, b. internal error)
+                    if(adminToDelete == null){
+
+                        // sets error codes admin not found
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
+                    }
+                    else{
+                        // internal error
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                    }
                 }
                 finally {
 
@@ -879,7 +896,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 brokerCallbackDelegate.addAdminHandler(operationWasSuccess);
                 break;
             case deleteAdmin:
-                brokerCallbackDelegate.deleteAdminHandler(operationWasSuccess, adapterOperationWasSuccess);
+                brokerCallbackDelegate.deleteAdminHandler(operationWasSuccess, adapterOperationWasSuccess, contextOperationWasSuccess);
                 break;
             case updateAdmin:
                 brokerCallbackDelegate.updateAdminHandler(operationWasSuccess, adapterOperationWasSuccess);

@@ -42,7 +42,7 @@ public interface BrokerCallbackDelegate {
     public abstract void addAdminHandler(final boolean wasAdminAdded);
 
     // handler to access deletion of admin
-    public abstract void deleteAdminHandler(final boolean wasAdminRemoved, final boolean didAdminRetainPrivilegesToRemove);
+    public abstract void deleteAdminHandler(final boolean wasAdminRemoved, final boolean wasAdminFound, final boolean didAdminRetainPrivilegesToRemove);
 
     // handler to ensure if update of admin was successful
     public abstract void updateAdminHandler(final boolean wasAdminUpdated, final boolean didAdminRetainPrivilegesToUpdate);
