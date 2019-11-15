@@ -228,17 +228,17 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // saves commodity
                     commodityToSave.save();
-
+                    Log.d("commodity saved","");
                     // asserts that commodity's object id is not null
                     if(commodityToSave.getObjectId() == null)
                         throw new RuntimeException("saved Commodity does not retain an object id after save");
 
                     // updates commodity ref
                     commodity = Commodity.Builder.toDataAccessFromParse(commodityToSave);
-
+                    Log.d("commodity saved and object id non-null","");
                     // creates dept stock
                     final DepartmentStock departmentStock = DepartmentStock.Builder.build(department, commodity, price, location);
-
+                    Log.d("dept stock built","");
                     // converts and save dept stock
                     departmentStock.toParseObject().save();
 
