@@ -499,7 +499,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     }
 
                     // if here then list is (1-m), regardless of such case issues error results
-                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
 
                 }
                 catch(ParseException ex){
@@ -507,7 +507,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // differentiates cases of parse exceptions (cases: a. no object found on such predicate, b. internal error incurred)
                     if(ex.getCode() == ParseException.OBJECT_NOT_FOUND){
                         // sets success codes-- no admin uncovered
-                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
                     }
                     else{
                         // sets error code -- internal error
@@ -517,7 +517,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 }
                 catch(CancellationException ex){
                     // sets success codes-- no admin uncovered
-                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, true);
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
                 }
                 finally{
 
