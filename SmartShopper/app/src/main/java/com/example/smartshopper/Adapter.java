@@ -368,13 +368,13 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     orQueryList.add(searchPhraseContains);
                     orQueryList.add(nameContains);
 
-                    Log.d("SEARCH QUERY Combined", String.valueOf("1"));
+
                     // 'or' the queries
                     final ParseQuery<ParseObject> comprisedCommodityQuery = ParseQuery.or(orQueryList);
-                    Log.d("SEARCH query start", String.valueOf("1"));
+
                     // invokes search to acquire list of commodities that assuage 'or' predicate
                     final List<ParseObject> commodityListAsParse = comprisedCommodityQuery.find();
-                    Log.d("GETTING ITEMS BACK FROM SEARCH", String.valueOf("1"));
+
                     // invokes helper to convert list to a commodity list
                     commodityList = Adapter.ORM_Helper.convertCommodityListAsParseToCommodityList(commodityListAsParse);
                     Log.d("CONVERT TO COMMODITY LIST", String.valueOf(commodityList.size()));
@@ -390,6 +390,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // acquires all dept stocks that assuage predicate
                     final List<ParseObject> deptStockListAsParse = deptStockQuery.find();
                     if(deptStockListAsParse.size() == 0) {
+                        Log.d("PARSE EXCEPTION NOT THROWN", "!!!");
                         operationResults = RepoCallbackResult.setOperationResultBooleans(true);
                         commodityList.clear();
                         throw new Exception("list size is zero");
@@ -397,7 +398,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     Log.d("GETS ALL DEPT STOCKS", String.valueOf(deptStockListAsParse.size()));
                     // invokes helper to convert dept stock as parse to a list of DeptStock
                     final List<DepartmentStock> departmentStockList = Adapter.ORM_Helper.convertParseObjectsToDeptStock(deptStockListAsParse);
-                    Log.d("DEPT STOCKS CONVERTED", String.valueOf("1"));
+
                     // invokes helper to amalgamate department stock to department list
                     List<Pair<DepartmentStock, Department>> departmentStockToDepartmentList = Adapter.ORM_Helper.combineDepartmentStockWithDepartment(departmentStockList, departmentList);
                     Log.d("GETTING LIST OF PAIRS", String.valueOf(departmentStockToDepartmentList.size()));
@@ -409,10 +410,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 }
                 catch(ParseException ex){
-
+                    Log.d("PARSE EXCEPTION", String.valueOf(ex.getCode() == ParseException.OBJECT_NOT_FOUND));
                     // sets error code
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
-                    Log.d("PARSE EXCEPTION", String.valueOf(ex.getCode() == ParseException.OBJECT_NOT_FOUND));
+
                     // upon empty results the list shall be non-null, empty
                     if(ex.getCode() == ParseException.OBJECT_NOT_FOUND)
                         commodityList = new ArrayList<Commodity>();
