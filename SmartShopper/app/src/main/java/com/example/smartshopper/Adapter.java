@@ -981,6 +981,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
         itemSearchQuery.whereEqualTo(Commodity.barcodeNameKey, barcode);
         final List<ParseObject> itemListAsParse = itemSearchQuery.find();
 
+        // asserts search results aren't empty
+        if(itemListAsParse.size() == 0)
+            throw new CancellationException("list size is 0");
+
         // asserts that list size is 1 (0 is thrown as exception)
         if (itemListAsParse.size() != 1)
             throw new RuntimeException("error state in data integrity-- multiple items exist with such barcode. Count: ".concat(String.valueOf(itemListAsParse.size())));
@@ -993,7 +997,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     @Override
     @MainThread
     public void repoCallback(@NonNull final HashMap<String, Boolean> operationResultHolder, @Nullable final DataAccess dataAccess, @Nullable final List<? extends DataAccess> dataAccessList, @NonNull final AdapterMethodType adapterMethodType, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
-        Log.d("Adapter: REPO Callback in adapter","!!");
+        Log.d("Adapter: REPO Callback in adapter","current adapter method ".concat(adapterMethodType.name()));
         // acquires local refs to boolean values (safe unboxing operations -- will always be set)
         final boolean operationWasSuccess = operationResultHolder.get(RepoCallbackResult.operationSuccessKey);
         final boolean adapterOperationWasSuccess = operationResultHolder.get(RepoCallbackResult.adapterOperationSuccessKey);
@@ -1019,6 +1023,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
             case findItemBySearch: // (SAFE cast, never not null and is commodity)
                 assert(dataAccessList != null);
                 brokerCallbackDelegate.findItemsBySearchHandler(operationWasSuccess,(List<Commodity>)dataAccessList);
+                break;
             case findAdminByLogin:
                 brokerCallbackDelegate.loginAdminByUsernameAndPassword(operationWasSuccess, adapterOperationWasSuccess, (Admin)dataAccess);
                 break;

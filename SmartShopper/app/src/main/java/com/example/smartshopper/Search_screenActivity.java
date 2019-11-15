@@ -51,9 +51,10 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
     @Override
     public void searchCB(boolean operationSuccess, boolean searchGood, boolean wasSearchTooShort, List<Commodity> commodityList){
 
-        Log.d("test bool", "search good: ".concat(String.valueOf(searchGood)) + "operation success: ".concat(String.valueOf(operationSuccess)));
+        Log.d("test bool search", "search good: ".concat(String.valueOf(searchGood)) + " operation success: ".concat(String.valueOf(operationSuccess)));
         // if search was too short- or if operation succeeded, but no results were yielded- apprise user of faulty case
         if(wasSearchTooShort || (operationSuccess && !searchGood)) {
+            Log.d("test bool search", "!!!");
             this.updateResultTextViewWithString("Please refine search.");
             return;
         }
