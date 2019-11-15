@@ -14,7 +14,7 @@ public class AdminScreenActivity extends AppCompatActivity {
     public String empid, name, rank;
 
     TextView nameTV, empIDTV, rankTV, msgCntrTV;
-
+    private Admin admin;
 
 
     @Override
@@ -29,7 +29,7 @@ public class AdminScreenActivity extends AppCompatActivity {
 //        Log.d("LoginDeBug", "Testing admin in activity: " +
 //                AdminMockModelClass.adminList.get(AdminMockModelClass.adminUserNames.indexOf(empid)).name);
 //        Log.d("LoginDeBug", "empid: "+ empid);
-        Admin admin;
+
         admin = (Admin)ini.getSerializableExtra("Admin");
         if(admin ==null){
             Log.d("AdminNull", "Admin is null");
@@ -68,12 +68,12 @@ public class AdminScreenActivity extends AppCompatActivity {
     }
     public void adminCreateAction(View v){
         Intent toAdminCreate = new Intent(this, AdminModificationScreenActivity.class);
-        toAdminCreate.putExtra("EMPID", empid);
+        toAdminCreate.putExtra("admin", admin);
         startActivity(toAdminCreate);
     }
     public void modifyProductAction(View v){
         Intent toProductModifer = new Intent(this, AdminProductScreenActivity.class);
-        toProductModifer.putExtra("EMPID", empid);
+        toProductModifer.putExtra("EMPID", admin);
         startActivity(toProductModifer);
     }
 

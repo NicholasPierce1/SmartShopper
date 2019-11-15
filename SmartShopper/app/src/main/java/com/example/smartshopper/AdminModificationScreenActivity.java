@@ -40,6 +40,9 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         empid = ini.getStringExtra("EMPID");
         // TODO: 11/14/2019 Make login screen pass in admin
         user = (Admin)ini.getSerializableExtra("admin");
+        if(user == null){
+            Log.d("AdminValid", "user is null");
+        }
         adminIDET = findViewById(R.id.AdminIDET);
         outcomeTV = findViewById(R.id.outcomeTV);
         middleAdminCB = findViewById(R.id.middleAdminCB);
