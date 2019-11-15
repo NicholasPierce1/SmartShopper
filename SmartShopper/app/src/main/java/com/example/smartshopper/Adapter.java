@@ -2,6 +2,7 @@ package com.example.smartshopper;
 
 import android.content.Context;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.MainThread;
@@ -850,7 +851,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // sets success bool results
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true);
-
+                    Log.d("is null", String.valueOf(operationResults == null));
                 }
                 catch(ParseException ex){
                     // sets error bool results
@@ -1003,7 +1004,8 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
             // walks through all parse objects and returns the dept where id's match
             for(ParseObject parseObject: parseObjectList){
-                if(parseObject.getObjectId().equals(storedDept.getObjectId()))
+
+                if(parseObject.getObjectId().equals(storedDept.departmentObjectId))
                     return parseObject;
             }
 
