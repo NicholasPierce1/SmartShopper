@@ -39,7 +39,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         super.setContentView(R.layout.admin_modify);
         Intent ini = getIntent();
         empid = ini.getStringExtra("EMPID");
-        // TODO: 11/14/2019 Make login screen pass in admin
         user = (Admin)ini.getSerializableExtra("admin");
         if(user == null){
             Log.d("AdminValid", "user is null");
@@ -63,12 +62,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
         cancelBTN = findViewById(R.id.cancelBTN);
         submitBTN = findViewById(R.id.submitBTN);
-
-        // TODO: 11/14/2019 Refactor buttons to use normal onClicks
+        usernameET = findViewById(R.id.userNameET);
         hideAndCelar();
+        aEmployeeDisET.setClickable(true);
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                aEmployeeDisET.setClickable(true);
                 // clears output text from last command
                 outcomeTV.setText("");
                 adminIDET.setText("");
@@ -77,13 +77,18 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     outcomeTV.setText("Not able to submit at this time");
                 }
                 else if (submitCode == 1){
+                    Log.d("AdminValid" , "In submit button submitcode ==1" );
                 if(isInputValid()){
+                    Log.d("AdminVald", "Input is valid");
                     cName = nameET.getText().toString();
                     cpw = passwordET.getText().toString();
+                    username = adminIDET.getText().toString();
+                    Log.d("AdminValud", "Username in controller: " + username);
                     level = levelFinder();
-                  model.createAdmin(cName, cAdminID,username, cpw, level, myActivity );
+                    model.checkForExistingUsername(submitCode, username, user, myActivity);
                 }
                 else{
+                    Log.d("AdminValid", "In else for invalid input");
                     outcomeTV.setText("Invalid input: " +wrong);
                 }
             }
@@ -92,6 +97,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         cName = nameET.getText().toString();
                         cpw = passwordET.getText().toString();
                         username = aEmployeeDisET.getText().toString();
+                        usernameET.setClickable(false);
                          level = levelFinder();
                         //We would make a real model call to create it, but for now...
                         subject.name = cName;
@@ -100,7 +106,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         subject.empID = cAdminID;
                         subject.adminLevel = level;
                         model.updateAdmin(subject, myActivity);
-
                     }
                     else{
                         outcomeTV.setText("Invalid input: " +wrong);
@@ -111,9 +116,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
 
 
                 }
-                createBTN.setVisibility(View.VISIBLE);
-                modifyBTN.setVisibility(View.VISIBLE);
-                deleteBTN.setVisibility(View.VISIBLE);
+
 
 
             }
@@ -133,6 +136,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         createBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("AdminValid", "Username of user:" + user.userName);
                 // clears output text from last command
                 outcomeTV.setText("");
                 //So you can't do other things
@@ -142,8 +146,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                   cAdminID = adminIDET.getText().toString();
-                  Log.d("AdminValid", "Username in controller: " + cAdminID);
-                  model.checkForExistingUsername(1, cAdminID, user, myActivity);
+                  Log.d("AdminValid", "ID in controller: " + cAdminID);
+                  model.findAdminByID(1,cAdminID, user, myActivity );
 
             }
         });
@@ -156,8 +160,9 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
-                Log.d("AdminValid", "Username in controller: " + cAdminID);
-                model.checkForExistingUsername(2, cAdminID, user, myActivity);
+                Log.d("AdminValid", "ID in controller: " + cAdminID);
+                Log.d("AdminValid", "Username of user:" + user.userName);
+                model.findAdminByID(2,cAdminID, user, myActivity );
 
             }
         });
@@ -171,12 +176,12 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
                 Log.d("AdminValid", "Username in controller: " + cAdminID);
-                model.checkForExistingUsername( 3, cAdminID, user, myActivity);
+                model.findAdminByID(3,cAdminID, user, myActivity );
 
             }
         });
     }
-    public void adminIdCheckCB(int oppCode, boolean exists, @Nullable Admin a){
+    public void adminIdCheckCB(int oppCode, boolean exists, boolean hasPermission, @Nullable Admin a){
         Log.d("AdminValid", "Exits: " + exists);
         if(oppCode ==1) {
             if (exists) {
@@ -202,7 +207,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 String no = "Admin id does not exist";
                 outcomeTV.setText("" + no);
             }
-            else if(!hasPermission(user, a)){
+            else if(!hasPermission){
+                Log.d("AdminValid", "User has permission: " + hasPermission);
                 outcomeTV.setText("Insufficient Permissions");
             }
             else{
@@ -234,7 +240,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 String no = "Admin id does not exist";
                 outcomeTV.setText("" + no);
             }
-            else if(!hasPermission(user,a)){
+            else if(!hasPermission){
+                Log.d("AdminValid", "User has permission: " + hasPermission);
                 outcomeTV.setText("Insufficient Permissions");
             }
             else{
@@ -314,15 +321,17 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
 
     }
     private boolean isInputValid(){
+        Log.d("AdminValid", "In is input valid");
         wrong = "";
         String name = nameET.getText().toString();
 
-        if(nameET.equals("") || nameET.equals(" ") || nameET.equals(null)){
-            wrong +="Invalid name. ";
+        if(nameET.equals("") || nameET.equals(" ") || nameET.equals(null) || ! nameET.getText().toString().contains(" ")){
+            wrong +="Invalid name. Must have first and last name.";
         }
         else if(passwordET.getText().toString().length() <8){
             wrong += "Password must be eight characters long";
         }
+        Log.d("AdminValid", "Leaving input valid");
         return wrong.equals("");
     }
     private AdminLevel levelFinder(){
@@ -335,7 +344,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
 
     @Override
     public void adminNotFound() {
-        Toast.makeText(getApplicationContext(), "Admin was not found", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "Admin find Failure. Please restart and try again", Toast.LENGTH_SHORT);
 
     }
     public void aCreateCB(boolean success){
@@ -370,6 +379,15 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         createBTN.setVisibility(View.VISIBLE);
         modifyBTN.setVisibility(View.VISIBLE);
         deleteBTN.setVisibility(View.VISIBLE);
+    }
+
+    public void adminUsernameCB(boolean valid){
+        if(valid) {
+            model.createAdmin(cName, cAdminID, username, cpw, level, myActivity);
+        }
+        else{
+            outcomeTV.setText("Username already exists or is invalid");
+        }
     }
 
 

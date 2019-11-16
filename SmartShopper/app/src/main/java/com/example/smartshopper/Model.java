@@ -22,7 +22,7 @@ public class Model implements BrokerCallbackDelegate {
     private static Model shared = new Model();
     private Commodity co;
     private int createCase = -1;
-    private String username;
+    private String adminID, username;
     private Admin requestor;
     private boolean inHouse;
 
@@ -208,7 +208,7 @@ public class Model implements BrokerCallbackDelegate {
 
         String name = "", vendor = "", tags;
         int dept, isle;
-        double price=-1.0;
+        double price;
         Department department;
         Location location;
         //Now begins all of our validation checks for Comodity.
@@ -285,43 +285,28 @@ public class Model implements BrokerCallbackDelegate {
         }
 
     }
-
-
-
-
     // ADMIN METHODS (CONTROLLER- MODEL)
 
     // adds admin
-    public void findAdminByID(String id, Admin adminThatIssuedRequest, AdminModCBMethods cbm){
+    public void findAdminByID(int oppCode,String id, Admin adminThatIssuedRequest, AdminModCBMethods cbm){
+        Log.d("AdminValid", "In admin **ID** called method");
         this.mm= cbm;
+        this.oppCode = oppCode;
 
         adapter.findAdminByEmpId(store, id, adminThatIssuedRequest, this );
     }
 
     @Override
     public void findAdminByEmpId(boolean adminSearchWasSuccess, boolean adminFoundAndIsInStore, boolean didAdminRetainPrivilegesToAcquire, @Nullable Admin admin) {
-        if(adminFoundAndIsInStore && adminFoundAndIsInStore){
-            if(inHouse){
-                //WE know it's from a method called by model and not an external class
-                finishisAdminUsernameUniqueHandler(admin);
-            }
-            else{
-                // TODO: 11/14/2019 Finish this mehtod for external calls if needed
-            }
+        //Method called to make sure the empid exits or does not exist. empid != username
+        Log.d("AdminValid", "In FindadminByID handler privalge: " + didAdminRetainPrivilegesToAcquire);
+        if(adminSearchWasSuccess){
+            ((AdminModCBMethods)mm).adminIdCheckCB(oppCode,adminFoundAndIsInStore, didAdminRetainPrivilegesToAcquire,admin);
         }
         else{
             ((AdminModCBMethods)mm).adminNotFound();
         }
     }
-
-    // TODO: sure this method is needed to be separate from the handler (called directly above)
-    private void finishisAdminUsernameUniqueHandler(Admin a){
-        Log.d("AdminValid", "In Finnisher method");
-        ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, true, a);
-
-    }
-
-
 
     // creates/adds admin
     public void createAdmin(@NonNull final String name, @NonNull String id, @NonNull final String userName, @NonNull final String password, @NonNull final AdminLevel adminLevel, AdminModCBMethods cbm){
@@ -367,44 +352,32 @@ public class Model implements BrokerCallbackDelegate {
 
 
 
-    // validates uniqueness of admin's username
+    // validates uniqueness of admin's adminID
     public void checkForExistingUsername(int oppCode,  String username, Admin requestor, @NonNull final AdminModCBMethods adminModCBMethods){
 
         // upcast delegate ref to singleton member
         this.mm = adminModCBMethods;
 
         // TODO, Mat why are you setting 'requestor'? Does controller not have local ref of the loggedInAdmin?
-        // TODO, Mat, are you validating a username is unqiue, then retrieving and admin by empId -- which is different -- with that username?
+        // TODO, Mat, are you validating a adminID is unqiue, then retrieving and admin by empId -- which is different -- with that adminID?
         this.requestor = requestor;
         this.username = username;
         this.oppCode = oppCode;
 
-        // enjoins adapter to corroborate if admin username is unique
-        Log.d("AdminValid", "Username in model call: " + username);
-        adapter.isAdminUsernameUnique(username, this);
+        // enjoins adapter to corroborate if admin adminID is unique
+        Log.d("AdminValid", "**Username** in model call: " + username);
+        Log.d("AdminValid", "USERNAME OPPCODE: " + oppCode);
+        inHouse = false;
+        adapter.findAdminByEmpId(store, username, requestor, this);
     }
 
     @Override
     public void isAdminUsernameUniqueHandler(boolean adminSearchWasSuccess, boolean adminFound) {
+        Log.d("AdminValid", "Admin valid from model:" + adminFound);
         if(adminSearchWasSuccess){
-            Log.d("AdminValid", "AdminFound: " + adminFound + " oppcode: " + oppCode);
-            if(oppCode == 1){
-                Log.d("AdminValid", "username in handler: " + username);
-                ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, adminFound, null);
-                //WE don't care about an admin object so move on.
-            }
-            //For Update
-            else if(oppCode == 2 || oppCode == 3){
-                if(!adminFound){
-                    ((AdminModCBMethods)mm).adminIdCheckCB(oppCode, adminFound, null);
-                }
-                else{
-                    inHouse = true;
-                    Log.d("AdminValid", "username: " + username);
-                    findAdminByID(username, requestor, (AdminModCBMethods)mm);
-                }
-            }
+            ((AdminModCBMethods)mm).adminUsernameCB(adminFound);
         }
+
     }
 
 

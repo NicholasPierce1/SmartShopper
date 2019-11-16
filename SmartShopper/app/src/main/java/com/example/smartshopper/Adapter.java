@@ -641,11 +641,15 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // asserts that admin that requested search has higher priviledges than admin found
                     if(admin.adminLevel.getIdType() > adminThatRequestedSearch.adminLevel.getIdType()){
+                        Log.d("Adapter", "------>>admin:"+ admin.adminLevel.getIdType() + "Requestor: "
+                        + adminThatRequestedSearch.adminLevel.getIdType());
                         // good case, set success codes
                         operationResults = RepoCallbackResult.setOperationResultBooleans(true, true, true);
                     }
                     else{
                         // admin level lock codes
+                        Log.d("Adapter", "------>>admin:"+ admin.adminLevel.getIdType() + "Requestor: "
+                                + adminThatRequestedSearch.adminLevel.getIdType());
                         operationResults = RepoCallbackResult.setOperationResultBooleans(true,true, false);
                     }
                 }

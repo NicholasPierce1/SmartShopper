@@ -107,6 +107,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
 
         } else if (code == 2) { //update
+            Log.d("ProductProbs", "Probs: " +createCase);
             if (createCase != 4) {
                 String no = "Barcode  does not exist";
                 resultTV.setText("" + no);
@@ -144,6 +145,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
             resultTV.setText("Not able to submit at this time");
         }
         else if (submitCode == 1 || submitCode == 2) {
+            c.putString("barcode", barcode);
             model.validateComodityInput(check, actionCode, c, this);
             
         }
