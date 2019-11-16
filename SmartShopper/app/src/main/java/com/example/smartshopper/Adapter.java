@@ -629,6 +629,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     final List<ParseObject> adminListAsParse = findAdminByEmpIdQuery.find();
                     // asserts that list is not empty
                     if(adminListAsParse.size() == 0) {
+                        Log.d("adapter", "size is zero on admin search by emp id");
                         throw new CancellationException("list size is zero");
                     }
 
@@ -641,16 +642,16 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // asserts that admin that requested search has higher priviledges than admin found
                     if(admin.adminLevel.getIdType() > adminThatRequestedSearch.adminLevel.getIdType()){
-                        Log.d("Adapter", "------>>admin:"+ admin.adminLevel.getIdType() + "Requestor: "
+                        Log.d("Adapter", "bad permissions------>>admin:"+ admin.adminLevel.getIdType() + "Requestor: "
                         + adminThatRequestedSearch.adminLevel.getIdType());
                         // good case, set success codes
-                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true, true);
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true, true, false);
                     }
                     else{
                         // admin level lock codes
-                        Log.d("Adapter", "------>>admin:"+ admin.adminLevel.getIdType() + "Requestor: "
+                        Log.d("Adapter", "good permissions------>>admin:"+ admin.adminLevel.getIdType() + "Requestor: "
                                 + adminThatRequestedSearch.adminLevel.getIdType());
-                        operationResults = RepoCallbackResult.setOperationResultBooleans(true,true, false);
+                        operationResults = RepoCallbackResult.setOperationResultBooleans(true,true, true);
                     }
                 }
                 catch(ParseException ex){
