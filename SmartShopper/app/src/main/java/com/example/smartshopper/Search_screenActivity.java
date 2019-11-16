@@ -20,7 +20,9 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
 
     TextView errorTV;
     EditText itemEntered;
-    String fake;
+
+    // instance member to hold commodity list
+    private List<Commodity> commodityList = new ArrayList<Commodity>();
 
     RecyclerView recyclerView;
     private GestureDetectorCompat detector = null;
@@ -33,6 +35,22 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         setContentView(R.layout.search_screen);
         errorTV = findViewById(R.id.errorTV);
         itemEntered = findViewById(R.id.itemNameET);
+
+
+        // Make a Listener for taps
+        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListenerForSearchMultiSelection(this));
+        // add the listener to the recycler
+        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e){
+                return detector.onTouchEvent(e);
+            }
+        });
+
+        // renders adapter with def/initial, empty commodity list
+        this.adapter = new Search_Screen_RecyclerView_Adapter(commodityList);
+        this.recyclerView.setAdapter(adapter);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         this.recyclerView = (RecyclerView)super.findViewById(R.id.itemRecyclerView);
         this.recyclerView.setVisibility(View.INVISIBLE);
@@ -66,22 +84,15 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
 
         // items within range of [1-3] acquired, create adapter, set to RV, propagate update to adapter
         assert(commodityList != null);
-        // Make a Listener for taps
-        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListenerForSearchMultiSelection(this));
-        // add the listener to the recycler
-        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e){
-                return detector.onTouchEvent(e);
-            }
-        });
-        final Search_Screen_RecyclerView_Adapter adapter = new Search_Screen_RecyclerView_Adapter(commodityList);
-        this.recyclerView.setAdapter(adapter);
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // on success- update instance member and notify data set change
+        for(Commodity commodity: commodityList)
+            this.commodityList.add(commodity); // done this way to ensure success and not alter ref's address in adapter
+
+        this.adapter.notifyDataSetChanged();
 
         // set visibility
         this.recyclerView.setVisibility(View.VISIBLE);
-
     }
 
     private class RecyclerViewOnGestureListenerForSearchMultiSelection extends GestureDetector.SimpleOnGestureListener {
