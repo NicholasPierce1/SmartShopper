@@ -81,6 +81,10 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
             return;
         }
 
+        // covers case if commodity list is exactly one-- intent immediately
+        else if(commodityList.size() == 1)
+            this.returnedItemIntent(commodityList.get(0));
+
 
         // items within range of [1-3] acquired, create adapter, set to RV, propagate update to adapter
         assert(commodityList != null);

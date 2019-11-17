@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -78,7 +79,8 @@ public class Welcome_screenActivity extends AppCompatActivity implements Adapter
     // else -- create alert dialog informing user error occured, ask user if they want a re-try
     @Override
     public void storeCB(boolean success, List<Store> stores) {
-        if(success = true){
+        Log.d("STORE", String.valueOf(stores == null));
+        if(success){
             this.storeList = stores;
             // invokes helper to convert list of stores to list of strings
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.convertStoreListToStringList() );

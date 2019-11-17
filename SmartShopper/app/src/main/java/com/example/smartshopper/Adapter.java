@@ -853,6 +853,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
         // IMPORTANT: init parse data base connection
         this.backFourAppRepo.setParseInitialize(applicationContext);
+        Log.d("Adapter: dB init","!!");
 
         // creates local Repo runnable reference
         final BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
@@ -869,12 +870,14 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 // try-catch to retrieve all stores
                 try{
                     // retrieves and uses ORM to convert to list of stores
+                    Log.d("Adapter:getting stores now","!!");
                     List<ParseObject> parseObjectList = parseQuery.find();
+                    Log.d("Adapter: back four app got stores?",String.valueOf(parseObjectList.size()));
                     // asserts that list is not empty
                     if(parseObjectList.size() == 0) {
                         throw new CancellationException("list size is zero");
                     }
-
+                    Log.d("Adapter: how many stores",String.valueOf(parseObjectList.size()));
                     // intializes store list-- knowning operation of acquiring stores entailed success
                     storeList = new ArrayList<Store>();
 
@@ -887,7 +890,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 }
                 catch(ParseException ex){
-
+                    Log.d("Adapter: parse exception thrown at getting stores",ex.getLocalizedMessage() + "code: " + ex.getCode());
                     // sets error state results
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
