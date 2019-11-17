@@ -78,8 +78,8 @@ public final class Commodity extends DataAccess implements Persistable{
             final Commodity commodity = new Commodity();
 
             commodity.barcode = barcode;
-            commodity.name = name;
-            commodity.vendorName = vendorName;
+            commodity.name = name.toLowerCase();
+            commodity.vendorName = vendorName.toLowerCase();
             commodity.searchPhrase = searchPhrase;
 
             return commodity;
