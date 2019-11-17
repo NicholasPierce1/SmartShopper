@@ -287,7 +287,7 @@ public class Model implements BrokerCallbackDelegate {
     }
     // ADMIN METHODS (CONTROLLER- MODEL)
 
-    // adds admin
+
     public void findAdminByID(int oppCode,String id, Admin adminThatIssuedRequest, AdminModCBMethods cbm){
         Log.d("AdminValid", "In admin **ID** called method");
         this.mm= cbm;
@@ -368,7 +368,7 @@ public class Model implements BrokerCallbackDelegate {
         Log.d("AdminValid", "**Username** in model call: " + username);
         Log.d("AdminValid", "USERNAME OPPCODE: " + oppCode);
         inHouse = false;
-        adapter.findAdminByEmpId(store, username, requestor, this);
+        adapter.isAdminUsernameUnique(username,this);
     }
 
     @Override

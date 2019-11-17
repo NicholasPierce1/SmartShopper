@@ -62,7 +62,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         deleteBTN = findViewById(R.id.RemoveAdminBTN);
         cancelBTN = findViewById(R.id.cancelBTN);
         submitBTN = findViewById(R.id.submitBTN);
-        usernameET = findViewById(R.id.userNameET);
+        usernameET = findViewById(R.id.EmployeeIdDisET);
         hideAndCelar();
         aEmployeeDisET.setClickable(true);
         submitBTN.setOnClickListener(new View.OnClickListener() {
@@ -82,13 +82,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         Log.d("AdminValid", "Input is valid");
                         cName = nameET.getText().toString();
                         cpw = passwordET.getText().toString();
-                        username = adminIDET.getText().toString();
+                        username = usernameET.getText().toString();
                         Log.d("AdminValid", "Username in controller: " + username);
                         level = levelFinder();
                         model.checkForExistingUsername(submitCode, username, user, myActivity);
                     }
                 else{
-                    Log.d("AdminValid", "In else for invalid input");
+                    Log.d("C", "In else for invalid input");
                     outcomeTV.setText("Invalid input: " +wrong);
                 }
             }
@@ -96,7 +96,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                     if(isInputValid()){
                         cName = nameET.getText().toString();
                         cpw = passwordET.getText().toString();
-                        username = aEmployeeDisET.getText().toString();
+                        username = usernameET.getText().toString();
                         usernameET.setClickable(false);
                          level = levelFinder();
                         //We would make a real model call to create it, but for now...
@@ -382,7 +382,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     }
 
     public void adminUsernameCB(boolean valid){
-        if(valid) {
+        if(!valid) {
             model.createAdmin(cName, cAdminID, username, cpw, level, myActivity);
         }
         else{
