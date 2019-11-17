@@ -78,15 +78,15 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 }
                 else if (submitCode == 1){
                     Log.d("AdminValid" , "In submit button submitcode ==1" );
-                if(isInputValid()){
-                    Log.d("AdminVald", "Input is valid");
-                    cName = nameET.getText().toString();
-                    cpw = passwordET.getText().toString();
-                    username = adminIDET.getText().toString();
-                    Log.d("AdminValud", "Username in controller: " + username);
-                    level = levelFinder();
-                    model.checkForExistingUsername(submitCode, username, user, myActivity);
-                }
+                    if(isInputValid()){
+                        Log.d("AdminValid", "Input is valid");
+                        cName = nameET.getText().toString();
+                        cpw = passwordET.getText().toString();
+                        username = adminIDET.getText().toString();
+                        Log.d("AdminValid", "Username in controller: " + username);
+                        level = levelFinder();
+                        model.checkForExistingUsername(submitCode, username, user, myActivity);
+                    }
                 else{
                     Log.d("AdminValid", "In else for invalid input");
                     outcomeTV.setText("Invalid input: " +wrong);
