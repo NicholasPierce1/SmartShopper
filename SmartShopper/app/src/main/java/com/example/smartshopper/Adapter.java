@@ -97,7 +97,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // updates item with store and dept stock
                     commodity.updateCommodity(department, departmentStock);
-
+                    Log.d("Adapter","item found and created");
                     // sets success result codes
                     operationsResult = RepoCallbackResult.setOperationResultBooleans(true, true, true);
 
@@ -309,15 +309,11 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     if(deptStockListAsParse.size() != 1)
                         throw new RuntimeException("ERROR IN DATA INTEGRITY-- multiple items acquired with matching store and commodity-- size: ".concat(String.valueOf(deptStockListAsParse.size())));
 
-                    // extracts dept stock and deletes
-                    DepartmentStock.Builder.toDataAccessFromParse(deptStockListAsParse.get(0)).toParseObject().delete();
-                    commodity.toParseObject().delete();
-
                     // converts commodity to parse object and saves
                     commodity.toParseObject().save();
 
                     // re-creates new dept stock from commodity
-                    final DepartmentStock departmentStockToResave = DepartmentStock.Builder.build(commodity.department, commodity, commodity.price, commodity.location);
+                    final DepartmentStock departmentStockToResave = DepartmentStock.Builder.toDataAccessFromParse(deptStockListAsParse.get(0)).updateDepartmentStockWithCommodity(commodity);
 
                     // with commodity saved, now saves relational object
                     departmentStockToResave.toParseObject().save();
@@ -817,10 +813,12 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                     // checks if admin rank of request is higher than to delete
                     if(adminThatRequestedDelete.adminLevel.getIdType() > adminToDelete.adminLevel.getIdType()){
+                        Log.d("Adapter: deleting admin","!!!");
 
                         //  converts admin to parse and delete
-                        adminToDelete.toParseObject().delete();
+                       adminToDelete.toParseObject().delete();
 
+                        Log.d("Adapter: deleted admin","!!!");
                         // sets success codes
                         operationResults = RepoCallbackResult.setOperationResultBooleans(true, true, true);
                     }
@@ -849,7 +847,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 finally {
 
                     // returns composites RepoCallBackResult
-                    return new RepoCallbackResult(operationResults, AdapterMethodType.addAdmin, brokerCallbackDelegate, null, null);
+                    return new RepoCallbackResult(operationResults, AdapterMethodType.deleteAdmin, brokerCallbackDelegate, null, null);
                 }
 
             }
@@ -873,9 +871,6 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 // try-catch-final block to delete the admin and then convert to parse + resave
                 try {
 
-                    // deletes admin before resaves
-                    admin.toParseObject().delete();
-
                     // converts to parse object and saves
                     admin.toParseObject().save();
 
@@ -883,7 +878,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true);
 
                 } catch (ParseException ex) {
-
+                    Log.d("adapter-- resaving admin after delete failed", ex.getMessage());
                     // sets errors code
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 

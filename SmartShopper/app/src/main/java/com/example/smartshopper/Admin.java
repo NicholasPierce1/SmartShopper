@@ -83,6 +83,7 @@ public final class Admin extends DataAccess implements Persistable {
             admin.empID = parseObject.getString(Admin.empIdKey);
             admin.adminLevel = AdminLevel.getAdminLevelFromInt(parseObject.getInt(Admin.adminLevelKey));
 
+            // sets object id from parse object
             admin.setObjectIdFromParseObject(parseObject);
 
             return admin;
@@ -102,6 +103,10 @@ public final class Admin extends DataAccess implements Persistable {
         parseObject.put(Admin.adminLevelKey, this.adminLevel.getIdType());
         parseObject.put(Admin.userNameKey, this.userName);
         parseObject.put(Admin.empIdKey, this.empID);
+
+        // sets object id of current object if not-null
+        if(this.getObjectId() != null)
+            parseObject.setObjectId(this.getObjectId());
 
         return parseObject;
     }

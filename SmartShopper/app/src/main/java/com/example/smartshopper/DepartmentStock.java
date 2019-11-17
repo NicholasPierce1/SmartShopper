@@ -90,6 +90,21 @@ final class DepartmentStock extends DataAccess implements Persistable {
 
     }
 
+
+    // update method that acquires a full DepartmentStock and resets price and location
+    @NonNull
+    public DepartmentStock updateDepartmentStockWithCommodity(@NonNull final Commodity commodity){
+
+        if(commodity.location == null)
+            throw new NullPointerException("must be a fully created commodity");
+
+        // updates price and location
+        this.price = commodity.price;
+        this.location = commodity.location;
+
+        return this;
+    }
+
     // implements Persistable's abstraction to convert composite or full to ParseObject
     @Override
     @NonNull
@@ -104,6 +119,10 @@ final class DepartmentStock extends DataAccess implements Persistable {
         parseObject.put(DepartmentStock.itemObjectIdKey, this.itemObjectId);
         parseObject.put(DepartmentStock.storeObjectIdKey, this.storeObjectId);
         parseObject.put(DepartmentStock.priceKey, this.price);
+
+        // sets object id of current object -- if not null
+        if(this.getObjectId() != null)
+            parseObject.setObjectId(this.getObjectId());
 
         return parseObject;
     }

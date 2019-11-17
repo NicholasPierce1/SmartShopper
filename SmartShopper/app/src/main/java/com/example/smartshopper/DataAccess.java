@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.net.IpSecManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.parse.ParseObject;
 
@@ -22,9 +23,8 @@ public abstract class DataAccess implements Serializable {
     public DataAccess(){}
 
     // allows for package private retrieval of object id
-    @NonNull
+    @Nullable
     final String getObjectId(){
-        assert(this.objectId != null);
 
         return this.objectId;
     }

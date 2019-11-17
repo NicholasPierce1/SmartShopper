@@ -112,16 +112,16 @@ public final class Commodity extends DataAccess implements Persistable{
 
         // creates local ref for parse object
         final ParseObject parseObject = new ParseObject(DA_ClassNameRelationMapping.Commodity.getRelationName());
-        Log.d("Adapter : converting now",String.valueOf(parseObject != null));
         // assigns local member state
         parseObject.put(Commodity.vendorNameKey, this.vendorName);
-        Log.d("Adapter : put1","!!");
         parseObject.put(Commodity.nameKey, this.name);
-        Log.d("Adapter : put2",String.valueOf(parseObject.has(Commodity.barcodeNameKey) + barcode));
         parseObject.put(Commodity.barcodeNameKey, this.barcode);
-        Log.d("Adapter : put3","!!");
         parseObject.put(Commodity.searchPhraseKey, this.searchPhrase);
-        Log.d("Adapter : finish converting","!!");
+
+        // sets object id of current object -- if not null
+        if(this.getObjectId() != null)
+            parseObject.setObjectId(this.getObjectId());
+
         return parseObject;
     }
 
