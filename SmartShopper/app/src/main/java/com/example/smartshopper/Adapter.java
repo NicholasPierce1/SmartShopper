@@ -833,8 +833,11 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 // enumerates local state promised to callback
                 HashMap<String, Boolean> operationResults = RepoCallbackResult.setOperationResultBooleans(false);
 
-                // try-catch-final block to convert to parse and resave
+                // try-catch-final block to delete the admin and then convert to parse + resave
                 try {
+
+                    // deletes admin before resaves
+                    admin.toParseObject().delete();
 
                     // converts to parse object and saves
                     admin.toParseObject().save();
