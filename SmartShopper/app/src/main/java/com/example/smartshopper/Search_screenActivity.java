@@ -37,6 +37,9 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         itemEntered = findViewById(R.id.itemNameET);
 
 
+        // acquires rv and assigns to member ref
+        this.recyclerView = (RecyclerView)super.findViewById(R.id.itemRecyclerView);
+
         // Make a Listener for taps
         detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListenerForSearchMultiSelection(this));
         // add the listener to the recycler
@@ -52,7 +55,6 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         this.recyclerView.setAdapter(adapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.recyclerView = (RecyclerView)super.findViewById(R.id.itemRecyclerView);
         this.recyclerView.setVisibility(View.INVISIBLE);
 
 
