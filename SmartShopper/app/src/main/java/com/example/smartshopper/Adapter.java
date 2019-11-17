@@ -13,6 +13,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -618,6 +619,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 // access if admin that requested has higher admin level permissions than the converted admin, and return accordingly
                 try{
 
+                    // asserts param length empId to 3
+                    if(empId.length() != 3)
+                        throw new InvalidParameterException("invalid empId length");
+
                     // creates parse query targeting admin
                     final ParseQuery<ParseObject> findAdminByEmpIdQuery = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.Admin.getRelationName());
 
@@ -671,6 +676,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // sets error code - no admin found
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true, false);
                 }
+                catch(InvalidParameterException ex){ // invoked when empId is longer than 3
+                    // sets error code for invalid param length
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
                 finally{
 
                     // returns repo callback result composite
@@ -697,6 +706,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 // try-catch-finally block to create full admin and save
                 try {
 
+                    // asserts param length empId to 3
+                    if(empId.length() != 3)
+                        throw new InvalidParameterException("invalid empId length");
+
                     // creates full admin
                     final Admin adminToSave = Admin.Builder.build(store, name, userName, password, adminLevel, empId);
 
@@ -708,6 +721,10 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 } catch (ParseException ex) {
                     // sets bad codes
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                }
+                catch(InvalidParameterException ex){ // invoked when empId is longer than 3
+                    // sets error code for invalid param length
                     operationResults = RepoCallbackResult.setOperationResultBooleans(false);
                 }
                 finally {
