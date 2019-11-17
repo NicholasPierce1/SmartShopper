@@ -678,7 +678,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 }
                 catch(InvalidParameterException ex){ // invoked when empId is longer than 3
                     // sets error code for invalid param length
-                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
                 }
                 finally{
 
@@ -725,7 +725,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 }
                 catch(InvalidParameterException ex){ // invoked when empId is longer than 3
                     // sets error code for invalid param length
-                    operationResults = RepoCallbackResult.setOperationResultBooleans(false);
+                    operationResults = RepoCallbackResult.setOperationResultBooleans(true);
                 }
                 finally {
 
