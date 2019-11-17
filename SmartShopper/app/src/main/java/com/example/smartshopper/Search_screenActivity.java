@@ -130,9 +130,10 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
     }
 
 
+    // acquires search, converts to lowercase, and instigates model search process
     public void itemSearch(View v){
         itemEntered = findViewById(R.id.itemNameET);
-        final String searchPhrase = String.valueOf(itemEntered.getText());
+        final String searchPhrase = String.valueOf(itemEntered.getText()).toLowerCase();
 
         Model.getShared().searchCommoditiesBySearchPhrase(searchPhrase, this);
     }

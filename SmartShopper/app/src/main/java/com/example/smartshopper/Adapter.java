@@ -211,7 +211,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // saves the pending item via composite inputs w/ the denoted store and dept
-    public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String name, @NonNull final String vendorName, @NonNull final String searchPhrase, final double price, @NonNull final Location location, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+    public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String nameToConvertToLowercase, @NonNull final String vendorNameConvertToLowerCase, @NonNull final String searchPhrase, final double price, @NonNull final Location location, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
         Log.d("Adapter : SAVE ITEM","!!!");
         // creates local ref to repo task
         BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
@@ -222,7 +222,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 HashMap<String, Boolean> operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 // creates composite commodity
-                Commodity commodity = Commodity.Builder.build(barcode,name, vendorName, searchPhrase);
+                Commodity commodity = Commodity.Builder.build(barcode,nameToConvertToLowercase, vendorNameConvertToLowerCase, searchPhrase);
                 Log.d("Adapter : create commodity for save","!!");
                 // try-catch-finally to save item, create dept stock, and save dept stock
                 try{
