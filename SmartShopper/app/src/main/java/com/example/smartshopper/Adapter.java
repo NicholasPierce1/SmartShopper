@@ -256,6 +256,12 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // sets error codes
                     operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
                 }
+                catch(CancellationException ex){
+
+                    // personalize exception result w/ known of empty data set retrieval
+                    operationsResults = RepoCallbackResult.setOperationResultBooleans(true);
+
+                }
                 finally {
 
                     // returns repo callback results
@@ -279,11 +285,42 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 // enumerates state promised to callback
                 HashMap<String, Boolean> operationResult = RepoCallbackResult.setOperationResultBooleans(false);
 
-                // try-catch-finally block to re-save commodity
+                // try-catch-finally block to delete commodity and dept stock, then re-save commodity and new dept stock
                 try{
+
+                    // gets dept stock from commodity's object id and store id
+
+                    // gets parse query targeting dept stock
+                    final ParseQuery<ParseObject> getDeptStockWhereStoreAndCommodityMatch = ParseQuery.getQuery(DataAccess.DA_ClassNameRelationMapping.DepartmentStock.getRelationName());
+
+                    // sets predicate where store id and commodity match
+                    getDeptStockWhereStoreAndCommodityMatch.whereEqualTo(DepartmentStock.itemObjectIdKey, commodity.getObjectId());
+                    getDeptStockWhereStoreAndCommodityMatch.whereEqualTo(DepartmentStock.storeObjectIdKey, commodity.department.store.getObjectId());
+
+                    // instigates search
+                    final List<ParseObject> deptStockListAsParse = getDeptStockWhereStoreAndCommodityMatch.find();
+
+                    // asserts list is not empty
+                    if(deptStockListAsParse.size() == 0) {
+                        throw new CancellationException("list size is zero");
+                    }
+
+                    // asserts list size is not greater than one
+                    if(deptStockListAsParse.size() != 1)
+                        throw new RuntimeException("ERROR IN DATA INTEGRITY-- multiple items acquired with matching store and commodity-- size: ".concat(String.valueOf(deptStockListAsParse.size())));
+
+                    // extracts dept stock and deletes
+                    DepartmentStock.Builder.toDataAccessFromParse(deptStockListAsParse.get(0)).toParseObject().delete();
+                    commodity.toParseObject().delete();
 
                     // converts commodity to parse object and saves
                     commodity.toParseObject().save();
+
+                    // re-creates new dept stock from commodity
+                    final DepartmentStock departmentStockToResave = DepartmentStock.Builder.build(commodity.department, commodity, commodity.price, commodity.location);
+
+                    // with commodity saved, now saves relational object
+                    departmentStockToResave.toParseObject().save();
 
                     // sets success code
                     operationResult = RepoCallbackResult.setOperationResultBooleans(true);
