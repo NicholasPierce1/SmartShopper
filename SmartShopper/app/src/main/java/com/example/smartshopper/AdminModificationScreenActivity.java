@@ -19,7 +19,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     String empid;
     Admin user;
     EditText adminIDET, nameET, passwordET, usernameET;
-    TextView outcomeTV, rankTV, aEmployeeDisET, employeeTV, nameTV, passwordTV;
+    TextView outcomeTV, rankTV,  employeeTV, nameTV, passwordTV;
     CheckBox middleAdminCB;
     CheckBox ownerCB;
     String wrong = "";
@@ -48,13 +48,12 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         middleAdminCB = findViewById(R.id.middleAdminCB);
         ownerCB = findViewById(R.id.ownerCB);
         rankTV = findViewById(R.id.RankTV);
-        aEmployeeDisET = findViewById(R.id.EmployeeIdDisET);
         employeeTV = findViewById(R.id.EmployeeIDTV);
         nameTV = findViewById(R.id.NameTV);
         passwordTV = findViewById(R.id.PasswordTV);
         nameET = findViewById(R.id.nameET);
         passwordET = findViewById(R.id.PasswordET);
-        aEmployeeDisET.setText("");
+
         model = Model.getShared();
         store = model.getStore();
         createBTN = findViewById(R.id.CreateAdminBTN);
@@ -64,11 +63,11 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         submitBTN = findViewById(R.id.submitBTN);
         usernameET = findViewById(R.id.EmployeeIdDisET);
         hideAndCelar();
-        aEmployeeDisET.setClickable(true);
+
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                aEmployeeDisET.setClickable(true);
+
                 // clears output text from last command
                 outcomeTV.setText("");
                 adminIDET.setText("");
@@ -146,9 +145,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                   cAdminID = adminIDET.getText().toString();
-                  Log.d("AdminValid", "ID in controller: " + cAdminID);
-                  model.findAdminByID(1,cAdminID, user, myActivity );
-
+                  if(cAdminID.length() !=3){
+                      Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
+                  }
+                  else {
+                      Log.d("AdminValid", "ID in controller: " + cAdminID);
+                      model.findAdminByID(1, cAdminID, user, myActivity);
+                  }
             }
         });
         modifyBTN.setOnClickListener(new View.OnClickListener() {
@@ -160,10 +163,14 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
-                Log.d("AdminValid", "ID in controller: " + cAdminID);
-                Log.d("AdminValid", "Username of user:" + user.userName);
-                model.findAdminByID(2,cAdminID, user, myActivity );
-
+                if(cAdminID.length() !=3){
+                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
+                }
+                else {
+                    Log.d("AdminValid", "ID in controller: " + cAdminID);
+                    Log.d("AdminValid", "Username of user:" + user.userName);
+                    model.findAdminByID(2, cAdminID, user, myActivity);
+                }
             }
         });
         deleteBTN.setOnClickListener(new View.OnClickListener() {
@@ -175,9 +182,13 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
-                Log.d("AdminValid", "Username in controller: " + cAdminID);
-                model.findAdminByID(3,cAdminID, user, myActivity );
-
+                if(cAdminID.length() !=3){
+                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
+                }
+                else {
+                    Log.d("AdminValid", "Username in controller: " + cAdminID);
+                    model.findAdminByID(3, cAdminID, user, myActivity);
+                }
             }
         });
     }
@@ -187,7 +198,9 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             if (exists) {
                 String no = "Admin with that user name already exists";
                 outcomeTV.setText("" + no);
-            } else {
+            }
+
+            else {
                 outcomeTV.setText("");
                 //Now we are going to show all of the fields
                 submitCode = 1;
@@ -216,7 +229,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 submitCode = 2;
                 //Now we are going to show all of the fields
                 showFields();
-                aEmployeeDisET.setText("" + cAdminID);
                 subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
@@ -248,7 +260,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 submitCode = 3;
                 //Now we are going to show all of the fields
                 showFields();
-                aEmployeeDisET.setText("" + cAdminID);
                 subject = a;
                 if(user.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
@@ -297,7 +308,8 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         nameET.setText("");
         nameET.setVisibility(View.INVISIBLE);
         employeeTV.setVisibility(View.INVISIBLE);
-        aEmployeeDisET.setVisibility(View.INVISIBLE);
+        usernameET.setVisibility(View.INVISIBLE);
+        usernameET.setText("");
         passwordTV.setVisibility(View.INVISIBLE);
         passwordET.setText("");
         passwordET.setVisibility(View.INVISIBLE);
@@ -310,9 +322,9 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     public void showFields(){
         nameTV.setVisibility(View.VISIBLE);
         nameET.setVisibility(View.VISIBLE);
+        usernameET.setVisibility(View.VISIBLE);
         nameET.setClickable(true);
         employeeTV.setVisibility(View.VISIBLE);
-        aEmployeeDisET.setVisibility(View.VISIBLE);
         passwordTV.setVisibility(View.VISIBLE);
         passwordET.setVisibility(View.VISIBLE);
         passwordET.setClickable(true);

@@ -108,7 +108,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
         } else if (code == 2) { //update
             Log.d("ProductProbs", "Probs: " +createCase);
-            if (createCase != 4) {
+            if (createCase != 2) {
                 String no = "Barcode  does not exist";
                 resultTV.setText("" + no);
             } else {
@@ -121,7 +121,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
             }
         }
         else if (code == 3) { //delete
-            if (createCase != 4) {
+            if (createCase != 2) {
                 String no = "Barcode  does not exist";
                 resultTV.setText("" + no);
             } else {
@@ -145,13 +145,14 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
             resultTV.setText("Not able to submit at this time");
         }
         else if (submitCode == 1 || submitCode == 2) {
-            c.putString("barcode", barcode);
+            if(submitCode ==1 )
+             c.putString("barcode", barcode);
             model.validateComodityInput(check, actionCode, c, this);
             
         }
         else if (submitCode == 3) {
             // TODO: 11/11/2019 do database stuff here for delete and use if else block to validate input on call back 
-            model.deleteItem((Commodity)c.getSerializable("c"), this);
+            model.deleteItem((Commodity)c.getSerializable("C"), this);
 
         }
 

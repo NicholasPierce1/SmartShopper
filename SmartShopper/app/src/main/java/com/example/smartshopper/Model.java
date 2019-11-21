@@ -103,7 +103,7 @@ public class Model implements BrokerCallbackDelegate {
                 case 1: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 1, barcodeExistResult.commodity); return;
                 case 2: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 2, barcodeExistResult.commodity );return;
                 case 3: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 3, barcodeExistResult.commodity);return;
-                case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4, barcodeExistResult.commodity);return;
+                //case 4: adminProductScreenActivity.buttonPressedCB(oppCode, barcode, 4, barcodeExistResult.commodity);return;
             }
 
         }
@@ -216,6 +216,7 @@ public class Model implements BrokerCallbackDelegate {
         if(oppCode ==1) {
             name = c.getString("name", "");
             vendor = c.getString("vendor", "");
+            Log.d("ProductProbs", "Vendor in creation is: " + vendor);
             if(isEmpty(name)){
                 no += "Name is empty";
                 weNeedToCheckName = false;
@@ -238,6 +239,7 @@ public class Model implements BrokerCallbackDelegate {
             co = (Commodity) c.getSerializable("C");
             name = co.name;
             vendor = co.vendorName;
+            Log.d("ProductProbs", "Vendor for prodcode 2 is: " + co.vendorName);
             price = co.price;
             department = co.department;
             location = co.location;
@@ -410,9 +412,7 @@ public class Model implements BrokerCallbackDelegate {
         else if(!bxr.newBarcode && !bxr.newBarcodeToStore){
             return  3;
         }
-        else if(bxr.newBarcodeToStore && bxr.newBarcode){
-            return 4;
-        }
+
         else return 0;
     }
     private void logCaseProblem(BarcodeExistResult bxe){

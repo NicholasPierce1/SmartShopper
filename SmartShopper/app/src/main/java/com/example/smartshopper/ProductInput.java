@@ -72,7 +72,7 @@ public class ProductInput extends Fragment {
         resultTV = v.findViewById(R.id.ResultTV);
         barCodeET = v.findViewById(R.id.BarcodeET);
         nameET = v.findViewById(R.id.NameET);
-        vendorET = v.findViewById(R.id.DeptET);
+        vendorET = v.findViewById(R.id.VendorET);
         deptET = v.findViewById(R.id.DeptET);
         isleET = v.findViewById(R.id.IsleET);
         priceET = v.findViewById(R.id.priceET);
@@ -174,11 +174,17 @@ public class ProductInput extends Fragment {
 
     public void unlockAll(){
         nameET.setClickable(true);
+        nameET.setText("");
         vendorET.setClickable(true);
+        vendorET.setText("");
         deptET.setClickable(true);
+        deptET.setText("");
         isleET.setClickable(true);
+        isleET.setText("");
         priceET.setClickable(true);
+        priceET.setText("");
         tagsET.setClickable(true);
+        tagsET.setText("");
     }
     public void lockAll(){
         nameET.setClickable(false);
@@ -192,9 +198,13 @@ public class ProductInput extends Fragment {
         nameET.setClickable(false);
         vendorET.setClickable(false);
         deptET.setClickable(true);
+        deptET.setText("");
         isleET.setClickable(true);
+        isleET.setText("");
         priceET.setClickable(true);
+        priceET.setText("");
         tagsET.setClickable(true);
+        tagsET.setText("");
     }
     public void displayAll(Commodity c){
         nameET.setText(""+c.name);
