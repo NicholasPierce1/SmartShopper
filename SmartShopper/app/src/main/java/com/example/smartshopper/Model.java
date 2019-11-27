@@ -3,10 +3,12 @@ package com.example.smartshopper;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Model implements BrokerCallbackDelegate {
@@ -78,6 +80,16 @@ public class Model implements BrokerCallbackDelegate {
         // invokes downcast delegate for apt callback
         ((WelcomeScreenModelMethods)this.mm).departmentCB(initSuccess);
     }
+
+
+    public ArrayList<String> getDepartmentName(){
+        ArrayList<String> rtrn = new ArrayList<>();
+        for(Department d : departmentList){
+            rtrn.add(d.type.name());
+        }
+        return rtrn;
+    }
+
 
 
 

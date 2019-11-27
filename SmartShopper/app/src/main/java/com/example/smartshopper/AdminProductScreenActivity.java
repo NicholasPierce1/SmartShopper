@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.util.ArrayList;
 //@Author Matthew Berry
 
 public class AdminProductScreenActivity extends AppCompatActivity
@@ -225,4 +227,8 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         transaction.show(cud);
         transaction.commit();
     }
+    public ArrayList<String> getDeptListForFragment(){
+        return model.getDepartmentName();
+    }
+
 }

@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.parse.ParseDecoder;
@@ -27,11 +29,13 @@ import com.parse.ParseObject;
  * create an instance of this fragment.
  */
 public class ProductInput extends Fragment {
+    // TODO: 11/27/2019 Get rid of isleET code and deptET code
     TextView nameTV, vendorTV, deptTV, isleTV, priceTV, resultTV, tagsTV;
-    EditText barCodeET, nameET, vendorET, deptET, isleET, priceET, tagsET;
+    EditText barCodeET, nameET, vendorET,  isleET, priceET, tagsET;
     Button cancleBTN, submitBTN;
     Commodity c;
     int submitCode;
+    Spinner deptSPNR, isleSPNR;
     Model m = Model.getShared();
 
     // TODO: Rename parameter arguments, choose names that match
@@ -39,6 +43,7 @@ public class ProductInput extends Fragment {
     public interface buttonInput{
         public void submitButtonPushed(int actionCode, boolean check, Bundle commodity);
         public void cancelButtonPushed();
+        public void getDeptListForFragment();
 
     }
     private buttonInput myActivity = null;
@@ -73,11 +78,14 @@ public class ProductInput extends Fragment {
         barCodeET = v.findViewById(R.id.BarcodeET);
         nameET = v.findViewById(R.id.NameET);
         vendorET = v.findViewById(R.id.VendorET);
-        deptET = v.findViewById(R.id.DeptET);
-        isleET = v.findViewById(R.id.IsleET);
         priceET = v.findViewById(R.id.priceET);
         tagsTV = v.findViewById(R.id.tagsTV);
         tagsET = v.findViewById(R.id.tagsET);
+        deptSPNR = v.findViewById(R.id.deptSPNR);
+        //deptSPNR.setOnItemSelectedListener(???);
+        isleSPNR = v.findViewById(R.id.isleSPNR);
+        //isleSPNR.setOnItemSelectedListener(???);
+
         submitBTN = v.findViewById(R.id.pSubmitBTN);
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,19 +185,18 @@ public class ProductInput extends Fragment {
         nameET.setText("");
         vendorET.setClickable(true);
         vendorET.setText("");
-        deptET.setClickable(true);
-        deptET.setText("");
         isleET.setClickable(true);
         isleET.setText("");
         priceET.setClickable(true);
         priceET.setText("");
         tagsET.setClickable(true);
         tagsET.setText("");
+        deptSPNR.setClickable(true);
+        //ArrayAdapter<String> = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, myActivity.getDeptListForFragment());
     }
     public void lockAll(){
         nameET.setClickable(false);
         vendorET.setClickable(false);
-        deptET.setClickable(false);
         isleET.setClickable(false);
         priceET.setClickable(false);
         tagsET.setClickable(false);
@@ -197,8 +204,6 @@ public class ProductInput extends Fragment {
     public void lockNameaAndVendorAndUnlockRest(){
         nameET.setClickable(false);
         vendorET.setClickable(false);
-        deptET.setClickable(true);
-        deptET.setText("");
         isleET.setClickable(true);
         isleET.setText("");
         priceET.setClickable(true);
@@ -207,9 +212,9 @@ public class ProductInput extends Fragment {
         tagsET.setText("");
     }
     public void displayAll(Commodity c){
+        //Don't forget department
         nameET.setText(""+c.name);
         vendorET.setText(""+ c.vendorName);
-        deptET .setText(""+c.department.type.toString());
         isleET.setText("" +Location.getLocationFromLocationId(c.location.getLocationID()));
         priceET.setText("" + c.price);
         tagsET.setText(""+ c.searchPhrase);
@@ -219,7 +224,7 @@ public class ProductInput extends Fragment {
         Bundle b = new Bundle();
         b.putString("name", nameET.getText().toString());
         b.putString("vendor", vendorET.getText().toString());
-        b.putInt("dept", Integer.parseInt(deptET.getText().toString()));
+        //b.putInt("dept", Integer.parseInt(deptET.getText().toString()));
         b.putInt("isle",Integer.parseInt(isleET.getText().toString()));
         b.putDouble("price", Double.parseDouble(priceET.getText().toString()));
         b.putString("tags", tagsET.getText().toString());
@@ -227,9 +232,9 @@ public class ProductInput extends Fragment {
     }
     private Bundle setToComodity(){
         //For Updation (catch NotAWordException)
-        c.department =(m.getDepartmentFromDepartmentType(DepartmentType.getDepartmentTypeFromID(
-                Integer.parseInt(deptET.getText().toString())
-        )));
+//        c.department =(m.getDepartmentFromDepartmentType(DepartmentType.getDepartmentTypeFromID(
+//                Integer.parseInt(deptET.getText().toString())
+//        )));
         c.location = Location.getLocationFromAisleNumber(Integer.parseInt(isleET.getText().toString()));
         c.price = Double.parseDouble(priceET.getText().toString());
         c.searchPhrase = tagsET.getText().toString();
