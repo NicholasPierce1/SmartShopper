@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 import com.parse.ParseDecoder;
 import com.parse.ParseObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -28,7 +31,7 @@ import com.parse.ParseObject;
  * Use the {link ProductInput#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductInput extends Fragment {
+public class ProductInput extends Fragment implements AdapterView.OnItemSelectedListener{
     // TODO: 11/27/2019 Get rid of isleET code and deptET code
     TextView nameTV, vendorTV, deptTV, isleTV, priceTV, resultTV, tagsTV;
     EditText barCodeET, nameET, vendorET,  isleET, priceET, tagsET;
@@ -43,7 +46,7 @@ public class ProductInput extends Fragment {
     public interface buttonInput{
         public void submitButtonPushed(int actionCode, boolean check, Bundle commodity);
         public void cancelButtonPushed();
-        public void getDeptListForFragment();
+        public ArrayList<String> getDeptListForFragment();
 
     }
     private buttonInput myActivity = null;
@@ -82,9 +85,9 @@ public class ProductInput extends Fragment {
         tagsTV = v.findViewById(R.id.tagsTV);
         tagsET = v.findViewById(R.id.tagsET);
         deptSPNR = v.findViewById(R.id.deptSPNR);
-        //deptSPNR.setOnItemSelectedListener(???);
+        deptSPNR.setOnItemSelectedListener(ArrayAdapter.);
         isleSPNR = v.findViewById(R.id.isleSPNR);
-        //isleSPNR.setOnItemSelectedListener(???);
+        isleSPNR.setOnItemSelectedListener(???);
 
         submitBTN = v.findViewById(R.id.pSubmitBTN);
         submitBTN.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +119,15 @@ public class ProductInput extends Fragment {
         return v;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -192,7 +202,7 @@ public class ProductInput extends Fragment {
         tagsET.setClickable(true);
         tagsET.setText("");
         deptSPNR.setClickable(true);
-        //ArrayAdapter<String> = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, myActivity.getDeptListForFragment());
+        ArrayAdapter<String> = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, myActivity.getDeptListForFragment());
     }
     public void lockAll(){
         nameET.setClickable(false);
