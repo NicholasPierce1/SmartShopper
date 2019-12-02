@@ -28,9 +28,9 @@
         android:text="Vendor:"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.122"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/NameTV"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/NameTV"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.134" />
 
@@ -78,15 +78,16 @@
     <EditText
         android:id="@+id/NameET"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent=".0375"
+        app:layout_constraintBottom_toBottomOf="@id/NameTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.919"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.046" />
+        app:layout_constraintTop_toTopOf="@id/NameTV"
+        app:layout_constraintVertical_bias="1" />
 
     <EditText
         android:id="@+id/VendorET"
