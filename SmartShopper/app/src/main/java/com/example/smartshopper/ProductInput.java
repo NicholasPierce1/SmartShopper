@@ -22,6 +22,7 @@ import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -41,6 +42,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     int submitCode;
     Spinner deptSPNR, isleSPNR;
     Model m = Model.getShared();
+    List<Department> deptlist;
 
     // private member to retain mappings of department to location/s
     private HashMap<Department, ArrayList<Location>> deptToLocationMappings;
@@ -76,6 +78,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_product_input, container, false);
         nameTV = v.findViewById(R.id.NameTV);
         vendorTV = v.findViewById(R.id.VendorTV);
@@ -94,6 +97,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         isleSPNR = v.findViewById(R.id.isleSPNR);
         isleSPNR.setOnItemSelectedListener(this);
         submitBTN = v.findViewById(R.id.pSubmitBTN);
+        deptlist = m.getDeptList();
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -445,4 +445,9 @@ public class Model implements BrokerCallbackDelegate {
         return (s == null || s.equals("") || s.equals(" "));
     }
 
+    public List<Department> getDeptList(){
+        return departmentList;
+    }
+
+
 }
