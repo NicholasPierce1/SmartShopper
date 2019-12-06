@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -17,10 +18,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.parse.ParseDecoder;
-import com.parse.ParseObject;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     List<Department> deptlist;
 
     // private member to retain mappings of department to location/s
-    private HashMap<Department, ArrayList<Location>> deptToLocationMappings;
+    private HashMap<Department, List<Location>> deptToLocationMappings;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,9 +68,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // initializes deptToLocationMappings  with dept instance to location list
-       // this.deptToLocationMappings.put()
     }
 
     @Override
@@ -98,6 +94,10 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         isleSPNR.setOnItemSelectedListener(this);
         submitBTN = v.findViewById(R.id.pSubmitBTN);
         deptlist = m.getDeptList();
+
+        // initializes department mapping's
+        this.initializeDepartmentToLocationMappings(this.deptlist);
+
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +139,57 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    // utilized to render/ initialize the mappings of the department to its locations
+    private void initializeDepartmentToLocationMappings(@NonNull final List<Department> departmentList){
+
+        // declares departments for grocery and produce
+        Department groceryDept = null;
+        Department produceDept = null;
+
+        // acquires grocery and produce instance and sets local instance
+        for(Department department: departmentList){
+
+            // acquires grocery department
+            if(department.type.equals(DepartmentType.grocery))
+                groceryDept = department;
+
+            // acquires and sets produce
+            else if(department.type.equals(DepartmentType.produce))
+                produceDept = department;
+
+        }
+
+        // assert vars are not null
+        if(groceryDept == null || produceDept == null)
+            throw new RuntimeException("no department for grocery or produce");
+
+        // renders mappings
+
+        // produce dept mappings
+        this.deptToLocationMappings.put(produceDept, Arrays.asList(Location.produceDepartmentLeftMostAisle, Location.produceDepartmentLeftMostDisplay, Location.produceDepartmentRightMostDisplay, Location.produceDepartmentTopMostAisle) );
+
+        // grocery dept mappings
+        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
+
+    }
+
+    // private method to return list of all mappings of grocery dept
+    @NonNull
+    private List<Location> getLocationsFromGroceryDepartment(@NonNull final Department groceryDept){
+
+        // creates local list to populate for grocery location list
+        final List<Location> groceryDeptList = new ArrayList<Location>();
+
+        // holds current location id number
+        int currentLocationIdForAisle = groceryDept.minAisle;
+
+        // walks through all ailses within grocery dept, populating list with location
+        while(currentLocationIdForAisle < groceryDept.maxAisle * 2)
+            groceryDeptList.add(Location.getLocationFromAisleNumberLocationId(currentLocationIdForAisle++));
+
+        return groceryDeptList;
     }
 
     @Override
@@ -258,7 +309,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 //        c.department =(m.getDepartmentFromDepartmentType(DepartmentType.getDepartmentTypeFromID(
 //                Integer.parseInt(deptET.getText().toString())
 //        )));
-        c.location = Location.getLocationFromAisleNumber(Integer.parseInt(isleET.getText().toString()));
+        c.location = Location.getLocationFromAisleNumberLocationId(Integer.parseInt(isleET.getText().toString()));
         c.price = Double.parseDouble(priceET.getText().toString());
         c.searchPhrase = tagsET.getText().toString();
         Bundle b = new Bundle();

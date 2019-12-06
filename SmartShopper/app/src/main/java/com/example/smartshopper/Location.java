@@ -1,11 +1,8 @@
 package com.example.smartshopper;
 
-import androidx.annotation.AnyThread;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
-import java.security.InvalidParameterException;
 
 enum Location implements Serializable {
     aisleOneLeft(1), aisleOneRight(2), aisleTwoLeft(3), aisleTwoRight(4), aisleThreeLeft(5), aisleThreeRight(6),
@@ -28,7 +25,7 @@ enum Location implements Serializable {
 
     // returns location from aisle number
     @Nullable
-    public static Location getLocationFromAisleNumber(final int aisleNumber) {
+    public static Location getLocationFromAisleNumberLocationId(final int aisleNumber) {
 
         // validates input to assert aisleNumber is within aisle range [1-19]
         if(aisleNumber > Location.aisleTenRight.locationID || aisleNumber < Location.aisleOneLeft.locationID)
@@ -66,8 +63,8 @@ enum Location implements Serializable {
             return null;
 
         // employs switch to walk through all non-aisle cases granted that location is non-aisle
-        if(Location.getLocationFromAisleNumber(locationID) != null)
-            return Location.getLocationFromAisleNumber(locationID);
+        if(Location.getLocationFromAisleNumberLocationId(locationID) != null)
+            return Location.getLocationFromAisleNumberLocationId(locationID);
 
         switch(locationID){
             case 20: return frozenDepartment;
