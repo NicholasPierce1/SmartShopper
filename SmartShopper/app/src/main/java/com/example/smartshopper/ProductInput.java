@@ -21,6 +21,7 @@ import com.parse.ParseDecoder;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -40,6 +41,9 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     int submitCode;
     Spinner deptSPNR, isleSPNR;
     Model m = Model.getShared();
+
+    // private member to retain mappings of department to location/s
+    private HashMap<Department, ArrayList<Location>> deptToLocationMappings;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +68,8 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // initializes deptToLocationMappings  with dept instance to location list
+       // this.deptToLocationMappings.put()
     }
 
     @Override
