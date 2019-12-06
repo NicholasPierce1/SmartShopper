@@ -14,6 +14,7 @@ import java.util.List;
 public class Model implements BrokerCallbackDelegate {
     //This model is Beetlejuice approved
     private List<Department> departmentList;
+
     private CallBackInterface mm;
     private AdminProductCBMethods adminProductScreenActivity;
     private Store store;

@@ -46,7 +46,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     public interface buttonInput{
         public void submitButtonPushed(int actionCode, boolean check, Bundle commodity);
         public void cancelButtonPushed();
-        public ArrayList<String> getDeptListForFragment();
 
     }
     private buttonInput myActivity = null;
@@ -85,10 +84,9 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         tagsTV = v.findViewById(R.id.tagsTV);
         tagsET = v.findViewById(R.id.tagsET);
         deptSPNR = v.findViewById(R.id.deptSPNR);
-        deptSPNR.setOnItemSelectedListener(ArrayAdapter.);
+        deptSPNR.setOnItemSelectedListener(this);
         isleSPNR = v.findViewById(R.id.isleSPNR);
-        isleSPNR.setOnItemSelectedListener(???);
-
+        isleSPNR.setOnItemSelectedListener(this);
         submitBTN = v.findViewById(R.id.pSubmitBTN);
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +119,10 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if(adapterView.getId()==deptSPNR.getId()){
+
+            return;
+        }
 
     }
 
@@ -167,9 +169,11 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     public void setSubmitCode(int sub){
         submitCode = sub;
     }
-    public void prepareFragmentForPresentation(Commodity c) {
+    public void prepareFragmentForPresentation(Commodity c, ArrayList<String> depts) {
         this.c = c;
-
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,depts );
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        deptSPNR.setAdapter(arrayAdapter);
 
         if (submitCode == 1) {//creation
             if (createCase == 1) { //Exisiting product
@@ -202,7 +206,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         tagsET.setClickable(true);
         tagsET.setText("");
         deptSPNR.setClickable(true);
-        ArrayAdapter<String> = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, myActivity.getDeptListForFragment());
     }
     public void lockAll(){
         nameET.setClickable(false);
