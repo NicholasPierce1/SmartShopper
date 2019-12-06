@@ -18,10 +18,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.MissingResourceException;
 
 
 /**
@@ -190,6 +192,27 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
             groceryDeptList.add(Location.getLocationFromAisleNumberLocationId(currentLocationIdForAisle++));
 
         return groceryDeptList;
+    }
+
+    // from department name selected, acquire department instance
+    @NonNull
+    private Department getDepartmentFromDepartmentNameSelection(@NonNull final List<Department> deptList, @NonNull final String deptNameSelectedByUser) throws ExceptionInInitializerError {
+
+        // acquires department type from user selection
+        final DepartmentType departmentTypeFromUserSelection = DepartmentType.getDepartmentTypeFromName(deptNameSelectedByUser);
+
+        // asserts dept type not null
+        if(departmentTypeFromUserSelection == null)
+            throw new ExceptionInInitializerError("User selection does not map to department type selection: ".concat(deptNameSelectedByUser));
+
+        // returns acquired dept from department type
+        for(Department department: deptList) {
+            if (department.type.equals(departmentTypeFromUserSelection))
+                return department;
+        }
+
+        // outside of loop, throw exception
+        throw new ExceptionInInitializerError("User selection does not map to department selection: ".concat(deptNameSelectedByUser));
     }
 
     @Override
