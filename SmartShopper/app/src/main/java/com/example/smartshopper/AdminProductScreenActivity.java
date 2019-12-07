@@ -186,11 +186,16 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 //
     @Override
     public void createCB(boolean cb) {
+        Log.d("CreateSuccess", "In create cb");
         if(cb){
+            Log.d("CreateSuccess", "In create if statement");
            Toast.makeText(getApplicationContext(), "Creation was a success!", Toast.LENGTH_SHORT);
+           Log.d("CreateSuccess", "Toast message was sent");
            showCUDFragment();
         }
         else{
+            Log.d("CreateSuccess", "In create else statement");
+
             Toast.makeText(getApplicationContext(), "Creation failed. Please try again later", Toast.LENGTH_SHORT);
         }
 
