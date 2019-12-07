@@ -362,7 +362,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
         // TODO: 12/7/2019 Set isle and department from spinner
         deptSPNR.setSelection(deptNamesForSpinnerOneAdapter.indexOf(c.department.type.name()));
-        isleSPNR.setSelection(currentLocationsForSelectedDepartment.indexOf(c.location));
+        isleSPNR.setSelection(this.deptToLocationMappings.get(c.department).indexOf(c.location));
         priceET.setText("" + c.price);
         tagsET.setText(""+ c.searchPhrase);
     }
