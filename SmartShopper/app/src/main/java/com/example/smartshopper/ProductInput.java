@@ -39,7 +39,7 @@ import java.util.MissingResourceException;
 public class ProductInput extends Fragment implements AdapterView.OnItemSelectedListener{
     // TODO: 11/27/2019 Get rid of isleET code and deptET code
     TextView nameTV, vendorTV, deptTV, isleTV, priceTV, resultTV, tagsTV;
-    EditText barCodeET, nameET, vendorET,  isleET, priceET, tagsET;
+    EditText barCodeET, nameET, vendorET, priceET, tagsET;
     Button cancleBTN, submitBTN;
     Commodity c;
     int submitCode;
@@ -267,19 +267,13 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+
         myActivity = (buttonInput) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-       // mListener = null;
     }
 
     /**
@@ -356,7 +350,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         isleSPNR.setClickable(true);
         nameET.setClickable(false);
         vendorET.setClickable(false);
-        isleET.setClickable(true);
         priceET.setClickable(true);
         priceET.setText("");
         tagsET.setClickable(true);
@@ -366,7 +359,10 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         //Don't forget department
         nameET.setText(""+c.name);
         vendorET.setText(""+ c.vendorName);
-        isleET.setText("" +Location.getLocationFromLocationId(c.location.getLocationID()));
+
+        // TODO: 12/7/2019 Set isle and department from spinner
+        deptSPNR.setSelection(deptNamesForSpinnerOneAdapter.indexOf(c.department.type.name()));
+        isleSPNR.setSelection(currentLocationsForSelectedDepartment.indexOf(c.location));
         priceET.setText("" + c.price);
         tagsET.setText(""+ c.searchPhrase);
     }
@@ -376,7 +372,8 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         b.putString("name", nameET.getText().toString());
         b.putString("vendor", vendorET.getText().toString());
         //b.putInt("dept", Integer.parseInt(deptET.getText().toString()));
-        b.putInt("isle",Integer.parseInt(isleET.getText().toString()));
+        b.putSerializable("isle",currentLocationSelection);
+        b.putSerializable("dept", deptSelected);
         b.putDouble("price", Double.parseDouble(priceET.getText().toString()));
         b.putString("tags", tagsET.getText().toString());
         return b;

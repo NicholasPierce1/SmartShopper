@@ -220,7 +220,7 @@ public class Model implements BrokerCallbackDelegate {
         this.oppCode = oppCode;
 
         String name = "", vendor = "", tags;
-        int dept, isle;
+
         double price;
         Department department;
         Location location;
@@ -239,11 +239,9 @@ public class Model implements BrokerCallbackDelegate {
                 no += " Venodr is empty";
                 weNeedToCheckName = false;
             }
-            dept = (c.getInt("dept"));
-            isle = (c.getInt("isle"));
-            DepartmentType dt = DepartmentType.getDepartmentTypeFromID(dept);
-            department =  getDepartmentFromDepartmentType(dt);
-            location = Location.getLocationFromLocationId(isle);
+
+            location = (Location)c.getSerializable("isle"); //wtf am I doing here
+            department = (Department)c.getSerializable("dept");
             tags = c.getString("tags");
             price = (c.getDouble("price"));
 

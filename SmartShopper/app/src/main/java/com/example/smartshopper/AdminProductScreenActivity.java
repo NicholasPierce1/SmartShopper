@@ -153,7 +153,6 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
             
         }
         else if (submitCode == 3) {
-            // TODO: 11/11/2019 do database stuff here for delete and use if else block to validate input on call back 
             model.deleteItem((Commodity)c.getSerializable("C"), this);
 
         }
