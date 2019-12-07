@@ -63,7 +63,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         submitBTN = findViewById(R.id.submitBTN);
         usernameET = findViewById(R.id.EmployeeIdDisET);
         hideAndCelar();
-
+        submitBTN.setVisibility(View.INVISIBLE);
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,18 +86,18 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         level = levelFinder();
                         model.checkForExistingUsername(submitCode, username, user, myActivity);
                     }
-                else{
-                    Log.d("C", "In else for invalid input");
-                    outcomeTV.setText("Invalid input: " +wrong);
+                    else{
+                        Log.d("C", "In else for invalid input");
+                        outcomeTV.setText("Invalid input: " +wrong);
+                    }
                 }
-            }
                 else if(submitCode == 2){
                     if(isInputValid()){
                         cName = nameET.getText().toString();
                         cpw = passwordET.getText().toString();
                         username = usernameET.getText().toString();
-                        usernameET.setClickable(false);
-                         level = levelFinder();
+                        usernameET.setEnabled(false);
+                        level = levelFinder();
                         //We would make a real model call to create it, but for now...
                         subject.name = cName;
                         subject.password = cpw;
@@ -121,17 +121,19 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             }
 
         });
-         cancelBTN.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 // clears output text from last command
-                 outcomeTV.setText("");
-                 hideAndCelar();
-                 createBTN.setVisibility(View.VISIBLE);
-                 modifyBTN.setVisibility(View.VISIBLE);
-                 deleteBTN.setVisibility(View.VISIBLE);
-             }
-         });
+        cancelBTN.setVisibility(View.INVISIBLE);
+        cancelBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // clears output text from last command
+                outcomeTV.setText("");
+                hideAndCelar();
+                hideSubmitAndCancle();
+                createBTN.setVisibility(View.VISIBLE);
+                modifyBTN.setVisibility(View.VISIBLE);
+                deleteBTN.setVisibility(View.VISIBLE);
+            }
+        });
         createBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,14 +146,14 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 createBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
-                  cAdminID = adminIDET.getText().toString();
-                  if(cAdminID.length() !=3){
-                      Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
-                  }
-                  else {
-                      Log.d("AdminValid", "ID in controller: " + cAdminID);
-                      model.findAdminByID(1, cAdminID, user, myActivity);
-                  }
+                cAdminID = adminIDET.getText().toString();
+                if(cAdminID.length() !=3){
+                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
+                }
+                else {
+                    Log.d("AdminValid", "ID in controller: " + cAdminID);
+                    model.findAdminByID(1, cAdminID, user, myActivity);
+                }
             }
         });
         modifyBTN.setOnClickListener(new View.OnClickListener() {
@@ -240,8 +242,14 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         middleAdminCB.setChecked(true);
 
                 }
+
+
                 nameET.setText("" + subject.name);
                 passwordET.setText("" + subject.password);
+                usernameET.setText(""+ subject.userName);
+                nameET.setEnabled(false);
+                usernameET.setEnabled(false);
+                Log.d("Clickable", "Fields should not be clickable");
 
                 Toast.makeText(getApplicationContext(),"Modify Admin Credentials", Toast.LENGTH_LONG).show();
 
@@ -273,10 +281,12 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                         middleAdminCB.setChecked(true);
 
                 }
-                nameET.setClickable(false);
+                nameET.setEnabled(false);
                 nameET.setText("" + subject.name);
-                passwordET.setClickable(false);
+                passwordET.setEnabled(false);
                 passwordET.setText("" + subject.password);
+                usernameET.setText(""+subject.userName);
+                usernameET.setEnabled(false);
 
                 Toast.makeText(getApplicationContext(),"Confirm Deletion", Toast.LENGTH_LONG).show();
 
@@ -295,16 +305,16 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         if(using.userName.equals(chaning.userName))
             return false;
         else if(using.adminLevel.equals(AdminLevel.owner))
-          return true;
+            return true;
         else if (chaning.adminLevel.equals(AdminLevel.storeAdmin))
-          return true;
+            return true;
         else return false;
 
     }
     public void hideAndCelar(){
 
 
-       nameTV.setVisibility(View.INVISIBLE);
+        nameTV.setVisibility(View.INVISIBLE);
         nameET.setText("");
         nameET.setVisibility(View.INVISIBLE);
         employeeTV.setVisibility(View.INVISIBLE);
@@ -320,16 +330,20 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         ownerCB.setVisibility(View.INVISIBLE);
     }
     public void showFields(){
+        Log.d("Clickable", "In show fields");
         nameTV.setVisibility(View.VISIBLE);
         nameET.setVisibility(View.VISIBLE);
         usernameET.setVisibility(View.VISIBLE);
-        nameET.setClickable(true);
+        usernameET.setEnabled(true);
+        nameET.setEnabled(true);
         employeeTV.setVisibility(View.VISIBLE);
         passwordTV.setVisibility(View.VISIBLE);
         passwordET.setVisibility(View.VISIBLE);
-        passwordET.setClickable(true);
+        passwordET.setEnabled(true);
         ownerCB.setClickable(true);
         middleAdminCB.setClickable(true);
+        submitBTN.setVisibility(View.VISIBLE);
+        cancelBTN.setVisibility(View.VISIBLE);
 
     }
     private boolean isInputValid(){
@@ -360,19 +374,21 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
 
     }
     public void aCreateCB(boolean success){
-       if(success) {
-           Log.d("AdminValid", "Admin was added successfully");
-           outcomeTV.setText("Creation Success!");
-           hideAndCelar();
-           showButtons();
-       }
-       else Toast.makeText(getApplicationContext(), "Unable to create admin at this time", Toast.LENGTH_LONG);
+        if(success) {
+            Log.d("AdminValid", "Admin was added successfully");
+            outcomeTV.setText("Creation Success!");
+            hideAndCelar();
+            showButtons();
+            hideSubmitAndCancle();
+        }
+        else Toast.makeText(getApplicationContext(), "Unable to create admin at this time", Toast.LENGTH_LONG);
     }
     public void aModifyCB(boolean success){
         if(success) {
             outcomeTV.setText("Update Success!");
             hideAndCelar();
             showButtons();
+            hideSubmitAndCancle();
         }
         else Toast.makeText(getApplicationContext(), "Unable to update admin at this time", Toast.LENGTH_LONG);
 
@@ -383,6 +399,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             outcomeTV.setText("Deletion Success!");
             hideAndCelar();
             showButtons();
+            hideSubmitAndCancle();
         }
         else Toast.makeText(getApplicationContext(), "Unable to delete admin at this time", Toast.LENGTH_LONG);
 
@@ -400,6 +417,11 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         else{
             outcomeTV.setText("Username already exists or is invalid");
         }
+    }
+
+    private void hideSubmitAndCancle(){
+        submitBTN.setVisibility(View.INVISIBLE);
+        cancelBTN.setVisibility(View.INVISIBLE);
     }
 
 
