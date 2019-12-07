@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -182,7 +183,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
     // utilized to render/ initialize the mappings of the department to its locations
     private void initializeDepartmentToLocationMappings(@NonNull final List<Department> departmentList){
-        
+
         // declares internal hashmap to hold dept type pairings to department
         final HashMap<DepartmentType, Department> departmentTypeDepartmentMappings = new HashMap<DepartmentType,Department>();
 
@@ -203,25 +204,25 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.grocery), this.getLocationsFromGroceryDepartment(groceryDept));
 
         // bakery dept mappings
-        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.bakery), Arrays.asList(Location.bakeryDepartment));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.bakery), Collections.singletonList(Location.bakeryDepartment));
 
         // dairy dept mappings
-        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.dairy),  Arrays.asList(Location.dairyDepartment));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.dairy),  Collections.singletonList(Location.dairyDepartment));
 
         // deli dept mappings
-        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.deli), Arrays.asList(Location.deliDepartment));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.deli), Collections.singletonList(Location.deliDepartment));
 
         // floral dept mappings
-        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.floral),  Arrays.asList(Location.floralDepartment));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.floral), Collections.singletonList(Location.floralDepartment));
 
         // frozen dept mappings
-        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.frozen),  Arrays.asList(Location.frozenDepartment));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.frozen),  Collections.singletonList(Location.frozenDepartment));
 
         // meat dept mappings
-        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.meat),  Arrays.asList(Location.meatDepartment));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.meat),  Collections.singletonList(Location.meatDepartment));
 
         // seafood seafood mappings
-        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.seafood),  Arrays.asList(Location.seafoodDepartment));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.seafood),  Collections.singletonList(Location.seafoodDepartment));
 
     }
 
