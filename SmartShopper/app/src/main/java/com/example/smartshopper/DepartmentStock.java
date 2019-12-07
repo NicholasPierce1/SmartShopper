@@ -1,5 +1,7 @@
 package com.example.smartshopper;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.parse.ParseObject;
@@ -59,6 +61,7 @@ final class DepartmentStock extends DataAccess implements Persistable {
             // assigns local state
             departmentStock.storeObjectId = department.store.getObjectId();
             departmentStock.departmentObjectId = department.getObjectId();
+            Log.d("Adapter : is department id null", String.valueOf(department.getObjectId() == null));
             departmentStock.itemObjectId = commodity.getObjectId();
             departmentStock.price = price;
             departmentStock.location = location;
@@ -112,17 +115,21 @@ final class DepartmentStock extends DataAccess implements Persistable {
 
         // creates local ref for parse object
         final ParseObject parseObject = new ParseObject(DA_ClassNameRelationMapping.DepartmentStock.getRelationName());
-
-        // appends local state
-        parseObject.put(DepartmentStock.departmentObjectIdKey, this.departmentObjectId);
-        parseObject.put(DepartmentStock.locationKey, this.location.getLocationID());
-        parseObject.put(DepartmentStock.itemObjectIdKey, this.itemObjectId);
-        parseObject.put(DepartmentStock.storeObjectIdKey, this.storeObjectId);
-        parseObject.put(DepartmentStock.priceKey, this.price);
+        Log.d("Adapter : begin conversion in dept stock", "!!!");
 
         // sets object id of current object -- if not null
         if(this.getObjectId() != null)
             parseObject.setObjectId(this.getObjectId());
+
+        Log.d("Adapter : 1/2 conversion in dept stock", String.valueOf(this.itemObjectId == null));
+        // appends local state
+        parseObject.put(DepartmentStock.locationKey, this.location.getLocationID());
+        parseObject.put(DepartmentStock.itemObjectIdKey, this.itemObjectId);
+        parseObject.put(DepartmentStock.departmentObjectIdKey, this.departmentObjectId);
+        parseObject.put(DepartmentStock.storeObjectIdKey, this.storeObjectId);
+        parseObject.put(DepartmentStock.priceKey, this.price);
+        Log.d("Adapter : done conversion in dept stock", "!!!");
+
 
         return parseObject;
     }

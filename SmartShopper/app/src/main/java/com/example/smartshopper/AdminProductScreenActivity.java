@@ -177,7 +177,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         //we no KNOW that stuff works soooo....
         if(opp == 1){
             b.putString("barcode", barcode);
-            model.createItem(b, this);
+            model.createItem(b, this, createCode==1);
         }
         else model.updateItem(b, this);
 

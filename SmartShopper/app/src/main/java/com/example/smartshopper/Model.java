@@ -24,7 +24,7 @@ public class Model implements BrokerCallbackDelegate {
     String barcode;
     private static Model shared = new Model();
     private Commodity co;
-    private int createCase = -1;
+    //private int createCase = -1;
     private String adminID, username;
     private Admin requestor;
     private boolean inHouse;
@@ -126,12 +126,12 @@ public class Model implements BrokerCallbackDelegate {
 
 
     // creates/adds item
-    public void createItem(Bundle b, AdminProductCBMethods cmb){
+    public void createItem(Bundle b, AdminProductCBMethods cmb, boolean isExisitingProduct){
         this.mm = cmb;
-
+        Log.d("adapter", "creae Case: ");
         adapter.createAndSaveItemForStoreInDept((Department)b.getSerializable("dept"),
                 b.getString("barcode"), b.getString("name"), b.getString("vendor")
-        , b.getString("tags"), b.getDouble("price"), (Location)b.getSerializable("location"), this);
+        , b.getString("tags"), b.getDouble("price"), (Location)b.getSerializable("location"), isExisitingProduct , this);
     }
 
     @Override

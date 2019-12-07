@@ -123,6 +123,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         }
                 }
                 catch(CancellationException ex){
+                    Log.d("adapter", "empty list at barcode validation-- item not in database or to store");
                     // checks between case 'b' and 'c' on predicate if commodity is null
                     if (commodity == null) {
                         // commodity not found in item relation from barcode -- case 'c'
@@ -134,8 +135,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 }
 
                 finally{
-                    assert(operationsResult != null);
-                    assert(commodity != null);
+                    Log.d("adapter", "adapter operation: " + String.valueOf(operationsResult.get(RepoCallbackResult.operationSuccessKey)) + "barcode exist: " + String.valueOf(operationsResult.get(RepoCallbackResult.adapterOperationSuccessKey)) + "barcode exist in store" + String.valueOf(operationsResult.get(RepoCallbackResult.contextOperationSuccessKey)));
 
                     // renders, and returns, repo callback
                     return new RepoCallbackResult(operationsResult, AdapterMethodType.validateIfBarcodeExist, brokerCallbackDelegate, commodity, null);
@@ -212,7 +212,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
     }
 
     // saves the pending item via composite inputs w/ the denoted store and dept
-    public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String nameToConvertToLowercase, @NonNull final String vendorNameConvertToLowerCase, @NonNull final String searchPhrase, final double price, @NonNull final Location location, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
+    public void createAndSaveItemForStoreInDept(@NonNull final Department department, @NonNull final String barcode, @NonNull final String nameToConvertToLowercase, @NonNull final String vendorNameConvertToLowerCase, @NonNull final String searchPhrase, final double price, @NonNull final Location location, @NonNull final boolean doesAlreadyExistToDatabase, @NonNull final BrokerCallbackDelegate brokerCallbackDelegate){
         Log.d("Adapter : SAVE ITEM","!!!");
         // creates local ref to repo task
         BackFourAppRepo.ExecuteRepoCallTask executeRepoCallTask = new BackFourAppRepo.ExecuteRepoCallTask() {
@@ -227,39 +227,62 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 Log.d("Adapter : create commodity for save","!!");
                 // try-catch-finally to save item, create dept stock, and save dept stock
                 try{
-                    Log.d("Adapter : about to convert parse object to save","!!");
-                    // converts commodity to parse object
-                    final ParseObject commodityToSave = commodity.toParseObject();
-                    Log.d("Adapter : converted commodity to parse object to save","!!");
-                    // saves commodity
-                    commodityToSave.save();
-                    Log.d("Adapter : commodity saved","!!!");
-                    // asserts that commodity's object id is not null
-                    if(commodityToSave.getObjectId() == null)
-                        throw new RuntimeException("saved Commodity does not retain an object id after save");
+                    Log.d("adapter","does item exist to database: ".concat(String.valueOf(doesAlreadyExistToDatabase)));
+                    // checks if creation is composite or not (if item already exist to database)
+                    if(doesAlreadyExistToDatabase){  // already exist in database
 
-                    // updates commodity ref
-                    commodity = Commodity.Builder.toDataAccessFromParse(commodityToSave);
-                    Log.d("Adapter : commodity saved and object id non-null","!!!");
-                    // creates dept stock
-                    final DepartmentStock departmentStock = DepartmentStock.Builder.build(department, commodity, price, location);
-                    Log.d("Adapter : dept stock built","!!!");
-                    // converts and save dept stock
-                    departmentStock.toParseObject().save();
+                        // commodity is composite and does not have object id- finds commodity from barcode and set object id on it
+                        final Commodity commodityThatAlreadyExist = findCompositeCommodityFromBarcode(barcode);
+                        commodity.setObjectIdFromParseObject(commodityThatAlreadyExist.toParseObject());
+                        commodity.department = department;
+                        Log.d("adapter print department id from create", String.valueOf(department.getObjectId()));
 
-                    // sets success codes
-                    operationsResults = RepoCallbackResult.setOperationResultBooleans(true);
+                        // create dept stock to save
+                        final DepartmentStock departmentStock = DepartmentStock.Builder.build(department, commodity, price, location);
 
+                        // saves dept stock and sets success codes
+                        ParseObject deptAsParseObject = departmentStock.toParseObject();
+                        Log.d("adapter", "converted dept stock and saving");
+
+                        deptAsParseObject.save();
+                        operationsResults = RepoCallbackResult.setOperationResultBooleans(true);
+                    }
+                    else {
+
+                        Log.d("Adapter : about to convert parse object to save", "!!");
+                        // converts commodity to parse object
+                        final ParseObject commodityToSave = commodity.toParseObject();
+                        Log.d("Adapter : converted commodity to parse object to save", "!!");
+                        // saves commodity
+                        commodityToSave.save();
+                        Log.d("Adapter : commodity saved", "!!!");
+                        // asserts that commodity's object id is not null
+                        if (commodityToSave.getObjectId() == null)
+                            throw new RuntimeException("saved Commodity does not retain an object id after save");
+
+                        // updates commodity ref
+                        commodity = Commodity.Builder.toDataAccessFromParse(commodityToSave);
+                        Log.d("Adapter : commodity saved and object id non-null", "!!!");
+                        // creates dept stock
+                        final DepartmentStock departmentStock = DepartmentStock.Builder.build(department, commodity, price, location);
+                        Log.d("Adapter : dept stock built", "!!!");
+                        // converts and save dept stock
+                        departmentStock.toParseObject().save();
+
+                        // sets success codes
+                        operationsResults = RepoCallbackResult.setOperationResultBooleans(true);
+                    }
                 }
                 catch(ParseException ex){
-                    Log.d("Adapter : parse exception", ex.getLocalizedMessage());
+                    Log.d("Adapter : parse exception in saving item", "!!!");
                     // sets error codes
                     operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
                 }
-                catch(CancellationException ex){
+                catch(Exception ex){
+                    Log.d("Adapter : exception in saving item", "!!!");
 
                     // personalize exception result w/ known of empty data set retrieval
-                    operationsResults = RepoCallbackResult.setOperationResultBooleans(true);
+                    operationsResults = RepoCallbackResult.setOperationResultBooleans(false);
 
                 }
                 finally {
