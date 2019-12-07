@@ -75,7 +75,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
       if(!isEmpty(barcode))
        model.validateBarcode( barcode, code, this);
       else{
-          Toast.makeText(this, "Barcode is empty", Toast.LENGTH_SHORT);
+          Toast.makeText(this, "Barcode is empty", Toast.LENGTH_SHORT).show();
       }
     }
 
@@ -93,7 +93,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
                 transaction.hide(cud);
                 submitCode = code;
                 createCode = createCase;
-                Toast.makeText(getApplicationContext(), "Enter commodity details", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Enter commodity details", Toast.LENGTH_LONG).show();
 
             }
             else if(createCase == 3){
@@ -103,7 +103,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
                 submitCode = code;
                 createCode = createCase;
 
-                Toast.makeText(getApplicationContext(), "Enter commodity details", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Enter commodity details", Toast.LENGTH_LONG).show();
 
             }
 
@@ -189,14 +189,14 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         Log.d("CreateSuccess", "In create cb");
         if(cb){
             Log.d("CreateSuccess", "In create if statement");
-           Toast.makeText(getApplicationContext(), "Creation was a success!", Toast.LENGTH_SHORT);
+           Toast.makeText(this, "Creation was a success!", Toast.LENGTH_SHORT).show();
            Log.d("CreateSuccess", "Toast message was sent");
            showCUDFragment();
         }
         else{
             Log.d("CreateSuccess", "In create else statement");
 
-            Toast.makeText(getApplicationContext(), "Creation failed. Please try again later", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Creation failed. Please try again later", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -204,11 +204,11 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     @Override
     public void updateCB(boolean cb) {
         if(cb){
-            Toast.makeText(getApplicationContext(), "Update was a success!", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Update was a success!", Toast.LENGTH_SHORT).show();
             showCUDFragment();
         }
         else{
-            Toast.makeText(getApplicationContext(), "Update failed. Please try again later", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Update failed. Please try again later", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -216,11 +216,11 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     @Override
     public void delCB(boolean cb) {
         if(cb){
-            Toast.makeText(getApplicationContext(), "Deletion was a success!", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Deletion was a success!", Toast.LENGTH_SHORT).show();
             showCUDFragment();
         }
         else{
-            Toast.makeText(getApplicationContext(), "Deletion failed. Please try again later", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Deletion failed. Please try again later", Toast.LENGTH_SHORT).show();
         }
 
     }
