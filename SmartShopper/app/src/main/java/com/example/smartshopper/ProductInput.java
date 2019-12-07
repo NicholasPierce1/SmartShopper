@@ -182,44 +182,46 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
     // utilized to render/ initialize the mappings of the department to its locations
     private void initializeDepartmentToLocationMappings(@NonNull final List<Department> departmentList){
-        // TODO: create hashmap on type key value to department instance itself then put all mappings in
-        // declares departments for grocery and produce
-        Department groceryDept = null;
-        Department produceDept = null;
+        
+        // declares internal hashmap to hold dept type pairings to department
+        final HashMap<DepartmentType, Department> departmentTypeDepartmentMappings = new HashMap<DepartmentType,Department>();
 
-        // acquires grocery and produce instance and sets local instance
-        for(Department department: departmentList){
-
-            // acquires grocery department
-            if(department.type.equals(DepartmentType.grocery))
-                groceryDept = department;
-
-            // acquires and sets produce
-            else if(department.type.equals(DepartmentType.produce))
-                produceDept = department;
-
-        }
-
-        // assert vars are not null
-        if(groceryDept == null || produceDept == null)
-            throw new RuntimeException("no department for grocery or produce");
+        // creates internal mappings by walking through all departments, putting the department type and department entries in
+        for(Department department: departmentList)
+            departmentTypeDepartmentMappings.put(department.type, department);
 
         // renders mappings
 
+        // asserts grocery department is not null/ exist
+        final Department groceryDept = departmentTypeDepartmentMappings.get(DepartmentType.grocery);
+        assert(groceryDept != null);
+
         // produce dept mappings
-        this.deptToLocationMappings.put(produceDept, Arrays.asList(Location.produceDepartmentLeftMostAisle, Location.produceDepartmentLeftMostDisplay, Location.produceDepartmentRightMostDisplay, Location.produceDepartmentTopMostAisle) );
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.produce), Arrays.asList(Location.produceDepartmentLeftMostAisle, Location.produceDepartmentLeftMostDisplay, Location.produceDepartmentRightMostDisplay, Location.produceDepartmentTopMostAisle) );
 
         // grocery dept mappings
-        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.grocery), this.getLocationsFromGroceryDepartment(groceryDept));
+
+        // bakery dept mappings
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.bakery), Arrays.asList(Location.bakeryDepartment));
+
+        // dairy dept mappings
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.dairy),  Arrays.asList(Location.dairyDepartment));
+
+        // deli dept mappings
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.deli), Arrays.asList(Location.deliDepartment));
+
+        // floral dept mappings
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.floral),  Arrays.asList(Location.floralDepartment));
 
         // frozen dept mappings
-        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.frozen),  Arrays.asList(Location.frozenDepartment));
 
-        // grocery dept mappings
-        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
+        // meat dept mappings
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.meat),  Arrays.asList(Location.meatDepartment));
 
-        // grocery dept mappings
-        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
+        // seafood seafood mappings
+        this.deptToLocationMappings.put(departmentTypeDepartmentMappings.get(DepartmentType.seafood),  Arrays.asList(Location.seafoodDepartment));
 
     }
 
