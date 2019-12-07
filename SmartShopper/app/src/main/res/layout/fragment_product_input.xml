@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
-        android:text="Isle: "
+        android:text="Aisle: "
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,15 +77,14 @@
 
     <EditText
         android:id="@+id/NameET"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:ems="10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        app:layout_constraintHeight_percent=".0375"
+        app:layout_constraintWidth_percent=".5"
         app:layout_constraintBottom_toBottomOf="@id/NameTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.919"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/NameTV"
         app:layout_constraintTop_toTopOf="@id/NameTV"
         app:layout_constraintVertical_bias="1" />
 
