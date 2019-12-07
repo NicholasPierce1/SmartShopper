@@ -135,7 +135,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                 }
 
                 finally{
-                    Log.d("adapter", "adapter operation: " + String.valueOf(operationsResult.get(RepoCallbackResult.operationSuccessKey)) + "barcode exist: " + String.valueOf(operationsResult.get(RepoCallbackResult.adapterOperationSuccessKey)) + "barcode exist in store" + String.valueOf(operationsResult.get(RepoCallbackResult.contextOperationSuccessKey)));
+                    Log.d("adapter", "adapter operation: " + String.valueOf(operationsResult.get(RepoCallbackResult.operationSuccessKey)) + " barcode exist: " + String.valueOf(operationsResult.get(RepoCallbackResult.adapterOperationSuccessKey)) + " barcode exist in store: " + String.valueOf(operationsResult.get(RepoCallbackResult.contextOperationSuccessKey)));
 
                     // renders, and returns, repo callback
                     return new RepoCallbackResult(operationsResult, AdapterMethodType.validateIfBarcodeExist, brokerCallbackDelegate, commodity, null);
@@ -224,7 +224,6 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
 
                 // creates composite commodity
                 Commodity commodity = Commodity.Builder.build(barcode,nameToConvertToLowercase, vendorNameConvertToLowerCase, searchPhrase);
-                Log.d("Adapter : create commodity for save","!!");
                 // try-catch-finally to save item, create dept stock, and save dept stock
                 try{
                     Log.d("adapter","does item exist to database: ".concat(String.valueOf(doesAlreadyExistToDatabase)));
@@ -234,18 +233,16 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                         // commodity is composite and does not have object id- finds commodity from barcode and set object id on it
                         final Commodity commodityThatAlreadyExist = findCompositeCommodityFromBarcode(barcode);
                         commodity.setObjectIdFromParseObject(commodityThatAlreadyExist.toParseObject());
-                        commodity.department = department;
-                        Log.d("adapter print department id from create", String.valueOf(department.getObjectId()));
 
                         // create dept stock to save
                         final DepartmentStock departmentStock = DepartmentStock.Builder.build(department, commodity, price, location);
 
                         // saves dept stock and sets success codes
                         ParseObject deptAsParseObject = departmentStock.toParseObject();
-                        Log.d("adapter", "converted dept stock and saving");
 
                         deptAsParseObject.save();
                         operationsResults = RepoCallbackResult.setOperationResultBooleans(true);
+                        Log.d("adapter", "converted dept stock and saved");
                     }
                     else {
 
