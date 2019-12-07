@@ -138,7 +138,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         input.setSubmitCode(submitCode);
         transaction.commit();
         msgCenterTV.setText("Enter prodcut details");
-        input.prepareFragmentForPresentation(commodity);
+        input.prepareFragmentForPresentation(commodity,model.getDepartmentName());
     }
 
     public void submitButtonPushed(int actionCode, boolean check, Bundle c) {

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,12 +44,13 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     int submitCode;
     Spinner deptSPNR, isleSPNR;
     Model m = Model.getShared();
+    Department deptSelected;
 
     // private member to retains converted string list
     private List<String> deptNamesForSpinnerOneAdapter = null;
 
     // private member to retain mappings of department to location/s
-    private HashMap<Department, List<Location>> deptToLocationMappings;
+    private HashMap<Department, List<Location>> deptToLocationMappings = new HashMap<Department, List<Location>>();
 
     // private member to retain a current location for spinner two
     private Location currentLocationSelection = null;
@@ -141,14 +143,35 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         if(adapterView.getId()==deptSPNR.getId()){
 
             // use selected index value (i) to get dept name and invoke helper method to get department
-            // then use department to get list of locations, set the instance member that holds the location list,
+            String localDeptName = deptNamesForSpinnerOneAdapter.get(i);
+            deptSelected = getDepartmentFromDepartmentNameSelection(m.getDeptList(),localDeptName);
+            Log.d("Product", localDeptName);
+            Log.d("Product", deptSelected.type.name());
+            // then use department to get list of locations, set the instance member that holds the location list
+            this.currentLocationsForSelectedDepartment = this.deptToLocationMappings.get(deptSelected);
+
             // and then set that list to array adapter two for spinner two
+            List<String>locationNames = new ArrayList<>();
+            for(Location loc: currentLocationsForSelectedDepartment){
+                locationNames.add(loc.name());
+            }
+            final ArrayAdapter<String> locationNameArrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, locationNames );
+            locationNameArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            this.isleSPNR.setAdapter(locationNameArrayAdapter);
+            this.isleSPNR.setOnItemSelectedListener(this);
+
             return;
         }
+        else{
+            //  LOCATION SPINNER
+            // use selection index (i) to acquire current location from instance member that holds location list
+            // then set current location
+           this.currentLocationSelection = currentLocationsForSelectedDepartment.get(i);
 
-        //  LOCATION SPINNER
-        // use selection index (i) to acquire current location from instance member that holds location list
-        // then set current location
+        }
+
+
 
     }
 
@@ -159,7 +182,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
     // utilized to render/ initialize the mappings of the department to its locations
     private void initializeDepartmentToLocationMappings(@NonNull final List<Department> departmentList){
-
+        // TODO: create hashmap on type key value to department instance itself then put all mappings in
         // declares departments for grocery and produce
         Department groceryDept = null;
         Department produceDept = null;
@@ -185,6 +208,15 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
         // produce dept mappings
         this.deptToLocationMappings.put(produceDept, Arrays.asList(Location.produceDepartmentLeftMostAisle, Location.produceDepartmentLeftMostDisplay, Location.produceDepartmentRightMostDisplay, Location.produceDepartmentTopMostAisle) );
+
+        // grocery dept mappings
+        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
+
+        // frozen dept mappings
+        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
+
+        // grocery dept mappings
+        this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
 
         // grocery dept mappings
         this.deptToLocationMappings.put(groceryDept, this.getLocationsFromGroceryDepartment(groceryDept));
@@ -301,8 +333,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         nameET.setText("");
         vendorET.setClickable(true);
         vendorET.setText("");
-        isleET.setClickable(true);
-        isleET.setText("");
+       isleSPNR.setClickable(true);
         priceET.setClickable(true);
         priceET.setText("");
         tagsET.setClickable(true);
@@ -310,17 +341,19 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         deptSPNR.setClickable(true);
     }
     public void lockAll(){
+        deptSPNR.setClickable(false);
+        isleSPNR.setClickable(false);
         nameET.setClickable(false);
         vendorET.setClickable(false);
-        isleET.setClickable(false);
         priceET.setClickable(false);
         tagsET.setClickable(false);
     }
     public void lockNameaAndVendorAndUnlockRest(){
+        deptSPNR.setClickable(true);
+        isleSPNR.setClickable(true);
         nameET.setClickable(false);
         vendorET.setClickable(false);
         isleET.setClickable(true);
-        isleET.setText("");
         priceET.setClickable(true);
         priceET.setText("");
         tagsET.setClickable(true);
@@ -346,11 +379,10 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         return b;
     }
     private Bundle setToComodity(){
-        //For Updation (catch NotAWordException)
-//        c.department =(m.getDepartmentFromDepartmentType(DepartmentType.getDepartmentTypeFromID(
-//                Integer.parseInt(deptET.getText().toString())
-//        )));
-        c.location = Location.getLocationFromAisleNumberLocationId(Integer.parseInt(isleET.getText().toString()));
+        //For Updation (catchNotAWordException)
+        c.department =deptSelected;
+
+        c.location = currentLocationSelection;
         c.price = Double.parseDouble(priceET.getText().toString());
         c.searchPhrase = tagsET.getText().toString();
         Bundle b = new Bundle();
