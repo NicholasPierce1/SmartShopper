@@ -376,9 +376,6 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     // acquires, converts, and deletes dept stock w/ known size of 1
                     deptStockListAsParse.get(0).delete();
 
-                    // converts and deletes commodity
-                    commodityToDelete.toParseObject().delete();
-
                     // sets success results code
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true);
 

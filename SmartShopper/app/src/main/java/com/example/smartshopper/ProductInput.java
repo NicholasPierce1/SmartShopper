@@ -18,14 +18,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.MissingResourceException;
 
 
 /**
@@ -58,6 +55,10 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
     // private member to hold the list of the current depatment's locations
     private List<Location> currentLocationsForSelectedDepartment = null;
+
+    // private member to enjoin deptSpinner to update selection w/ saved value
+    private boolean shouldUpdateAisleSelection = false;
+    private int updatedAisleSelectionToModifyDepartment = -1;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -141,13 +142,13 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if(adapterView.getId()==deptSPNR.getId()){
+
+         if(adapterView.getId()==deptSPNR.getId()){
 
             // use selected index value (i) to get dept name and invoke helper method to get department
             String localDeptName = deptNamesForSpinnerOneAdapter.get(i);
             deptSelected = getDepartmentFromDepartmentNameSelection(m.getDeptList(),localDeptName);
-            Log.d("Product", localDeptName);
-            Log.d("Product", deptSelected.type.name());
+
             // then use department to get list of locations, set the instance member that holds the location list
             this.currentLocationsForSelectedDepartment = this.deptToLocationMappings.get(deptSelected);
 
@@ -156,13 +157,18 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
             for(Location loc: currentLocationsForSelectedDepartment){
                 locationNames.add(loc.name());
             }
-            final ArrayAdapter<String> locationNameArrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, locationNames );
+            ArrayAdapter<String> locationNameArrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, locationNames );
             locationNameArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             this.isleSPNR.setAdapter(locationNameArrayAdapter);
             this.isleSPNR.setOnItemSelectedListener(this);
 
-            return;
+            // checks if update is required in newly created adapter -- if so then set selection
+            if(this.shouldUpdateAisleSelection)
+                this.isleSPNR.setSelection(this.updatedAisleSelectionToModifyDepartment);
+
+            // resets flag for update instruction
+            this.shouldUpdateAisleSelection = false;
         }
         else{
             //  LOCATION SPINNER
@@ -360,9 +366,12 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         nameET.setText(""+c.name);
         vendorET.setText(""+ c.vendorName);
 
-        // TODO: 12/7/2019 Set isle and department from spinner
+        // sets flag and current int value of location for modification of aisle spinner's adapter
+        this.shouldUpdateAisleSelection = true;
+        this.updatedAisleSelectionToModifyDepartment = this.deptToLocationMappings.get(c.department).indexOf(c.location);
+
         deptSPNR.setSelection(deptNamesForSpinnerOneAdapter.indexOf(c.department.type.name()));
-        isleSPNR.setSelection(this.deptToLocationMappings.get(c.department).indexOf(c.location));
+
         priceET.setText("" + c.price);
         tagsET.setText(""+ c.searchPhrase);
     }
