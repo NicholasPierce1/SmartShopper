@@ -43,10 +43,18 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     int submitCode;
     Spinner deptSPNR, isleSPNR;
     Model m = Model.getShared();
-    List<Department> deptlist;
+
+    // private member to retains converted string list
+    private List<String> deptNamesForSpinnerOneAdapter = null;
 
     // private member to retain mappings of department to location/s
     private HashMap<Department, List<Location>> deptToLocationMappings;
+
+    // private member to retain a current location for spinner two
+    private Location currentLocationSelection = null;
+
+    // private member to hold the list of the current depatment's locations
+    private List<Location> currentLocationsForSelectedDepartment = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -95,10 +103,9 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         isleSPNR = v.findViewById(R.id.isleSPNR);
         isleSPNR.setOnItemSelectedListener(this);
         submitBTN = v.findViewById(R.id.pSubmitBTN);
-        deptlist = m.getDeptList();
 
         // initializes department mapping's
-        this.initializeDepartmentToLocationMappings(this.deptlist);
+        this.initializeDepartmentToLocationMappings(this.m.getDeptList());
 
         submitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,8 +140,15 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if(adapterView.getId()==deptSPNR.getId()){
 
+            // use selected index value (i) to get dept name and invoke helper method to get department
+            // then use department to get list of locations, set the instance member that holds the location list,
+            // and then set that list to array adapter two for spinner two
             return;
         }
+
+        //  LOCATION SPINNER
+        // use selection index (i) to acquire current location from instance member that holds location list
+        // then set current location
 
     }
 
@@ -254,6 +268,10 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         submitCode = sub;
     }
     public void prepareFragmentForPresentation(Commodity c, ArrayList<String> depts) {
+
+        // sets dept name list
+        this.deptNamesForSpinnerOneAdapter = depts;
+
         this.c = c;
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,depts );
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
