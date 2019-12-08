@@ -150,6 +150,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         input.setSubmitCode(submitCode);
         transaction.commit();
         msgCenterTV.setText("Enter product details");
+        resultTV.setText("");
         input.prepareFragmentForPresentation(commodity,model.getDepartmentName());
         }
     }

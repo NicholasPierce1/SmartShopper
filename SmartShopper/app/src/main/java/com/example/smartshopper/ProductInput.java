@@ -35,7 +35,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class ProductInput extends Fragment implements AdapterView.OnItemSelectedListener{
-    // TODO: 11/27/2019 Get rid of isleET code and deptET code
     TextView nameTV, vendorTV, deptTV, isleTV, priceTV, resultTV, tagsTV;
     EditText barCodeET, nameET, vendorET, priceET, tagsET;
     Button cancleBTN, submitBTN;
@@ -61,7 +60,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     private boolean shouldUpdateAisleSelection = false;
     private int updatedAisleSelectionToModifyDepartment = -1;
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public interface buttonInput{
         public void submitButtonPushed(int actionCode, boolean check, Bundle commodity);
@@ -70,7 +68,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     }
     private buttonInput myActivity = null;
 
-    // TODO: Rename and change types of parameters
     private int createCase;
 
     //private OnFragmentInteractionListener mListener;
@@ -294,7 +291,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
     public void setCreateCase(int createCase){
