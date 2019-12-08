@@ -87,6 +87,7 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         assert(commodityList != null);
 
         // on success- update instance member and notify data set change
+        this.commodityList.clear();
         for(Commodity commodity: commodityList)
             this.commodityList.add(commodity); // done this way to ensure success and not alter ref's address in adapter
 
