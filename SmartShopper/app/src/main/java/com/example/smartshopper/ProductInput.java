@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -377,25 +378,46 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         tagsET.setText(""+ c.searchPhrase);
     }
     private Bundle retrive(){
-        //This is for the controller later
-
+        //This is for the controller later. Creation of item.
         Bundle b = new Bundle();
-        b.putString("name", nameET.getText().toString());
-        b.putString("vendor", vendorET.getText().toString());
-        b.putSerializable("isle",currentLocationSelection);
-        b.putSerializable("dept", deptSelected);
-        b.putDouble("price", Double.parseDouble(priceET.getText().toString()));
-        b.putString("tags", tagsET.getText().toString());
+        b.putBoolean("isSafe", false);
+        try {
+            b.putString("name", nameET.getText().toString());
+            b.putString("vendor", vendorET.getText().toString());
+            b.putSerializable("isle", currentLocationSelection);
+            b.putSerializable("dept", deptSelected);
+            b.putDouble("price", Double.parseDouble(priceET.getText().toString()));
+            b.putString("tags", tagsET.getText().toString());
+            b.putBoolean("isSafe", true);
+
+        }
+        catch (NumberFormatException e){
+            Toast.makeText(getContext(), "Price is invalid or blank", Toast.LENGTH_LONG);
+        }
+        catch (NullPointerException e){
+            Toast.makeText(getContext(), "Fields are empty", Toast.LENGTH_LONG).show();
+        }
         return b;
     }
     private Bundle setToComodity(){
         //For Updation (catchNotAWordException)
-        c.department =deptSelected;
-        c.location = currentLocationSelection;
-        c.price = Double.parseDouble(priceET.getText().toString());
-        c.searchPhrase = tagsET.getText().toString();
         Bundle b = new Bundle();
-        b.putSerializable("C", c);
+        b.putBoolean("isSafe", false);
+        try {
+            c.department = deptSelected;
+            c.location = currentLocationSelection;
+            c.price = Double.parseDouble(priceET.getText().toString());
+            c.searchPhrase = tagsET.getText().toString();
+            b.putSerializable("C", c);
+            b.putBoolean("isSafe", true);
+        }
+        catch (NumberFormatException e){
+            Toast.makeText(getContext(), "Price is invalid or blank", Toast.LENGTH_LONG).show();
+
+        }
+        catch (NullPointerException e){
+            Toast.makeText(getContext(), "Fields are empty", Toast.LENGTH_LONG).show();
+        }
         return b;
     }
 
