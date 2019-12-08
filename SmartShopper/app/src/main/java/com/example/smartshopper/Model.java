@@ -180,10 +180,6 @@ public class Model implements BrokerCallbackDelegate {
         // assigns upcasted delegate handler
         this.mm = searchResultHandler;
 
-        // checks length is greater than three
-        if(searchPhrase.length() <= 3)
-            searchResultHandler.searchCB(false, false, true, null);
-
         // acquires shared adapter to invoke search
         this.adapter.searchForItemByPhrase(this.store, searchPhrase, this.departmentList, this);
     }
