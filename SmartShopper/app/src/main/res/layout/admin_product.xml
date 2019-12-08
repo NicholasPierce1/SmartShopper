@@ -10,50 +10,51 @@
         android:id="@+id/msgCenterTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Barcode number"
+        android:text="Enter Barcode Number"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.004" />
+        app:layout_constraintVertical_bias="0.005" />
 
 
     <TextView
         android:id="@+id/ResultTV"
-        android:layout_width="290dp"
-        android:layout_height="191dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.396"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97" />
+        app:layout_constraintTop_toBottomOf="@id/BackBTN"
+        app:layout_constraintVertical_bias="0.95" />
 
     <Button
         android:id="@+id/BackBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="goBackAction"
-        android:text="Back to Hub"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Back To Hub"
+        app:layout_constraintBottom_toTopOf="@id/ResultTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.427"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/modifyCTNR"
         app:layout_constraintVertical_bias="0.695" />
 
     <FrameLayout
         android:id="@+id/modifyCTNR"
-        android:layout_width="471dp"
-        android:layout_height="436dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent=".70"
+        app:layout_constraintBottom_toTopOf="@id/BackBTN"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.109">
+        app:layout_constraintTop_toBottomOf="@id/msgCenterTV"
+        app:layout_constraintVertical_bias="0.5">
 
     </FrameLayout>
 
