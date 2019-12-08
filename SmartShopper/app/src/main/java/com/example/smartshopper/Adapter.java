@@ -489,7 +489,7 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
                     Log.d("Adapter : GETTING LIST OF PAIRS", String.valueOf(departmentStockToDepartmentList.size()));
                     // invokes helper to update item from departmentStockToDepartmentList pairs where object id's match
                     Adapter.ORM_Helper.updateItemFromDeptStockToDepartmentPairList(commodityList, departmentStockToDepartmentList);
-
+                    Log.d("Adapter : FINAL LIST OF ITEMS SIZE", String.valueOf(commodityList.size()));
                     // sets success code
                     operationResults = RepoCallbackResult.setOperationResultBooleans(true);
 
@@ -1261,31 +1261,47 @@ public final class Adapter implements BackFourAppRepo.RepoCallbackHandler{
         // helper to update item from dept stock w/ dept pair list
         static void updateItemFromDeptStockToDepartmentPairList(@NonNull final List<Commodity> commodityList, @NonNull final List<Pair<DepartmentStock, Department>> deptStockToDepartmentPairList){
 
+            // creates new commodity list to set afterwards
+            final List<Commodity> commodityListToSet = new ArrayList<Commodity>();
+
+            Log.d("Adapter : ITEM LIST SIZE", String.valueOf(commodityList.size()));
+
             // walks through all items, finding and updating where item object id == department stock's commodity id
             for(Commodity commodity: commodityList){
 
                 // invokes helper to acquire pair where object id's match
                 final Pair<DepartmentStock, Department> pair = getPairOfDeptStockWithDepartmentFromCommodity(commodity, deptStockToDepartmentPairList);
+                Log.d("Adapter : COMMODITY AND PAIR RESULT", commodity.name + " " + String.valueOf(pair));
+                // checks if pair match up is null -- if so, then delete item from list
+                if(pair != null){
+                    // updates item
+                    commodity.updateCommodity(pair.second, pair.first);
 
-                // invokes update on commodity
-                commodity.updateCommodity(pair.second, pair.first);
+                    // appends to commodity list that'll be set
+                    commodityListToSet.add(commodity);
+                }
             }
+            Log.d("Adapter : ITEM LIST SIZE DONE", String.valueOf(commodityListToSet.size()));
+
+            // walks through all matching items and adds to given list
+            commodityList.clear();
+            commodityList.addAll(commodityListToSet);
         }
 
         // helper method to return dept stock w/ dept pair where it matched commodity object id
-        @NonNull
-        static Pair<DepartmentStock, Department> getPairOfDeptStockWithDepartmentFromCommodity(@NonNull final Commodity commodity, @NonNull final List<Pair<DepartmentStock, Department>> deptStockToDeptPairList){
+        @Nullable
+        static Pair<DepartmentStock, Department> getPairOfDeptStockWithDepartmentFromCommodity(@NonNull final Commodity commodity, @NonNull final List<Pair<DepartmentStock, Department>> deptStockToDeptPairList) {
 
             // walks through all pairs and returns match on object id equality
-            for(Pair<DepartmentStock, Department> pair: deptStockToDeptPairList){
+            for (Pair<DepartmentStock, Department> pair : deptStockToDeptPairList) {
                 Log.d("Adapter: GETTING ITEMS BACK FROM SEARCH", "dept stock com id: ".concat(pair.first.itemObjectId) +
                         "com id: ".concat(commodity.getObjectId()));
-                if(pair.first.itemObjectId.equals(commodity.getObjectId()))
+                if (pair.first.itemObjectId.equals(commodity.getObjectId()))
                     return pair;
             }
 
-            // throws exception is no match uncovered
-            throw new NoSuchElementException("no pair pertains to commodity's object id");
+            // no item procured from pair match, return null
+            return null;
         }
 
     }
