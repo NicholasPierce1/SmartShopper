@@ -36,15 +36,15 @@
         android:id="@+id/EmployeeIDTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="EmployeeID: "
+        android:text="Employee ID: "
         android:textSize="18sp"
-        app:layout_constraintWidth_percent=".75"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/msgCenterTV"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias=".2" />
+        app:layout_constraintVertical_bias=".2"
+        app:layout_constraintWidth_percent=".75" />
 
     <TextView
         android:id="@+id/RantTV"

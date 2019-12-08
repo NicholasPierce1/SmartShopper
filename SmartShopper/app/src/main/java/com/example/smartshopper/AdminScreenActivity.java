@@ -64,7 +64,7 @@ public class AdminScreenActivity extends AppCompatActivity {
         }
        else{
            adminCreateBTN.setVisibility(View.INVISIBLE);
-           return "Stnadard Admin";
+           return "Standard Admin";
         }
     }
     public void adminCreateAction(View v){
