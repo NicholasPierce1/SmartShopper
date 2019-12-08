@@ -48,7 +48,7 @@
         android:id="@+id/modifyCTNR"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent=".70"
+        app:layout_constraintHeight_percent=".80"
         app:layout_constraintBottom_toTopOf="@id/BackBTN"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

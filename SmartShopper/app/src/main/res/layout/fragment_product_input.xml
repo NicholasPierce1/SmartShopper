@@ -132,6 +132,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
+        android:maxLines="2"
         android:gravity="center_horizontal"
         app:layout_constraintWidth_percent=".5"
         app:layout_constraintBottom_toBottomOf="@id/tagsTV"
@@ -163,7 +164,7 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@id/tagsTV"
         app:layout_constraintTop_toBottomOf="@id/tagsTV"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.75" />
 
     <Spinner
         android:id="@+id/deptSPNR"
