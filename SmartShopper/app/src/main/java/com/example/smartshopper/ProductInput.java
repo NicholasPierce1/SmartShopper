@@ -315,6 +315,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         if (submitCode == 1) {//creation
             if (createCase == 1) { //Exisiting product
                 lockNameaAndVendorAndUnlockRest();
+                deptSPNR.setEnabled(true);
                 nameET.setText(""+c.name);
                 vendorET.setText(""+c.vendorName);
             }
@@ -336,24 +337,24 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         nameET.setText("");
         vendorET.setEnabled(true);
         vendorET.setText("");
-        isleSPNR.setClickable(true);
+        isleSPNR.setEnabled(true);
         priceET.setEnabled(true);
         priceET.setText("");
         tagsET.setEnabled(true);
         tagsET.setText("");
-        deptSPNR.setClickable(true);
+        deptSPNR.setEnabled(true);
     }
     public void lockAll(){
-        deptSPNR.setClickable(false);
-        isleSPNR.setClickable(false);
+        deptSPNR.setEnabled(false);
+        isleSPNR.setEnabled(false);
         nameET.setEnabled(false);
         vendorET.setEnabled(false);
         priceET.setEnabled(false);
         tagsET.setEnabled(false);
     }
     public void lockNameaAndVendorAndUnlockRest(){
-        deptSPNR.setClickable(true);
-        isleSPNR.setClickable(true);
+        isleSPNR.setEnabled(true);
+        deptSPNR.setEnabled(false);
         nameET.setEnabled(false);
         vendorET.setEnabled(false);
         priceET.setEnabled(true);
@@ -377,6 +378,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     }
     private Bundle retrive(){
         //This is for the controller later
+
         Bundle b = new Bundle();
         b.putString("name", nameET.getText().toString());
         b.putString("vendor", vendorET.getText().toString());
