@@ -201,7 +201,7 @@ public class Model implements BrokerCallbackDelegate {
         }
 
         // search was success, assert size of list is in context of business rules
-        if(commodityList.size() > 3 || commodityList.isEmpty()) {
+        if(commodityList.isEmpty()) {
             ((SearchResultHandler) this.mm).searchCB(searchWasSuccessful, false, false, null);
             return;
         }
