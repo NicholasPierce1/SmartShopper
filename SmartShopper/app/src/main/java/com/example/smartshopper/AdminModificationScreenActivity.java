@@ -141,9 +141,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 // clears output text from last command
                 outcomeTV.setText("");
                 //So you can't do other things
-                modifyBTN.setVisibility(View.INVISIBLE);
-                deleteBTN.setVisibility(View.INVISIBLE);
-                createBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
@@ -159,9 +156,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         modifyBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createBTN.setVisibility(View.INVISIBLE);
-                deleteBTN.setVisibility(View.INVISIBLE);
-                modifyBTN.setVisibility(View.INVISIBLE);
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
@@ -178,9 +172,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         deleteBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createBTN.setVisibility(View.INVISIBLE);
-                modifyBTN.setVisibility(View.INVISIBLE);
-                deleteBTN.setVisibility(View.INVISIBLE);
+
                 //Need to make sure the id does not exist
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
@@ -203,6 +195,9 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             }
 
             else {
+                createBTN.setVisibility(View.INVISIBLE);
+                modifyBTN.setVisibility(View.INVISIBLE);
+                deleteBTN.setVisibility(View.INVISIBLE);
                 outcomeTV.setText("");
                 //Now we are going to show all of the fields
                 submitCode = 1;
@@ -232,7 +227,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 //Now we are going to show all of the fields
                 showFields();
                 subject = a;
-                if(user.adminLevel.equals(AdminLevel.owner)){
+                if(user.adminLevel.equals(AdminLevel.owner) && !subject.adminLevel.equals(AdminLevel.owner)){
                     rankTV.setVisibility(View.VISIBLE);
                     middleAdminCB.setVisibility(View.VISIBLE);
                     ownerCB.setVisibility(View.VISIBLE);
@@ -301,16 +296,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         setResult(0, data);
         finish();
     }
-    private boolean hasPermission(Admin using, Admin chaning){
-        if(using.userName.equals(chaning.userName))
-            return false;
-        else if(using.adminLevel.equals(AdminLevel.owner))
-            return true;
-        else if (chaning.adminLevel.equals(AdminLevel.storeAdmin))
-            return true;
-        else return false;
 
-    }
     public void hideAndCelar(){
 
 
@@ -349,8 +335,6 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
     private boolean isInputValid(){
         Log.d("AdminValid", "In is input valid");
         wrong = "";
-        String name = nameET.getText().toString();
-
         if(nameET.equals("") || nameET.equals(" ") || nameET.equals(null) || ! nameET.getText().toString().contains(" ")){
             wrong +="Invalid name. Must have first and last name.";
         }
@@ -408,6 +392,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
         createBTN.setVisibility(View.VISIBLE);
         modifyBTN.setVisibility(View.VISIBLE);
         deleteBTN.setVisibility(View.VISIBLE);
+        outcomeTV.setText("");
     }
 
     public void adminUsernameCB(boolean valid){

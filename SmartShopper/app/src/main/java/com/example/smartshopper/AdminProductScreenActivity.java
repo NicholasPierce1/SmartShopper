@@ -173,8 +173,9 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
     @Override
     public void cancelButtonPushed() {
-       showCUDFragment();
         submitCode =-1;
+       showCUDFragment();
+
     }
 
 
@@ -184,15 +185,15 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     public void validationCB(String wrong, int opp, Bundle b) {
         Log.d("ProductProbs", wrong);
         if(!wrong.equals("")){
-            resultTV.setText("Invalid input: \n" + wrong );
+            Toast.makeText(this,"Invalid input:" + wrong, Toast.LENGTH_LONG).show();
         }
-        //we no KNOW that stuff works soooo....
-        if(opp == 1){
-            b.putString("barcode", barcode);
-            model.createItem(b, this, createCode==1);
+        else {
+            //we no KNOW that stuff works soooo....
+            if (opp == 1) {
+                b.putString("barcode", barcode);
+                model.createItem(b, this, createCode == 1);
+            } else model.updateItem(b, this);
         }
-        else model.updateItem(b, this);
-
 
     }
 //
@@ -239,9 +240,12 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
 
     private void showCUDFragment(){
         FragmentTransaction transaction = manager.beginTransaction();
+        cud.removeBarcode();
         transaction.hide(input);
         transaction.show(cud);
         transaction.commit();
+        resultTV.setText("");
+
     }
     public ArrayList<String> getDeptListForFragment(){
         return model.getDepartmentName();

@@ -98,7 +98,6 @@ public class Model implements BrokerCallbackDelegate {
     // ITEM METHODS (CONTROLLER-MODEL)
 
     // validate uniqueness of item via barcode
-    // TODO, Mat why aren't you using callbacks? The delegate is not used in this transaction
     public void validateBarcode(String barcode, int oppCode, AdminProductCBMethods cbm){
         adminProductScreenActivity = cbm;
         this.oppCode = oppCode;
@@ -162,8 +161,7 @@ public class Model implements BrokerCallbackDelegate {
     public  void deleteItem(Commodity c, AdminProductCBMethods cbm){
         this.mm = cbm;
 
-        // TODO: Mat, we only need barcode, you can change the commodity to a string of barcode
-        // TODO: I find the item internally for you, that why the callback let's you know if it worked
+
         adapter.deleteItemFromBarcode(store, c.barcode, this);
     }
 
@@ -275,13 +273,13 @@ Log.d("adapter callback", String.valueOf(commodityList.size()) + String.valueOf(
             adapter.validateItemNameToVendorIsUnique(name, vendor, this);
         }
 
-        // TODO, Mat be VERY sure to call a handler directly from the model
         else validateNameForVendorIsUniqueHandler(true, true);
     }
 
     @Override
     public void validateNameForVendorIsUniqueHandler(boolean searchWasSuccess, boolean nameIsUnique) {
         if(searchWasSuccess){
+            Log.d("AdminMod", "nameIsUnique:"+ nameIsUnique);
             if(!nameIsUnique){
                 no += "That product name already exists for the vendor";
             }
@@ -353,8 +351,7 @@ Log.d("adapter callback", String.valueOf(commodityList.size()) + String.valueOf(
     public void deleteAdmin(Admin user, Admin subject, AdminModCBMethods cbm){
         this.mm = cbm;
 
-        // TODO, Mat the purpose of the adapter method is to help your model implementation, I find the admin for you by the empId
-        // TODO, lemme help and just pass the unverified empId value to me
+
         adapter.deleteAdmin(store, subject.empID, user,this);
     }
 
@@ -370,9 +367,6 @@ Log.d("adapter callback", String.valueOf(commodityList.size()) + String.valueOf(
 
         // upcast delegate ref to singleton member
         this.mm = adminModCBMethods;
-
-        // TODO, Mat why are you setting 'requestor'? Does controller not have local ref of the loggedInAdmin?
-        // TODO, Mat, are you validating a adminID is unqiue, then retrieving and admin by empId -- which is different -- with that adminID?
         this.requestor = requestor;
         this.username = username;
         this.oppCode = oppCode;
