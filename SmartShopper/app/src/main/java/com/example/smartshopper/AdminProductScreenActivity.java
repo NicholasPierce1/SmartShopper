@@ -155,21 +155,20 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     }
 
     public void submitButtonPushed(int actionCode, boolean check, Bundle c) {
-        c.putString("barcode", barcode);
-        if (submitCode == -1) {
-            resultTV.setText("Not able to submit at this time");
-        }
-        else if (submitCode == 1 || submitCode == 2) {
-            if(submitCode ==1 )
-             c.putString("barcode", barcode);
-            model.validateComodityInput(check, actionCode, c, this);
-            
-        }
-        else if (submitCode == 3) {
-            model.deleteItem((Commodity)c.getSerializable("C"), this);
+        if(c.getBoolean("isSafe")) {
+            c.putString("barcode", barcode);
+            if (submitCode == -1) {
+                resultTV.setText("Not able to submit at this time");
+            } else if (submitCode == 1 || submitCode == 2) {
+                if (submitCode == 1)
+                    c.putString("barcode", barcode);
+                model.validateComodityInput(check, actionCode, c, this);
 
-        }
+            } else if (submitCode == 3) {
+                model.deleteItem((Commodity) c.getSerializable("C"), this);
 
+            }
+        }
     }
 
     @Override
