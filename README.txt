@@ -20,3 +20,13 @@ Admin side:
 - pre-created barcodes that exist to store: 220991, 220994, 111111
 - barcodes that exist but not to store: 110088
 - admin empi id that exist to store: 321, 999 (none of the two admins above have these emp id so feel free to modify/delete as needed)
+
+Functionality and Completion Status:
+- Allow users to select stores and declare user role/identity (done)
+- Allow consumers to query and see where items reside at(done)
+- Allow consumers to navigate freely on consumer side via “emulated” tab bar (done)
+- Allow admin to login and see profile state/attributes (done)
+- Allow admin to create, update, and delete admin with respect to input validation (done)
+- Allow admin to create, update, and delete items  with respect to input validation (done)
+- Allow admin to freely navigate internally in admin panel (done)
+- Responsive design implementation on all views (done)
