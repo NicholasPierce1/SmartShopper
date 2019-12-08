@@ -93,7 +93,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintVertical_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CreateAdminBTN"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -106,7 +106,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/NameTV"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintVertical_bias="0.2"
         app:layout_constraintStart_toStartOf="@id/NameTV"
         app:layout_constraintTop_toBottomOf="@+id/CreateAdminBTN"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -121,7 +121,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/NameTV"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintVertical_bias="0.55"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/NameTV"
         app:layout_constraintTop_toBottomOf="@+id/CreateAdminBTN"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -162,8 +162,8 @@
         app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="@id/CreateAdminBTN"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/RankTV"
-        app:layout_constraintVertical_bias=".15"
+        app:layout_constraintTop_toBottomOf="@id/CreateAdminBTN"
+        app:layout_constraintVertical_bias=".75"
         />
 
     <TextView
@@ -186,9 +186,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outcomeTV"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias=".7"/>
+        app:layout_constraintTop_toTopOf="@+id/submitBTN"
+        app:layout_constraintBottom_toBottomOf="@id/submitBTN"
+        app:layout_constraintVertical_bias=".5"/>
 
     <TextView
         android:id="@+id/PasswordTV"
@@ -198,7 +198,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/NameTV"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintVertical_bias="0.375"
         app:layout_constraintStart_toStartOf="@id/NameTV"
         app:layout_constraintTop_toBottomOf="@+id/CreateAdminBTN"
         app:layout_constraintBottom_toBottomOf="parent" />

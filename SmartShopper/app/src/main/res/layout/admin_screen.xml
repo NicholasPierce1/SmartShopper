@@ -85,7 +85,7 @@
         app:layout_constraintStart_toStartOf="@id/RantTV"
         app:layout_constraintTop_toBottomOf="@id/actionTV"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias=".225" />
+        app:layout_constraintVertical_bias=".275" />
 
     <Button
         android:id="@+id/ProductBTN"
@@ -111,6 +111,6 @@
         app:layout_constraintStart_toStartOf="@id/RantTV"
         app:layout_constraintTop_toBottomOf="@id/actionTV"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias=".4" />
+        app:layout_constraintVertical_bias=".525" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
