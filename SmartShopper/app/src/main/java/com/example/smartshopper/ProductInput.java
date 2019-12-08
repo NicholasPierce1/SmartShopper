@@ -388,7 +388,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
 
         }
         catch (NumberFormatException e){
-            Toast.makeText(getContext(), "Price is invalid or blank", Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), "Price is invalid or blank", Toast.LENGTH_LONG).show();
         }
         catch (NullPointerException e){
             Toast.makeText(getContext(), "Fields are empty", Toast.LENGTH_LONG).show();

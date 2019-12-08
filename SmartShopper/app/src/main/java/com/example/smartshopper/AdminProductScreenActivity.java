@@ -68,14 +68,14 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     }
 
     private boolean isEmpty(String s) {
-        return (s == null || s.equals("") || s.equals(" "));
+        return (s == null || s.equals("") || s.equals(" ") || s.length()!=6);
     }
 
     public void buttonPressed(int code, String barcode){
       if(!isEmpty(barcode))
        model.validateBarcode( barcode, code, this);
       else{
-          Toast.makeText(this, "Barcode is empty", Toast.LENGTH_SHORT).show();
+          Toast.makeText(this, "Barcode must be six numbers", Toast.LENGTH_SHORT).show();
       }
     }
 
@@ -156,7 +156,8 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     }
 
     public void submitButtonPushed(int actionCode, boolean check, Bundle c) {
-        if(c.getBoolean("isSafe")) {
+        if(c.getBoolean("isSafe")) {//need to make sure that there was nothing wrong when
+            //the bundle was created
             c.putString("barcode", barcode);
             if (submitCode == -1) {
                 resultTV.setText("Not able to submit at this time");

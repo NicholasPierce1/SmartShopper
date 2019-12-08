@@ -145,7 +145,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
                 if(cAdminID.length() !=3){
-                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Log.d("AdminValid", "ID in controller: " + cAdminID);
@@ -160,7 +160,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
                 if(cAdminID.length() !=3){
-                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Log.d("AdminValid", "ID in controller: " + cAdminID);
@@ -177,7 +177,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
                 hideAndCelar();
                 cAdminID = adminIDET.getText().toString();
                 if(cAdminID.length() !=3){
-                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Id must be three characters.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Log.d("AdminValid", "Username in controller: " + cAdminID);
@@ -354,7 +354,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
 
     @Override
     public void adminNotFound() {
-        Toast.makeText(getApplicationContext(), "Admin find Failure. Please restart and try again", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "Admin find Failure. Please restart and try again", Toast.LENGTH_SHORT).show();
 
     }
     public void aCreateCB(boolean success){
@@ -365,7 +365,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             showButtons();
             hideSubmitAndCancle();
         }
-        else Toast.makeText(getApplicationContext(), "Unable to create admin at this time", Toast.LENGTH_LONG);
+        else Toast.makeText(getApplicationContext(), "Unable to create admin at this time", Toast.LENGTH_LONG).show();
     }
     public void aModifyCB(boolean success){
         if(success) {
@@ -374,7 +374,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             showButtons();
             hideSubmitAndCancle();
         }
-        else Toast.makeText(getApplicationContext(), "Unable to update admin at this time", Toast.LENGTH_LONG);
+        else Toast.makeText(getApplicationContext(), "Unable to update admin at this time", Toast.LENGTH_LONG).show();
 
     }
 
@@ -385,7 +385,7 @@ public class AdminModificationScreenActivity extends AppCompatActivity implement
             showButtons();
             hideSubmitAndCancle();
         }
-        else Toast.makeText(getApplicationContext(), "Unable to delete admin at this time", Toast.LENGTH_LONG);
+        else Toast.makeText(getApplicationContext(), "Unable to delete admin at this time", Toast.LENGTH_LONG).show();
 
     }
     private void showButtons(){

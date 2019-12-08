@@ -79,6 +79,7 @@ public class ProductCUD extends Fragment {
         modifyBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 myActivity.buttonPressed(2, barcodeET.getText().toString());
 
             }
