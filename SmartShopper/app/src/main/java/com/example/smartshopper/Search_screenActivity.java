@@ -131,11 +131,17 @@ public class Search_screenActivity extends AppCompatActivity implements tabBarFr
         itemEntered = findViewById(R.id.itemNameET);
         final String searchPhrase = String.valueOf(itemEntered.getText()).toLowerCase();
 
-        Model.getShared().searchCommoditiesBySearchPhrase(searchPhrase, this);
-
         // hides prior search result
         this.errorTV.setText("");
         this.recyclerView.setVisibility(View.INVISIBLE);
+
+        if(searchPhrase.length() < 3){
+            this.updateResultTextViewWithString("please expand search");
+            return;
+        }
+
+
+        Model.getShared().searchCommoditiesBySearchPhrase(searchPhrase, this);
     }
 
 
