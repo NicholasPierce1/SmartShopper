@@ -116,7 +116,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
             public void onClick(View view) {
                 //We are either creating a comodity or changing. We will pass in the things we are doing
                 //as a bundle to make life easy
-               boolean check = createCase == 3; //In the event of  create case
+                boolean check = createCase == 3; //In the event of  create case
                 if(submitCode == 1){ //creation
                     myActivity.submitButtonPushed(1, check, retrive());
                 }
@@ -143,7 +143,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-         if(adapterView.getId()==deptSPNR.getId()){
+        if(adapterView.getId()==deptSPNR.getId()){
 
             // use selected index value (i) to get dept name and invoke helper method to get department
             String localDeptName = deptNamesForSpinnerOneAdapter.get(i);
@@ -174,7 +174,7 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
             //  LOCATION SPINNER
             // use selection index (i) to acquire current location from instance member that holds location list
             // then set current location
-           this.currentLocationSelection = currentLocationsForSelectedDepartment.get(i);
+            this.currentLocationSelection = currentLocationsForSelectedDepartment.get(i);
 
         }
 
@@ -315,8 +315,8 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         if (submitCode == 1) {//creation
             if (createCase == 1) { //Exisiting product
                 lockNameaAndVendorAndUnlockRest();
-               nameET.setText(""+c.name);
-               vendorET.setText(""+c.vendorName);
+                nameET.setText(""+c.name);
+                vendorET.setText(""+c.vendorName);
             }
             else unlockAll();
         }
@@ -332,33 +332,33 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     }
 
     public void unlockAll(){
-        nameET.setClickable(true);
+        nameET.setEnabled(true);
         nameET.setText("");
-        vendorET.setClickable(true);
+        vendorET.setEnabled(true);
         vendorET.setText("");
-       isleSPNR.setClickable(true);
-        priceET.setClickable(true);
+        isleSPNR.setClickable(true);
+        priceET.setEnabled(true);
         priceET.setText("");
-        tagsET.setClickable(true);
+        tagsET.setEnabled(true);
         tagsET.setText("");
         deptSPNR.setClickable(true);
     }
     public void lockAll(){
         deptSPNR.setClickable(false);
         isleSPNR.setClickable(false);
-        nameET.setClickable(false);
-        vendorET.setClickable(false);
-        priceET.setClickable(false);
-        tagsET.setClickable(false);
+        nameET.setEnabled(false);
+        vendorET.setEnabled(false);
+        priceET.setEnabled(false);
+        tagsET.setEnabled(false);
     }
     public void lockNameaAndVendorAndUnlockRest(){
         deptSPNR.setClickable(true);
         isleSPNR.setClickable(true);
-        nameET.setClickable(false);
-        vendorET.setClickable(false);
-        priceET.setClickable(true);
+        nameET.setEnabled(false);
+        vendorET.setEnabled(false);
+        priceET.setEnabled(true);
         priceET.setText("");
-        tagsET.setClickable(true);
+        tagsET.setEnabled(true);
         tagsET.setText("");
     }
     public void displayAll(Commodity c){
@@ -380,7 +380,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
         Bundle b = new Bundle();
         b.putString("name", nameET.getText().toString());
         b.putString("vendor", vendorET.getText().toString());
-        //b.putInt("dept", Integer.parseInt(deptET.getText().toString()));
         b.putSerializable("isle",currentLocationSelection);
         b.putSerializable("dept", deptSelected);
         b.putDouble("price", Double.parseDouble(priceET.getText().toString()));
@@ -390,7 +389,6 @@ public class ProductInput extends Fragment implements AdapterView.OnItemSelected
     private Bundle setToComodity(){
         //For Updation (catchNotAWordException)
         c.department =deptSelected;
-
         c.location = currentLocationSelection;
         c.price = Double.parseDouble(priceET.getText().toString());
         c.searchPhrase = tagsET.getText().toString();

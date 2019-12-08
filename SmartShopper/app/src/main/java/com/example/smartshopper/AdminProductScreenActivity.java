@@ -80,12 +80,14 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
     }
 
     public void buttonPressedCB(int code, String barcode, int createCase, Commodity commodity) {
+        boolean needToBlock = false;
         this.barcode = barcode;
         FragmentTransaction transaction = manager.beginTransaction();
         if (code == 1) { //create
             if (createCase == 2) {
                 String no = "Product with that Barcode name already exists";
                 resultTV.setText("" + no);
+                needToBlock = true;
             }
             else if(createCase == 1){
                 //Now we are going to show all of the fields
@@ -94,6 +96,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
                 submitCode = code;
                 createCode = createCase;
                 Toast.makeText(this, "Enter commodity details", Toast.LENGTH_LONG).show();
+                needToBlock = false;
 
             }
             else if(createCase == 3){
@@ -102,7 +105,7 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
                 transaction.hide(cud);
                 submitCode = code;
                 createCode = createCase;
-
+                needToBlock = false;
                 Toast.makeText(this, "Enter commodity details", Toast.LENGTH_LONG).show();
 
             }
@@ -111,12 +114,16 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         } else if (code == 2) { //update
             Log.d("ProductProbs", "Probs: " +createCase);
             if (createCase != 2) {
+                Log.d("ProductProbs", "Product has deemed invalid for updation");
                 String no = "Barcode  does not exist";
+                needToBlock = true;
                 resultTV.setText("" + no);
             } else {
+                Log.d("ProductProbs", "Product has been validated for updation");
                 transaction.show(input);
                 transaction.hide(cud);
                 submitCode = code;
+                needToBlock = false;
                 //Now we are going to show all of the fields
                 Toast.makeText(getApplicationContext(), "Modify Commodity details", Toast.LENGTH_LONG).show();
 
@@ -124,21 +131,27 @@ implements ProductCUD.CUDopperations, ProductInput.buttonInput, AdminProductCBMe
         }
         else if (code == 3) { //delete
             if (createCase != 2) {
+                Log.d("ProductProbs", "Product has deemed invalid for deletion");
                 String no = "Barcode  does not exist";
                 resultTV.setText("" + no);
+                needToBlock = true;
             } else {
+                needToBlock = false;
+                Log.d("ProductProbs", "Product has been validated for deletion");
                 transaction.show(input);
                 transaction.hide(cud);
                 submitCode = code;
-                Toast.makeText(getApplicationContext(), "Confrim Deletion", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Confirm Deletion", Toast.LENGTH_LONG).show();
 
             }
         }
+        if(!needToBlock){
         input.setCreateCase(createCase);
         input.setSubmitCode(submitCode);
         transaction.commit();
         msgCenterTV.setText("Enter product details");
         input.prepareFragmentForPresentation(commodity,model.getDepartmentName());
+        }
     }
 
     public void submitButtonPushed(int actionCode, boolean check, Bundle c) {
